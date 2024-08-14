@@ -12,7 +12,7 @@ export default function BackgroundVideo() {
       </video>
       <div className="absolute inset-0 flex items-center justify-center">
         <h1
-          className="text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight text-center drop-shadow-custom"
+          className="text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight text-center drop-shadow-custom font-catamaran"
           style={{ width: "80%" }}
         >
           LEADING DRUMMERS OF ALL SKILL LEVELS TO ACHIEVE THEIR GOALS

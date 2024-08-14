@@ -16,6 +16,9 @@ const config: Config = {
       dropShadow: {
         custom: "6px 6px 6px rgba(0, 0, 0, 0.85)", // Custom drop shadow
       },
+      fontFamily: {
+        catamaran: ["Catamaran", "sans-serif"],
+      },
     },
   },
   plugins: [],
