@@ -20,8 +20,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Header />
-        <main className="flex min-h-screen flex-col items-center justify-between">
-          {children}
+        <main className="flex flex-col justify-center align-center">
+          {children} {/* This is where the BackgroundVideo and content go */}
         </main>
         <Footer />
       </body>

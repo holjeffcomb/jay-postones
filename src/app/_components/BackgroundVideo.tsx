@@ -1,20 +1,23 @@
 export default function BackgroundVideo() {
   return (
-    <div className="absolute top-0 left-0 overflow-hidden flex items-center justify-center w-full h-auto">
+    <div className="relative w-full overflow-hidden">
       <video
-        className="min-w-full min-h-full w-auto h-auto"
+        className="w-full h-auto object-cover"
         autoPlay
         loop
         muted
+        playsInline
       >
         <source src="/videos/background-video.mp4" type="video/mp4" />
       </video>
-      <h1
-        className="absolute text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight text-center z-10 drop-shadow-custom"
-        style={{ maxWidth: "80%" }}
-      >
-        LEADING DRUMMERS OF ALL SKILL LEVELS TO ACHIEVE THEIR GOALS
-      </h1>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <h1
+          className="text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight text-center drop-shadow-custom"
+          style={{ width: "80%" }}
+        >
+          LEADING DRUMMERS OF ALL SKILL LEVELS TO ACHIEVE THEIR GOALS
+        </h1>
+      </div>
     </div>
   );
 }
