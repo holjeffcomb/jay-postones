@@ -1,3 +1,4 @@
+import Image from "next/image";
 import BackgroundVideo from "./_components/BackgroundVideo";
 
 export default function Home() {
@@ -7,10 +8,20 @@ export default function Home() {
       <BackgroundVideo />
 
       {/* Content Below the Video */}
-      <div className="flex flex-row justify-center items-center space-x-4 p-8">
-        <p>1</p>
-        <p>2</p>
-        <p>3</p>
+      <div className="flex flex-row justify-center items-center w-full space-x-4 p-8">
+        <Image
+          src="/images/drumming.jpg"
+          alt="Drumming"
+          width={396}
+          height={226}
+        />
+        <Image
+          src="/images/resources.jpg"
+          alt="Drumming"
+          width={396}
+          height={226}
+        />
+        <Image src="/images/gear.jpg" alt="Drumming" width={396} height={226} />
       </div>
     </>
   );
