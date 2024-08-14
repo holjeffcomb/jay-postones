@@ -13,8 +13,12 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      dropShadow: {
+        custom: "6px 6px 6px rgba(0, 0, 0, 0.85)", // Custom drop shadow
+      },
     },
   },
   plugins: [],
 };
+
 export default config;
