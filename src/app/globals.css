@@ -13,8 +13,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: rgb(255, 255, 255);
-    --background-start-rgb: rgb(20, 20, 20);
-    --background-end-rgb: rgb(72, 72, 72);
+    --background-start-rgb: #261f1f;
+    --background-end-rgb: #333333;
     --text-color: rgb(225, 225, 225);
   }
 }

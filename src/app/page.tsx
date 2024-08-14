@@ -6,6 +6,7 @@ export default function Home() {
     <>
       <BackgroundVideo />
 
+      {/* Image links */}
       <div className="flex flex-row justify-center items-center w-full space-x-4 p-8 min-w-2">
         <div className="relative min-w-72 rounded-xl overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105 group">
           <div className="w-full h-full">
@@ -59,6 +60,7 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Endorsees */}
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-2xl font-bold">JAY PROUDLY ENDORSES:</h1>
         <Image
