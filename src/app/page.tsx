@@ -58,6 +58,16 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <div className="flex flex-col justify-center items-center">
+        <h1 className="text-2xl font-bold">JAY PROUDLY ENDORSES:</h1>
+        <Image
+          src="/images/logos/ENDORSEES.png"
+          alt="Endorsees"
+          width={806}
+          height={290}
+        />
+      </div>
     </>
   );
 }
