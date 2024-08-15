@@ -11,8 +11,8 @@ export default async function LatestLesson() {
   const data = await getData();
 
   async function getData(): Promise<LessonData> {
-    const baseUrl =
-      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+    const baseUrl = "https://jay-postones.vercel.app";
+    // typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
     try {
       const res = await fetch(`${baseUrl}/api/getLatestLesson`, {
