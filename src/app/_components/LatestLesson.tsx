@@ -1,4 +1,7 @@
+"use client";
+
 import he from "he";
+import { useState, useEffect } from "react";
 
 interface LessonData {
   date: string;
@@ -7,37 +10,60 @@ interface LessonData {
   excerpt: string;
 }
 
-export default async function LatestLesson() {
-  const data = await getData();
+export default function LatestLesson() {
+  const [data, setData] = useState<LessonData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  async function getData(): Promise<LessonData> {
-    const baseUrl = "https://jay-postones.vercel.app";
-    // typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+  useEffect(() => {
+    async function getData() {
+      const baseUrl =
+        typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
-    try {
-      const res = await fetch(`/api/getLatestLesson`, {
-        headers: {
-          "Cache-Control": "no-store",
-        },
-      });
+      try {
+        const res = await fetch(`${baseUrl}/api/getLatestLesson`, {
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        });
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch data from API route");
+        if (!res.ok) {
+          throw new Error("Failed to fetch data from API route");
+        }
+
+        const json = await res.json();
+        console.log("Client Data:", json); // Debugging output
+
+        setData({
+          date: json.date,
+          title: json.title,
+          link: json.link,
+          excerpt: json.excerpt,
+        });
+      } catch (error) {
+        console.error("Error fetching latest lesson:", error);
+        setError("Failed to load the latest lesson.");
       }
-
-      const json = await res.json();
-      console.log("Client Data:", json); // Debugging output
-
-      return {
-        date: json.date,
-        title: json.title,
-        link: json.link,
-        excerpt: json.excerpt,
-      };
-    } catch (error) {
-      console.error("Error fetching latest lesson:", error);
-      throw error;
     }
+
+    getData();
+  }, []);
+
+  if (error) {
+    return (
+      <div className="flex flex-col justify-center items-center mt-6 mb-6 p-4 bg-white shadow-lg rounded-lg max-w-xl m-auto">
+        <h1 className="text-2xl font-bold mb-4">LATEST LESSON</h1>
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col justify-center items-center mt-6 mb-6 p-4 bg-white shadow-lg rounded-lg max-w-xl m-auto">
+        <h1 className="text-2xl font-bold mb-4">LATEST LESSON</h1>
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   // Decode the title to handle HTML entities
