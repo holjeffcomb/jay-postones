@@ -1,5 +1,6 @@
 import Image from "next/image";
 import BackgroundVideo from "./_components/BackgroundVideo";
+import LatestLesson from "./_components/LatestLesson";
 
 export default function Home() {
   return (
@@ -18,7 +19,7 @@ export default function Home() {
             className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ease-in-out"
           />
           <div className="absolute inset-0 flex justify-center items-center">
-            <span className="text-white text-4xl font-bold drop-shadow-custom">
+            <span className="text-white text-4xl font-bold font-catamaran drop-shadow-custom">
               DRUMMING
             </span>
           </div>
@@ -34,13 +35,13 @@ export default function Home() {
             className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ease-in-out"
           />
           <div className="absolute inset-0 flex justify-center items-center">
-            <span className="text-white text-4xl font-bold drop-shadow-custom">
+            <span className="text-white text-4xl font-bold font-catamaran drop-shadow-custom">
               RESOURCES
             </span>
           </div>
         </div>
 
-        <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out max-w-md transform hover:scale-105 group">
+        <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out max-w-md transform hover:scale-105 group mt-6 mb-6">
           <Image
             src="/images/gear.jpg"
             alt="Gear"
@@ -50,7 +51,7 @@ export default function Home() {
             className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ease-in-out"
           />
           <div className="absolute inset-0 flex justify-center items-center">
-            <span className="text-white text-4xl font-bold drop-shadow-custom">
+            <span className="text-white text-4xl font-bold font-catamaran drop-shadow-custom">
               GEAR
             </span>
           </div>
@@ -67,6 +68,8 @@ export default function Home() {
           height={290}
         />
       </div>
+
+      <LatestLesson />
     </>
   );
 }
