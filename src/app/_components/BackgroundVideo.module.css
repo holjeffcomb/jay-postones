@@ -2,6 +2,39 @@
   height: 700px;
 }
 
+.overlay {
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: contrast(1.2) brightness(0.9);
+}
+
+.overlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/images/3px-tile.png");
+  background-size: auto; /* Adjust this to `contain` or a custom size if needed */
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(3, 109, 144, 0.2),
+    rgba(0, 0, 255, 0.2)
+  );
+  mix-blend-mode: overlay;
+}
+
 @media (max-width: 1300px) {
   .video {
     height: 500px;
