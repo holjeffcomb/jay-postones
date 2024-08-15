@@ -1,8 +1,10 @@
+import styles from "./BackgroundVideo.module.css";
+
 export default function BackgroundVideo() {
   return (
     <div className="relative w-full overflow-hidden">
       <video
-        className="w-full h-auto object-cover"
+        className={`w-full object-cover ${styles.video}`}
         autoPlay
         loop
         muted
