@@ -8,7 +8,7 @@ export default function Home() {
 
       {/* Image links */}
       <div className="flex flex-col lg:flex-row justify-center items-center w-full p-8 gap-4 xl:gap-6">
-        <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105 group">
+        <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out max-w-md transform hover:scale-105 group">
           <Image
             src="/images/drumming.jpg"
             alt="Drumming"
@@ -24,7 +24,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105 group">
+        <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out max-w-md transform hover:scale-105 group">
           <Image
             src="/images/resources.jpg"
             alt="Resources"
@@ -40,7 +40,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105 group">
+        <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out max-w-md transform hover:scale-105 group">
           <Image
             src="/images/gear.jpg"
             alt="Gear"
