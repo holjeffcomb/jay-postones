@@ -15,7 +15,7 @@ export default async function LatestLesson() {
     // typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
     try {
-      const res = await fetch(`${baseUrl}/api/getLatestLesson`, {
+      const res = await fetch(`/api/getLatestLesson`, {
         headers: {
           "Cache-Control": "no-store",
         },
