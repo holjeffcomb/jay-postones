@@ -1,8 +1,14 @@
 .video {
-  height: 900px;
+  height: 700px;
 }
 
 @media (max-width: 1300px) {
+  .video {
+    height: 500px;
+  }
+}
+
+@media (max-width: 500px) {
   .video {
     height: 400px;
   }
