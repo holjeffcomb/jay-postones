@@ -1,6 +1,7 @@
 import Image from "next/image";
 import BackgroundVideo from "./_components/BackgroundVideo";
 import LatestLesson from "./_components/LatestLesson";
+import Testimonials from "./_components/Testimonials";
 
 export default function Home() {
   return (
@@ -68,6 +69,8 @@ export default function Home() {
           height={290}
         />
       </div>
+
+      <Testimonials />
 
       <LatestLesson />
     </>
