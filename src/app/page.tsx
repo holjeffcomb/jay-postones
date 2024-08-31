@@ -2,6 +2,7 @@ import Image from "next/image";
 import BackgroundVideo from "./_components/BackgroundVideo";
 import LatestLesson from "./_components/LatestLesson";
 import Testimonials from "./_components/Testimonials";
+import FirstLesson from "./_components/FirstLesson";
 
 export default function Home() {
   return (
@@ -71,7 +72,7 @@ export default function Home() {
       </div>
 
       <Testimonials />
-
+      <FirstLesson />
       <LatestLesson />
     </>
   );
