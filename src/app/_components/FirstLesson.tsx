@@ -20,14 +20,14 @@ export default async function FirstLesson() {
     <div>
       <h1>Lessons</h1>
       <ul>
-        {lessons.map((lesson) => (
+        {lessons.map((lesson: any) => (
           <li key={lesson.title}>
             <h2>{lesson.title}</h2>
             <p>{lesson.description}</p>
             <div>
               <h3>Exercises:</h3>
               <ul>
-                {lesson.exercises.map((exercise, index) => (
+                {lesson.exercises.map((exercise: any, index: any) => (
                   <li key={index}>
                     <h4>{exercise.title}</h4>
                     <p>{exercise.description}</p>
@@ -50,7 +50,7 @@ export default async function FirstLesson() {
               <div>
                 <h3>Tags</h3>
                 <ul>
-                  {lesson.tags.map((tag, index) => (
+                  {lesson.tags.map((tag: any, index: any) => (
                     <li key={index}>{tag}</li>
                   ))}
                 </ul>
