@@ -9,36 +9,72 @@ export default function LessonsPage() {
     "courses" | "individualLessons" | "playthroughs"
   >("courses");
   const [lessons, setLessons] = useState([]);
-  const query = `*[_type in ["course"]]{
-    title,
-    description,
-    'imageUrl': image.asset->url,
-    videoUrl,
-    "lessons": lessons[]->{
+
+  const queries = {
+    courses: `*[_type == "course"] | order(_createdAt desc) {
       title,
       description,
+      'imageUrl': image.asset->url,
+      videoUrl,
+      "lessons": lessons[]->{
+        title,
+        description,
+        videoUrl,
+        "exercises": exercises[]{
+          title,
+          description,
+          soundslice
+        },
+        tags
+      },
+      level,
+      tags,
+      _createdAt
+    }`,
+    individualLessons: `*[_type == "lesson"] | order(_createdAt desc) {
+      title,
+      description,
+      'imageUrl': lessonImage.asset->url,
       videoUrl,
       "exercises": exercises[]{
         title,
         description,
         soundslice
-      }
-    },
-    level,
-    _type
-  }`;
+      },
+      level,
+      tags,
+      _createdAt
+    }`,
+    playthroughs: `*[_type == "playthrough"] | order(_createdAt desc) {
+      title,
+      description,
+      'imageUrl': image.asset->url,
+      videoUrl,
+      songTitle,
+      artist,
+      tags,
+      _createdAt
+    }`,
+  };
 
   useEffect(() => {
     const fetchLessons = async () => {
-      const lessons = await client.fetch(query);
-      setLessons(lessons);
+      const fetchedLessons = await client.fetch(queries[bucket]);
+      const truncatedLessons = fetchedLessons.map((lesson: any) => ({
+        ...lesson,
+        description:
+          lesson.description.length > 100
+            ? lesson.description.slice(0, 150) + "[...]"
+            : lesson.description,
+      }));
+      setLessons(truncatedLessons);
     };
 
     fetchLessons();
-  }, []);
+  }, [bucket]);
 
   return (
-    <div className="flex flex-col items-start justify-start h-screen p-4 gap-4">
+    <div className="flex flex-col items-start justify-start p-4 gap-4">
       <div className="flex flex-row relative gap-4">
         <button
           onClick={() => setBucket("courses")}
