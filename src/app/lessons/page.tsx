@@ -14,7 +14,7 @@ export default function LessonsPage() {
     courses: `*[_type == "course"] | order(_createdAt desc) {
       title,
       description,
-      'imageUrl': image.asset->url,
+      'imageUrl': image.asset->url + '?w=400&h=225&fit=crop',
       videoUrl,
       "lessons": lessons[]->{
         title,
@@ -34,7 +34,7 @@ export default function LessonsPage() {
     individualLessons: `*[_type == "lesson"] | order(_createdAt desc) {
       title,
       description,
-      'imageUrl': lessonImage.asset->url,
+      'imageUrl': lessonImage.asset->url + '?w=400&h=225&fit=crop',
       videoUrl,
       "exercises": exercises[]{
         title,
@@ -48,7 +48,7 @@ export default function LessonsPage() {
     playthroughs: `*[_type == "playthrough"] | order(_createdAt desc) {
       title,
       description,
-      'imageUrl': image.asset->url,
+      'imageUrl': image.asset->url + '?w=400&h=225&fit=crop',
       videoUrl,
       songTitle,
       artist,
@@ -64,7 +64,7 @@ export default function LessonsPage() {
         ...lesson,
         description:
           lesson.description.length > 100
-            ? lesson.description.slice(0, 150) + "[...]"
+            ? lesson.description.slice(0, 70) + " [...]"
             : lesson.description,
       }));
       setLessons(truncatedLessons);
