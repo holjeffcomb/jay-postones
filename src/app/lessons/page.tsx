@@ -64,7 +64,7 @@ export default function LessonsPage() {
         ...lesson,
         description:
           lesson.description.length > 100
-            ? lesson.description.slice(0, 70) + " [...]"
+            ? lesson.description.slice(0, 100) + " [...]"
             : lesson.description,
       }));
       setLessons(truncatedLessons);
