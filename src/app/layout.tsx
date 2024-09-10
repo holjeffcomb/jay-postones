@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
-import { Inter } from "next/font/google";
+import { Inter, Raleway } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const raleway = Raleway({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Jay Postones",
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={raleway.className}>
         <Header />
         <main className="flex flex-col justify-center align-center">
           {children} {/* This is where the BackgroundVideo and content go */}
