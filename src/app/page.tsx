@@ -3,6 +3,7 @@ import BackgroundVideo from "./_components/BackgroundVideo";
 import LatestLesson from "./_components/LatestLesson";
 import Testimonials from "./_components/Testimonials";
 import FirstLesson from "./_components/FirstLesson";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -11,7 +12,10 @@ export default function Home() {
 
       {/* Image links */}
       <div className="flex flex-col lg:flex-row justify-center items-center w-full p-8 gap-4 xl:gap-6">
-        <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out max-w-md transform hover:scale-105 group">
+        <Link
+          href="/lessons"
+          className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out max-w-md transform hover:scale-105 group"
+        >
           <Image
             src="/images/drumming.jpg"
             alt="Drumming"
@@ -25,7 +29,7 @@ export default function Home() {
               DRUMMING
             </span>
           </div>
-        </div>
+        </Link>
 
         <div className="relative flex-1 w-full rounded-xl overflow-hidden transition-all duration-500 ease-in-out max-w-md transform hover:scale-105 group">
           <Image
