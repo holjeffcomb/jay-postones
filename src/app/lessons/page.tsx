@@ -14,7 +14,7 @@ export default function LessonsPage() {
     courses: `*[_type == "course"] | order(_createdAt desc) {
       title,
       description,
-      'imageUrl': image.asset->url + '?w=400&h=225&fit=crop',
+      'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
       videoUrl,
       "lessons": lessons[]->{
         title,
@@ -34,7 +34,7 @@ export default function LessonsPage() {
     individualLessons: `*[_type == "lesson"] | order(_createdAt desc) {
       title,
       description,
-      'imageUrl': lessonImage.asset->url + '?w=400&h=225&fit=crop',
+      'imageUrl': lessonImage.asset->url + '?w=600&h=400&fit=crop',
       videoUrl,
       "exercises": exercises[]{
         title,
@@ -48,7 +48,7 @@ export default function LessonsPage() {
     playthroughs: `*[_type == "playthrough"] | order(_createdAt desc) {
       title,
       description,
-      'imageUrl': image.asset->url + '?w=400&h=225&fit=crop',
+      'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
       videoUrl,
       songTitle,
       artist,
