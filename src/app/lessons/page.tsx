@@ -109,10 +109,19 @@ export default function LessonsPage() {
         </select>
         <select className="p-2 border rounded-md text-black">
           <option value="">Select category</option>
-          <option value="technique">Technique</option>
+          <option value="drum-fills">Drum fills</option>
           <option value="grooves">Grooves</option>
-          <option value="fills">Fills</option>
-          <option value="styles">Styles</option>
+          <option value="rudiments">Rudiments</option>
+          <option value="polyrhythms">Polyrhythms</option>
+          <option value="odd-timing">Odd Timing</option>
+          <option value="double-kick">Double Kick</option>
+          <option value="single-kick">Single Kick</option>
+          <option value="basic-techniques">Basic techniques</option>
+          <option value="flow">Flow</option>
+          <option value="limb-independence">Limb Independence</option>
+          <option value="tesseract">TesseracT</option>
+          <option value="single-strokes">Single Strokes</option>
+          <option value="double-strokes">Double Strokes</option>
         </select>
       </div>
       <LessonGrid lessons={lessons} />
