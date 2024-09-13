@@ -50,17 +50,21 @@ export default function LatestLesson() {
 
   if (error) {
     return (
-      <div className="flex flex-col justify-center items-center mt-6 mb-6 p-4 bg-white shadow-lg rounded-lg max-w-xl m-auto">
-        <h1 className="text-2xl font-bold mb-4">LATEST LESSON</h1>
-        <p className="text-red-600">{error}</p>
+      <div className="flex flex-col justify-center items-center mt-12 mb-12 p-8 bg-[var(--background-color)] text-[var(--text-color)] rounded-xl max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-6 font-catamaran">
+          LATEST LESSON
+        </h1>
+        <p className="text-red-500">{error}</p>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="flex flex-col justify-center items-center mt-6 mb-6 p-4 bg-white shadow-lg rounded-lg max-w-xl m-auto">
-        <h1 className="text-2xl font-bold mb-4">LATEST LESSON</h1>
+      <div className="flex flex-col justify-center items-center mt-12 mb-12 p-8 bg-[var(--background-color)] text-[var(--text-color)] rounded-xl max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-6 font-catamaran">
+          LATEST LESSON
+        </h1>
         <p>Loading...</p>
       </div>
     );
@@ -70,21 +74,34 @@ export default function LatestLesson() {
   const decodedTitle = he.decode(data.title);
 
   return (
-    <div className="flex flex-col justify-center items-center mt-6 mb-6 p-4 bg-white shadow-lg rounded-lg max-w-xl m-auto">
-      <h1 className="text-2xl font-bold mb-4">LATEST LESSON</h1>
-      <div className="text-left">
-        <p className="text-gray-600 mb-2">
+    <div className="flex flex-col justify-center items-center mt-12 mb-12 p-8 bg-[var(--background-color)] text-[var(--text-color)] rounded-xl max-w-4xl mx-auto">
+      <h1 className="text-4xl font-bold mb-6 font-catamaran">LATEST LESSON</h1>
+      <div className="text-left w-full">
+        <p className="text-gray-400 mb-3">
           <strong>Date:</strong> {new Date(data.date).toLocaleDateString()}
         </p>
-        <h2 className="text-xl font-semibold text-blue-600 mb-2">
-          <a href={data.link} target="_blank" rel="noopener noreferrer">
+        <h2 className="text-2xl font-semibold text-[var(--accent-color)] mb-4 font-catamaran">
+          <a
+            href={data.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
             {decodedTitle}
           </a>
         </h2>
         <div
-          className="text-gray-800"
+          className="text-[var(--text-color)] mb-6"
           dangerouslySetInnerHTML={{ __html: data.excerpt }}
         />
+        <a
+          href={data.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-[var(--accent-color)] text-[var(--background-color)] py-2 px-4 rounded-lg font-bold transition-all duration-300 ease-in-out hover:bg-opacity-80"
+        >
+          Read More
+        </a>
       </div>
     </div>
   );
