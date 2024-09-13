@@ -44,6 +44,8 @@ export default function Footer() {
               <a
                 href="https://www.facebook.com/JayTesseracT/"
                 className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Image
                   src="/images/logos/socials/facebook-neg.png"
@@ -55,6 +57,8 @@ export default function Footer() {
               <a
                 href="https://www.instagram.com/jaytesseract/"
                 className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Image
                   src="/images/logos/socials/insta-neg.png"
@@ -66,6 +70,8 @@ export default function Footer() {
               <a
                 href="https://x.com/jaypostones"
                 className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Image
                   src="/images/logos/socials/x-neg.png"
@@ -77,6 +83,8 @@ export default function Footer() {
               <a
                 href="https://www.youtube.com/c/JayPostones"
                 className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Image
                   src="/images/logos/socials/youtube-neg.png"
