@@ -3,54 +3,59 @@
 import React, { useState, useEffect } from "react";
 import testimonials from "@/data/testimonials";
 import styles from "./Testimonials.module.css";
-import Image from "next/image";
+import TestimonialCard from "./TestimonialCard";
 
 const Testimonials: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const testimonialsPerPage = 3;
+  const totalPages = Math.ceil(testimonials.length / testimonialsPerPage);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 8000);
+      setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
+    }, 12000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [totalPages]);
+
+  const getCurrentTestimonials = () => {
+    const start = currentPage * testimonialsPerPage;
+    return testimonials.slice(start, start + testimonialsPerPage);
+  };
 
   return (
     <div className={styles.testimonialContainer}>
       <div
         className={styles.testimonialWrapper}
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        style={{ transform: `translateX(-${currentPage * 100}%)` }}
       >
-        {testimonials.map((testimonial, index) => (
-          <div className={styles.testimonial} key={index}>
-            <div className={styles.imageContainer}>
-              <Image
-                src={`/images/testimonials/${testimonial.image}`}
-                layout="fill"
-                objectFit="cover"
-                objectPosition="center"
-                alt={testimonial.name}
-              />
-            </div>
-            <div className={styles.testimonialText}>
-              <h2 className="font-bold">{testimonial.heading}</h2>
-              <p className="font-light">{testimonial.quote}</p>
-              <p className="font-normal">- {testimonial.name}</p>
-            </div>
+        {Array.from({ length: totalPages }).map((_, pageIndex) => (
+          <div key={pageIndex} className={styles.testimonialPage}>
+            {testimonials
+              .slice(
+                pageIndex * testimonialsPerPage,
+                (pageIndex + 1) * testimonialsPerPage
+              )
+              .map((testimonial) => (
+                <TestimonialCard
+                  key={testimonial.name}
+                  heading={testimonial.heading}
+                  quote={testimonial.quote}
+                  name={testimonial.name}
+                  image={testimonial.image}
+                />
+              ))}
           </div>
         ))}
       </div>
       <div className={styles.controls}>
-        {testimonials.map((_, index) => (
+        {Array.from({ length: totalPages }).map((_, index) => (
           <button
             key={index}
             className={`${styles.dot} ${
-              currentIndex === index ? styles.active : ""
+              currentPage === index ? styles.active : ""
             }`}
-            onClick={() => setCurrentIndex(index)}
+            onClick={() => setCurrentPage(index)}
           />
         ))}
       </div>
