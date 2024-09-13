@@ -34,6 +34,7 @@
   line-height: 1.2;
   margin-bottom: 20px;
   white-space: pre-line; /* Add this line */
+  padding-top: 10px;
 }
 
 .footer {
@@ -73,14 +74,28 @@
 
 @media (max-width: 768px) {
   .card {
-    width: 100%;
-    min-height: 300px; /* Add this line to set a minimum height on mobile */
-    max-height: none; /* Remove the max-height constraint on mobile */
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 90%;
+    min-height: 500px;
+    max-height: none;
   }
 
   .quote {
-    flex-grow: 1; /* Allow the quote to grow and fill available space */
+    flex-grow: 1;
     display: flex;
-    align-items: center; /* Center the quote vertically */
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .quoteContent {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .quoteIcon {
+    margin-right: 10px;
+    flex-shrink: 0;
   }
 }
