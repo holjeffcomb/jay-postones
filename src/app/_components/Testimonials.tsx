@@ -13,7 +13,7 @@ const Testimonials: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
-    }, 12000);
+    }, 24000);
 
     return () => clearInterval(interval);
   }, [totalPages]);
