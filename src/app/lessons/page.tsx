@@ -12,15 +12,18 @@ export default function LessonsPage() {
 
   const queries = {
     courses: `*[_type == "course"] | order(_createdAt desc) {
+      _id,
       title,
       description,
       'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
       videoUrl,
       "lessons": lessons[]->{
+        _id,
         title,
         description,
         videoUrl,
         "exercises": exercises[]{
+          _id,
           title,
           description,
           soundslice
@@ -32,11 +35,13 @@ export default function LessonsPage() {
       _createdAt
     }`,
     individualLessons: `*[_type == "lesson"] | order(_createdAt desc) {
+      _id,
       title,
       description,
       'imageUrl': lessonImage.asset->url + '?w=600&h=400&fit=crop',
       videoUrl,
       "exercises": exercises[]{
+        _id,
         title,
         description,
         soundslice
@@ -46,6 +51,7 @@ export default function LessonsPage() {
       _createdAt
     }`,
     playthroughs: `*[_type == "playthrough"] | order(_createdAt desc) {
+      _id,
       title,
       description,
       'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
