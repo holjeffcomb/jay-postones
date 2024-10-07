@@ -26,7 +26,39 @@ export default function LessonPage() {
               DASH
             </div>
             <div className="flex flex-col items-center justify-center w-2/3 bg-[var(--accent-color)] h-full">
-              <div>Video Window</div>
+              <div className="flex flex-col items-center justify-between h-full p-5 w-full">
+                <div className="flex flex-row items-center justify-between w-full">
+                  <h1 className="font-extrabold text-2xl text-[var(--secondary-color)]">
+                    {lesson.title}
+                  </h1>
+                  <button
+                    onClick={() => window.history.back()}
+                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded"
+                  >
+                    back
+                  </button>
+                </div>
+                <iframe
+                  src={lesson.soundslice}
+                  width="100%"
+                  height="500"
+                  // frameborder="0"
+                  // allowfullscreen
+                  allow="autoplay"
+                ></iframe>
+
+                <div className="flex gap-4">
+                  <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
+                    Add to Practice List
+                  </button>
+                  <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
+                    Download GP File
+                  </button>
+                  <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
+                    Mark Complete
+                  </button>
+                </div>
+              </div>
             </div>
             <div className="flex flex-col items-center justify-between w-1/3 bg-[var(--highlight-color)] h-full text-[var(--primary-color)]">
               <div className="text-left p-4">
