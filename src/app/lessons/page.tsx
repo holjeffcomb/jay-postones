@@ -34,7 +34,7 @@ export default function LessonsPage() {
       tags,
       _createdAt
     }`,
-    individualLessons: `*[_type == "lesson"] | order(_createdAt desc) {
+    individualLessons: `*[_type == "lesson" && isDisplayed == true] | order(_createdAt desc) {
       _id,
       title,
       description,
