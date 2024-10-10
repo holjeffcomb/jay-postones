@@ -6,6 +6,9 @@ import { client } from "../../../lib/sanityClient";
 
 export default function LessonPage() {
   const [lesson, setLesson] = useState<any>(null);
+  const [userNotes, setUserNotes] = useState<string>(
+    "enter your own notes here..."
+  );
   const params = useParams();
 
   useEffect(() => {
@@ -22,9 +25,9 @@ export default function LessonPage() {
       {lesson ? (
         <>
           <div className="flex flex-row justify-between items-center w-full bg-gray-300 h-full">
-            <div className="flex flex-col items-center justify-start w-1/6 bg-[var(--secondary-color)] h-full">
+            {/* <div className="flex flex-col items-center justify-start w-1/6 bg-[var(--secondary-color)] h-full">
               DASH
-            </div>
+            </div> */}
             <div className="flex flex-col items-center justify-center w-2/3 bg-[var(--accent-color)] h-full">
               <div className="flex flex-col items-center justify-between h-full p-5 w-full">
                 <div className="flex flex-row items-center justify-between w-full">
@@ -58,6 +61,13 @@ export default function LessonPage() {
                     Mark Complete
                   </button>
                 </div>
+                <div className="flex flex-row items-center justify-center w-full">
+                  {lesson.exercises.map((exercise: any, index: string) => (
+                    <div key={index} className="m-2">
+                      <img src={exercise.thumbnail} alt={exercise.title} />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="flex flex-col items-center justify-between w-1/3 bg-[var(--highlight-color)] h-full text-[var(--primary-color)]">
@@ -69,18 +79,16 @@ export default function LessonPage() {
                 <h2 className="font-bold">USER NOTES</h2>
                 <textarea
                   className="w-full p-2 border rounded-md text-gray-400 h-72"
-                  placeholder="enter your own notes here..."
-                  defaultValue="enter your own notes here..."
+                  placeholder={userNotes}
+                  defaultValue={userNotes}
                   onFocus={(e) => {
                     const target = e.target as HTMLTextAreaElement;
                     target.value =
-                      target.value === "enter your own notes here..."
-                        ? ""
-                        : target.value;
+                      target.value === userNotes ? "" : target.value;
                   }}
                   onChange={(e) => {
                     const target = e.target as HTMLTextAreaElement;
-                    if (target.value !== "enter your own notes here...") {
+                    if (target.value !== userNotes) {
                       target.classList.remove("text-gray-400");
                       target.classList.add("text-black");
                     } else {
