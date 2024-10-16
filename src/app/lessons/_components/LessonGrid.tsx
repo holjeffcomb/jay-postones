@@ -15,12 +15,18 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
                   objectFit="cover"
                   className="absolute top-0 left-0 w-full h-full"
                 />
+                <div
+                  className="absolute bottom-0 left-0 p-2 text-[var(--text-color)] "
+                  style={{ textShadow: "3px 2px 2px #2d2d2d" }}
+                >
+                  <h2 className="text-xl font-bold break-words">
+                    {course.title.toUpperCase()}
+                  </h2>
+                  <h3 className="text-sm">{course.subtitle}</h3>
+                </div>
               </div>
             )}
             <div className="p-4 flex flex-col h-[calc(100%-56.25%)]">
-              <h2 className="text-xl font-bold mb-2 group-hover:text-[var(--accent-color)] break-words">
-                {course.title.toUpperCase()}
-              </h2>
               <div className="flex flex-wrap gap-2 mb-2">
                 {course.tags &&
                   course.tags.map((tag: string, index: number) => (

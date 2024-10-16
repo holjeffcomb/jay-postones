@@ -14,6 +14,7 @@ export default function LessonsPage() {
     courses: `*[_type == "course"] | order(_createdAt desc) {
       _id,
       title,
+      subtitle,
       description,
       'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
       videoUrl,
@@ -37,6 +38,7 @@ export default function LessonsPage() {
     individualLessons: `*[_type == "lesson" && isDisplayed == true] | order(_createdAt desc) {
       _id,
       title,
+      subtitle,
       description,
       'imageUrl': lessonImage.asset->url + '?w=600&h=400&fit=crop',
       videoUrl,
@@ -53,6 +55,7 @@ export default function LessonsPage() {
     playthroughs: `*[_type == "playthrough"] | order(_createdAt desc) {
       _id,
       title,
+      subtitle,
       description,
       'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
       videoUrl,
