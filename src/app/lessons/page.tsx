@@ -33,6 +33,7 @@ export default function LessonsPage() {
       },
       level,
       tags,
+      membershipLevel,
       _createdAt
     }`,
     individualLessons: `*[_type == "lesson" && isDisplayed == true] | order(_createdAt desc) {
@@ -50,6 +51,7 @@ export default function LessonsPage() {
       },
       level,
       tags,
+      membershipLevel,
       _createdAt
     }`,
     playthroughs: `*[_type == "playthrough"] | order(_createdAt desc) {
@@ -62,6 +64,7 @@ export default function LessonsPage() {
       songTitle,
       artist,
       tags,
+      membershipLevel,
       _createdAt
     }`,
   };
