@@ -16,6 +16,13 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
                   className="absolute top-0 left-0 w-full h-full"
                 />
                 <div
+                  className={`absolute flex flex-row justify-center items-center top-0 right-0 px-2 rounded-sm m-2 text-[var(--text-color)] ${course.membershipLevel === "free" ? "bg-blue-500" : course.membershipLevel === "silver" ? "bg-gray-500" : course.membershipLevel === "gold" ? "bg-yellow-500" : course.membershipLevel === "platinum" ? "bg-purple-500" : "bg-[var(--accent-color)]"}`}
+                >
+                  <span className="text-sm font-normal">
+                    {course.membershipLevel?.toUpperCase()}
+                  </span>
+                </div>
+                <div
                   className="absolute bottom-0 left-0 p-2 text-[var(--text-color)] "
                   style={{ textShadow: "3px 2px 2px #2d2d2d" }}
                 >
