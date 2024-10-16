@@ -72,8 +72,8 @@ export default function LessonsPage() {
       const truncatedLessons = fetchedLessons.map((lesson: any) => ({
         ...lesson,
         description:
-          lesson.description.length > 100
-            ? lesson.description.slice(0, 100) + " [...]"
+          lesson.description.length > 200
+            ? lesson.description.slice(0, 200) + " [...]"
             : lesson.description,
       }));
       setLessons(truncatedLessons);

@@ -5,7 +5,7 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
     <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {lessons.map((course) => (
         <Link href={`/lessons/${course._id}`} key={course._id}>
-          <div className="bg-[var(--secondary-color)] rounded-lg shadow-[4px_4px_4px_rgba(0,0,0,0.8)] overflow-hidden transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg hover:bg-[#3D3F5D] group min-w-[300px] w-full">
+          <div className="bg-[var(--secondary-color)] rounded-lg shadow-[4px_4px_4px_rgba(0,0,0,0.8)] overflow-hidden transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg hover:bg-[#3D3F5D] group min-w-[300px] w-full h-[400px]">
             {course.imageUrl && (
               <div className="relative w-full pt-[56.25%] overflow-hidden">
                 <Image
@@ -26,8 +26,13 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
                 </div>
               </div>
             )}
-            <div className="p-4 flex flex-col h-[calc(100%-56.25%)]">
-              <div className="flex flex-wrap gap-2 mb-2">
+            <div className="p-3 flex flex-col gap-1 h-[calc(100%-56.25%)]">
+              <span
+                className={`text-sm font-normal ${course.level === "beginner" ? "text-green-500" : course.level === "intermediate" ? "text-yellow-500" : "text-red-500"}`}
+              >
+                {course.level}
+              </span>
+              <div className="flex flex-wrap gap-2">
                 {course.tags &&
                   course.tags.map((tag: string, index: number) => (
                     <span
@@ -38,13 +43,10 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
                     </span>
                   ))}
               </div>
-              <p className="text-[var(--text-color)] mb-4 text-sm italic break-words flex-grow">
+              <p className="text-[var(--text-color)] text-sm italic break-words flex-grow">
                 {course.description}
               </p>
               <div className="flex justify-between items-center mt-auto">
-                <span className="text-sm font-semibold text-[var(--accent-color)]">
-                  {course.level}
-                </span>
                 {course.lessons && course.lessons.length > 0 && (
                   <span className="text-sm text-[var(--accent-color)]">
                     {course.lessons.length} lessons
