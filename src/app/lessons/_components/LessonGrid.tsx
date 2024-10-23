@@ -34,8 +34,12 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
                   </span>
                 </div>
                 <div
-                  className="absolute bottom-0 left-0 p-2 text-[var(--text-color)]"
-                  style={{ textShadow: "3px 2px 2px #2d2d2d" }}
+                  className="absolute bottom-0 left-0 w-full p-2 text-[var(--text-color)]"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(0, 0, 0, 0.85) 25%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.15) 85%, rgba(0, 0, 0, 0) 100%)",
+                    textShadow: "3px 2px 2px #2d2d2d",
+                  }}
                 >
                   <h2 className="text-xl font-bold break-words">
                     {course.title.toUpperCase()}
