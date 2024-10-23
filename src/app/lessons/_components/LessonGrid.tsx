@@ -51,7 +51,7 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
                   ))}
               </div>
               <p className="text-[var(--text-color)] text-sm italic break-words flex-grow">
-                {course.description}
+                {course.summary}
               </p>
               <div className="flex justify-between items-center mt-auto">
                 {course.lessons && course.lessons.length > 0 && (
