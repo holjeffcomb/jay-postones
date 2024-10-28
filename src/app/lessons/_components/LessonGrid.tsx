@@ -60,11 +60,11 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
               >
                 {course.level}
               </span>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1">
                 {course.tags?.map((tag: string, index: number) => (
                   <span
                     key={index}
-                    className="px-2 py-1 text-xs font-semibold bg-[var(--accent-color)] text-[var(--primary-color)] rounded-full"
+                    className="px-1 py-0.5 text-xs font-normal bg-[var(--accent-color)] text-[var(--primary-color)] rounded-md"
                   >
                     {tag}
                   </span>
