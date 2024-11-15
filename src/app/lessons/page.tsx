@@ -43,6 +43,9 @@ export default function LessonsPage() {
       subtitle,
       summary,
       description,
+      sticking,
+      timeSignature,
+      tempo,
       'imageUrl': lessonImage.asset->url + '?w=600&h=400&fit=crop',
       videoUrl,
       "exercises": exercises[]{
@@ -93,19 +96,27 @@ export default function LessonsPage() {
       <div className="flex flex-row relative gap-4">
         <button
           onClick={() => setBucket("courses")}
-          className={`text-l ${bucket === "courses" ? "font-bold underline" : "font-normal"}`}
+          className={`text-l ${
+            bucket === "courses" ? "font-bold underline" : "font-normal"
+          }`}
         >
           Courses
         </button>
         <button
           onClick={() => setBucket("individualLessons")}
-          className={`text-l ${bucket === "individualLessons" ? "font-bold underline" : "font-normal"}`}
+          className={`text-l ${
+            bucket === "individualLessons"
+              ? "font-bold underline"
+              : "font-normal"
+          }`}
         >
           Individual Lessons
         </button>
         <button
           onClick={() => setBucket("playthroughs")}
-          className={`text-l ${bucket === "playthroughs" ? "font-bold underline" : "font-normal"}`}
+          className={`text-l ${
+            bucket === "playthroughs" ? "font-bold underline" : "font-normal"
+          }`}
         >
           Playthroughs
         </button>
