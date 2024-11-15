@@ -74,24 +74,27 @@ export default function LessonPage() {
             <div className="flex flex-col justify-between w-1/3 bg-[var(--highlight-color)] h-full text-[var(--primary-color)]">
               {/* Top-aligned content */}
               <div>
-                <div className="text-left px-4 py-2">
+                <div className="text-left px-4 py-5">
                   <h2 className="font-bold">NOTES FROM JAY</h2>
-                  <p>{lesson.description}</p>
+                  <div style={{ whiteSpace: "pre-wrap" }}>
+                    {lesson.description}
+                  </div>
                 </div>
+
                 {lesson.sticking && (
-                  <div className="text-left px-4 py-1 flex items-center text-sm">
+                  <div className="text-left px-4 py-0 flex items-center text-sm">
                     <h2 className="font-bold">Sticking:</h2>
                     <p className="ml-2">{lesson.sticking}</p>
                   </div>
                 )}
                 {lesson.tempo && (
-                  <div className="text-left px-4 py-1 flex items-center text-sm">
+                  <div className="text-left px-4 py-0 flex items-center text-sm">
                     <h2 className="font-bold">Tempo:</h2>
                     <p className="ml-2">{lesson.tempo}</p>
                   </div>
                 )}
                 {lesson.timeSignature && (
-                  <div className="text-left px-4 py-1 flex items-center text-sm">
+                  <div className="text-left px-4 py-0 flex items-center text-sm">
                     <h2 className="font-bold">Time Signature:</h2>
                     <p className="ml-2">{lesson.timeSignature}</p>
                   </div>
