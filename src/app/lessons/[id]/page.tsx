@@ -30,9 +30,31 @@ export default function LessonPage() {
         `*[_type == "lesson" && _id == "${params.id}"][0]`
       );
       setLesson(lesson);
+
+      // Update exerciseContent based on videoUrl
+      if (lesson?.videoUrl?.startsWith("https://vimeo.com")) {
+        setExerciseContent(
+          <iframe
+            src={lesson.videoUrl.replace(
+              "https://vimeo.com/",
+              "https://player.vimeo.com/video/"
+            )}
+            width="100%"
+            height="480"
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+            title="Exercise Video"
+          />
+        );
+      } else if (lesson?.videoUrl) {
+        setExerciseContent(<p>Unsupported video format.</p>);
+      } else {
+        setExerciseContent(<p>No content available for this exercise.</p>);
+      }
     };
     fetchLesson();
-  }, []);
+  }, [params.id]);
 
   const components = {
     types: {
@@ -59,7 +81,7 @@ export default function LessonPage() {
               DASH
             </div> */}
             <div className="flex flex-col items-center justify-center w-2/3 bg-[var(--accent-color)] min-h-screen">
-              <div className="flex flex-col items-center justify-between h-screen p-5 w-full">
+              <div className="flex flex-col items-center gap-6 justify-between h-screen p-5 w-full">
                 <div className="flex flex-row items-center justify-between w-full">
                   <h1 className="font-extrabold text-2xl text-[var(--secondary-color)]">
                     {lesson.title}
@@ -71,20 +93,7 @@ export default function LessonPage() {
                     back
                   </button>
                 </div>
-                <div className="h-full w-full">
-                  {exerciseContent ? (
-                    typeof exerciseContent === "string" ? (
-                      <p>{exerciseContent}</p>
-                    ) : (
-                      <PortableText
-                        value={exerciseContent}
-                        components={components}
-                      />
-                    )
-                  ) : (
-                    <p>Select an exercise to view its content.</p>
-                  )}
-                </div>
+                <div className="h-full w-full">{exerciseContent}</div>
 
                 <div className="flex gap-4">
                   <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
