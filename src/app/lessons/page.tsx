@@ -12,67 +12,80 @@ export default function LessonsPage() {
 
   const queries = {
     courses: `*[_type == "course"] | order(_createdAt desc) {
-      _id,
-      title,
-      subtitle,
-      summary,
-      description,
-      'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
-      videoUrl,
-      "lessons": lessons[]->{
         _id,
         title,
+        subtitle,
+        summary,
         description,
+        'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
+        videoUrl,
+        "lessons": lessons[]->{
+          _id,
+          title,
+          description,
+          videoUrl,
+          "exercises": exercises[]{
+            _id,
+            title,
+            type,
+            description,
+            soundsliceUrl,
+            videoUrl,
+            content
+          },
+          tags
+        },
+        level,
+        tags,
+        membershipLevel,
+        _createdAt
+      }`,
+    individualLessons: `*[_type == "lesson" && isDisplayed == true] | order(_createdAt desc) {
+        _id,
+        title,
+        subtitle,
+        summary,
+        description,
+        sticking,
+        timeSignature,
+        tempo,
+        'imageUrl': lessonImage.asset->url + '?w=600&h=400&fit=crop',
         videoUrl,
         "exercises": exercises[]{
           _id,
           title,
+          type,
           description,
-          soundslice
+          soundsliceUrl,
+          videoUrl,
+          content[]{
+            ...,
+            _type == "image" => {
+              ...,
+              asset,
+              alt
+            }
+          }
         },
-        tags
-      },
-      level,
-      tags,
-      membershipLevel,
-      _createdAt
-    }`,
-    individualLessons: `*[_type == "lesson" && isDisplayed == true] | order(_createdAt desc) {
-      _id,
-      title,
-      subtitle,
-      summary,
-      description,
-      sticking,
-      timeSignature,
-      tempo,
-      'imageUrl': lessonImage.asset->url + '?w=600&h=400&fit=crop',
-      videoUrl,
-      "exercises": exercises[]{
+        level,
+        tags,
+        membershipLevel,
+        _createdAt
+      }`,
+    playthroughs: `*[_type == "playthrough"] | order(_createdAt desc) {
         _id,
         title,
+        subtitle,
+        summary,
         description,
-        soundslice
-      },
-      level,
-      tags,
-      membershipLevel,
-      _createdAt
-    }`,
-    playthroughs: `*[_type == "playthrough"] | order(_createdAt desc) {
-      _id,
-      title,
-      subtitle,
-      summary,
-      description,
-      'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
-      videoUrl,
-      songTitle,
-      artist,
-      tags,
-      membershipLevel,
-      _createdAt
-    }`,
+        'imageUrl': image.asset->url + '?w=600&h=400&fit=crop',
+        videoUrl,
+        songTitle,
+        artist,
+        tags,
+        membershipLevel,
+        _createdAt
+      }`,
   };
 
   useEffect(() => {
