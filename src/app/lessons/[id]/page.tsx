@@ -112,35 +112,38 @@ export default function LessonPage() {
             <div className="flex flex-col justify-between w-1/3 p-4 bg-[var(--highlight-color)] h-screen text-[var(--primary-color)]">
               {/* Top section */}
               <div className="flex flex-col flex-grow items-stretch">
-                <div className="text-left">
-                  <h2 className="font-bold">NOTES FROM JAY</h2>
-                  <div style={{ whiteSpace: "pre-wrap" }}>
+                <div className="text-left mb-2">
+                  <h2 className="font-bold mb-2">NOTES FROM JAY</h2>
+                  <div style={{ whiteSpace: "pre-wrap", lineHeight: "1.2" }}>
                     {lesson.description}
                   </div>
                 </div>
 
-                {/* This section takes the width of its content */}
-                <div className="bg-[var(--accent-color)] my-2 rounded-md p-1 inline-block max-w-max">
-                  {lesson.sticking && (
-                    <div className="text-left px-1 flex items-start text-sm">
-                      <h2 className="font-bold">Sticking:</h2>
-                      <p className="ml-2">{lesson.sticking}</p>
-                    </div>
-                  )}
-                  {lesson.tempo && (
-                    <div className="text-left px-1 flex items-start text-sm">
-                      <h2 className="font-bold">Tempo:</h2>
-                      <p className="ml-2">{lesson.tempo}</p>
-                    </div>
-                  )}
-                  {lesson.timeSignature && (
-                    <div className="text-left px-1 flex items-start text-sm">
-                      <h2 className="font-bold">Time Signature:</h2>
-                      <p className="ml-2">{lesson.timeSignature}</p>
-                    </div>
-                  )}
-                </div>
-
+                {/* sticking/tempo/time sig section */}
+                {lesson.sticking || lesson.tempo || lesson.timeSignature ? (
+                  <div className="bg-[var(--accent-color)] my-2 rounded-md p-1 inline-block max-w-max">
+                    {lesson.sticking && (
+                      <div className="text-left px-1 flex items-start text-sm">
+                        <h2 className="font-bold">Sticking:</h2>
+                        <p className="ml-2">{lesson.sticking}</p>
+                      </div>
+                    )}
+                    {lesson.tempo && (
+                      <div className="text-left px-1 flex items-start text-sm">
+                        <h2 className="font-bold">Tempo:</h2>
+                        <p className="ml-2">{lesson.tempo}</p>
+                      </div>
+                    )}
+                    {lesson.timeSignature && (
+                      <div className="text-left px-1 flex items-start text-sm">
+                        <h2 className="font-bold">Time Signature:</h2>
+                        <p className="ml-2">{lesson.timeSignature}</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <></>
+                )}
                 {/* Exercises */}
                 <div className="flex flex-col items-stretch justify-start w-full gap-2 my-2">
                   {lesson.exercises.map(
