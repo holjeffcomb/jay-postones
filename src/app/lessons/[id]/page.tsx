@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { client } from "../../../lib/sanityClient";
 import { FaFont, FaVideo, FaMusic } from "react-icons/fa";
 import { PortableText } from "@portabletext/react";
-import { urlFor } from "../../../lib/sanityClient";
+import { urlFor, getUrlFromId } from "../../../lib/sanityClient";
 
 const typeToIcon = {
   portableText: <FaFont />,
@@ -30,6 +30,7 @@ export default function LessonPage() {
         `*[_type == "lesson" && _id == "${params.id}"][0]`
       );
       setLesson(lesson);
+      console.log(lesson);
 
       // Update exerciseContent based on videoUrl
       if (lesson?.videoUrl?.startsWith("https://vimeo.com")) {
@@ -99,9 +100,19 @@ export default function LessonPage() {
                   <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
                     Add to Practice List
                   </button>
-                  <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
-                    Download GP File
-                  </button>
+                  {lesson.downloadableFile?.asset._ref ? (
+                    <a
+                      href={getUrlFromId(lesson.downloadableFile.asset._ref)}
+                      download
+                    >
+                      <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
+                        Download
+                      </button>
+                    </a>
+                  ) : (
+                    <></>
+                  )}
+
                   <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
                     Mark Complete
                   </button>
