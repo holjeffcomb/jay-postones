@@ -30,7 +30,6 @@ export default function LessonPage() {
         `*[_type == "lesson" && _id == "${params.id}"][0]`
       );
       setLesson(lesson);
-      console.log(lesson);
 
       // Update exerciseContent based on videoUrl
       if (lesson?.videoUrl?.startsWith("https://vimeo.com")) {
@@ -171,11 +170,53 @@ export default function LessonPage() {
                       <button
                         key={index}
                         className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-start gap-2 hover:bg-gray-100 transition w-full"
-                        onClick={() =>
-                          setExerciseContent(
-                            exercise.content || "No content available"
-                          )
-                        }
+                        onClick={() => {
+                          if (exercise.type === "portableText") {
+                            setExerciseContent(
+                              <PortableText
+                                value={exercise.content}
+                                components={components}
+                              />
+                            );
+                          }
+                          if (exercise.type === "soundslice") {
+                            setExerciseContent(
+                              <iframe
+                                src={exercise.soundsliceUrl}
+                                width="100%"
+                                height="400"
+                                allowFullScreen
+                              ></iframe>
+                            );
+                          }
+                          if (exercise.type === "video") {
+                            if (
+                              lesson?.videoUrl?.startsWith("https://vimeo.com")
+                            ) {
+                              setExerciseContent(
+                                <iframe
+                                  src={lesson.videoUrl.replace(
+                                    "https://vimeo.com/",
+                                    "https://player.vimeo.com/video/"
+                                  )}
+                                  width="100%"
+                                  height="480"
+                                  allow="autoplay; fullscreen; picture-in-picture"
+                                  allowFullScreen
+                                  title="Exercise Video"
+                                />
+                              );
+                            } else if (lesson?.videoUrl) {
+                              setExerciseContent(
+                                <p>Unsupported video format.</p>
+                              );
+                            } else {
+                              setExerciseContent(
+                                <p>No content available for this exercise.</p>
+                              );
+                            }
+                          }
+                        }}
                       >
                         <div className="flex items-start gap-2">
                           {typeToIcon[exercise.type] || <span>?</span>}
