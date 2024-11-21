@@ -70,6 +70,7 @@ export default function LessonsPage() {
         level,
         tags,
         membershipLevel,
+        downloadableFile,
         _createdAt
       }`,
     playthroughs: `*[_type == "playthrough"] | order(_createdAt desc) {
