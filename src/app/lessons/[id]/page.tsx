@@ -245,7 +245,7 @@ export default function LessonPage() {
               <div className="text-left w-full mt-auto">
                 <h2 className="font-bold">USER NOTES</h2>
                 <textarea
-                  className="w-full p-2 border rounded-md text-gray-400 h-72"
+                  className="w-full p-2 border rounded-md text-gray-400 h-auto"
                   placeholder={userNotes}
                   defaultValue={userNotes}
                   onFocus={(e) => {
