@@ -59,16 +59,25 @@ export default function LessonPage() {
   const components = {
     types: {
       image: ({ value }: { value: any }) => {
-        console.log("Image Value:", value); // Debugging
         if (!value?.asset) return null; // Skip rendering if URL is missing
         return (
           <img
-            src={urlFor(value.asset).width(300).url()}
+            src={urlFor(value.asset).width(380).url()}
             alt={value.alt || "Image"}
             className="my-4 h-auto"
           />
         );
       },
+    },
+    block: {
+      h1: ({ children }: any) => (
+        <h1 className="text-2xl font-bold text-[var(--secondary-color)]">
+          {children}
+        </h1>
+      ),
+      normal: ({ children }: any) => (
+        <p className="text-[var(--secondary-color)]">{children}</p>
+      ),
     },
   };
 
@@ -173,10 +182,12 @@ export default function LessonPage() {
                         onClick={() => {
                           if (exercise.type === "portableText") {
                             setExerciseContent(
-                              <PortableText
-                                value={exercise.content}
-                                components={components}
-                              />
+                              <div className="w-64 flex flex-col m-auto">
+                                <PortableText
+                                  value={exercise.content}
+                                  components={components}
+                                />
+                              </div>
                             );
                           }
                           if (exercise.type === "soundslice") {
