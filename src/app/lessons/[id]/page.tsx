@@ -41,7 +41,6 @@ export default function LessonPage() {
             )}
             width="100%"
             height="480"
-            frameBorder="0"
             allow="autoplay; fullscreen; picture-in-picture"
             allowFullScreen
             title="Exercise Video"
