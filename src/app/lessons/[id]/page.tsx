@@ -62,7 +62,7 @@ export default function LessonPage() {
         if (!value?.asset) return null; // Skip rendering if URL is missing
         return (
           <img
-            src={urlFor(value.asset).width(380).url()}
+            src={urlFor(value.asset).width(800).url()}
             alt={value.alt || "Image"}
             className="my-4 h-auto"
           />
@@ -85,12 +85,10 @@ export default function LessonPage() {
     <div className="flex flex-row items-center justify-center h-auto">
       {lesson ? (
         <>
-          <div className="flex lg:flex-row flex-col justify-between items-center w-full bg-gray-300">
-            {/* <div className="flex flex-col items-center justify-start w-1/6 bg-[var(--secondary-color)] h-full">
-              DASH
-            </div> */}
-            <div className="flex flex-col items-center justify-start lg:w-2/3 w-full bg-[var(--accent-color)] h-auto">
-              <div className="flex flex-col items-center gap-6 justify-between h-auto p-5 w-full">
+          <div className="flex lg:flex-row flex-col justify-between w-full bg-gray-300 items-stretch">
+            {/* Left Column */}
+            <div className="flex flex-col items-center justify-start lg:w-2/3 w-full bg-[var(--accent-color)]">
+              <div className="flex flex-col items-center gap-6 justify-between p-5 w-full">
                 <div className="flex flex-row items-center justify-between w-full">
                   <h1 className="font-extrabold text-2xl text-[var(--secondary-color)]">
                     {lesson.title}
@@ -103,7 +101,6 @@ export default function LessonPage() {
                   </button>
                 </div>
                 <div className="h-full w-full">{exerciseContent}</div>
-
                 <div className="flex gap-2 text-xs">
                   <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
                     Add to Practice List
@@ -120,7 +117,6 @@ export default function LessonPage() {
                   ) : (
                     <></>
                   )}
-
                   <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
                     Mark Complete
                   </button>
@@ -128,17 +124,16 @@ export default function LessonPage() {
               </div>
             </div>
 
-            <div className="flex flex-col justify-between lg:w-1/3 w-full p-4 bg-[var(--highlight-color)] h-auto text-[var(--primary-color)]">
+            {/* Right Column */}
+            <div className="flex flex-col items-start lg:w-1/3 w-full p-4 bg-[var(--highlight-color)] text-[var(--primary-color)]">
               {/* Top section */}
-              <div className="flex flex-col flex-grow items-stretch">
+              <div className="flex flex-col flex-grow items-stretch w-full">
                 <div className="text-left mb-2">
                   <h2 className="font-bold mb-2">NOTES FROM JAY</h2>
                   <div style={{ whiteSpace: "pre-wrap", lineHeight: "1.2" }}>
                     {lesson.description}
                   </div>
                 </div>
-
-                {/* sticking/tempo/time sig section */}
                 {lesson.sticking || lesson.tempo || lesson.timeSignature ? (
                   <div className="bg-[var(--accent-color)] my-2 rounded-md p-1 inline-block max-w-max">
                     {lesson.sticking && (
@@ -163,7 +158,6 @@ export default function LessonPage() {
                 ) : (
                   <></>
                 )}
-                {/* Exercises */}
                 <div className="flex flex-col items-stretch justify-start w-full gap-2 my-2">
                   {lesson.exercises.map(
                     (
@@ -182,7 +176,7 @@ export default function LessonPage() {
                         onClick={() => {
                           if (exercise.type === "portableText") {
                             setExerciseContent(
-                              <div className="w-64 flex flex-col m-auto">
+                              <div className="w-10/12 flex flex-col m-auto">
                                 <PortableText
                                   value={exercise.content}
                                   components={components}
@@ -240,7 +234,6 @@ export default function LessonPage() {
                   )}
                 </div>
               </div>
-
               <div className="text-left w-full mt-auto">
                 <h2 className="font-bold">USER NOTES</h2>
                 <textarea
