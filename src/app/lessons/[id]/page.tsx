@@ -82,15 +82,15 @@ export default function LessonPage() {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center min-h-screen">
+    <div className="flex flex-row items-center justify-center h-auto">
       {lesson ? (
         <>
-          <div className="flex flex-row justify-between items-center w-full bg-gray-300">
+          <div className="flex lg:flex-row flex-col justify-between items-center w-full bg-gray-300">
             {/* <div className="flex flex-col items-center justify-start w-1/6 bg-[var(--secondary-color)] h-full">
               DASH
             </div> */}
-            <div className="flex flex-col items-center justify-center w-2/3 bg-[var(--accent-color)] min-h-screen">
-              <div className="flex flex-col items-center gap-6 justify-between h-screen p-5 w-full">
+            <div className="flex flex-col items-center justify-start lg:w-2/3 w-full bg-[var(--accent-color)] h-auto">
+              <div className="flex flex-col items-center gap-6 justify-between h-auto p-5 w-full">
                 <div className="flex flex-row items-center justify-between w-full">
                   <h1 className="font-extrabold text-2xl text-[var(--secondary-color)]">
                     {lesson.title}
@@ -104,7 +104,7 @@ export default function LessonPage() {
                 </div>
                 <div className="h-full w-full">{exerciseContent}</div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-2 text-xs">
                   <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
                     Add to Practice List
                   </button>
@@ -128,7 +128,7 @@ export default function LessonPage() {
               </div>
             </div>
 
-            <div className="flex flex-col justify-between w-1/3 p-4 bg-[var(--highlight-color)] h-screen text-[var(--primary-color)]">
+            <div className="flex flex-col justify-between lg:w-1/3 w-full p-4 bg-[var(--highlight-color)] h-auto text-[var(--primary-color)]">
               {/* Top section */}
               <div className="flex flex-col flex-grow items-stretch">
                 <div className="text-left mb-2">
@@ -241,11 +241,10 @@ export default function LessonPage() {
                 </div>
               </div>
 
-              {/* Bottom section: User Notes */}
               <div className="text-left w-full mt-auto">
                 <h2 className="font-bold">USER NOTES</h2>
                 <textarea
-                  className="w-full p-2 border rounded-md text-gray-400 h-auto"
+                  className="w-full p-2 border rounded-md text-gray-400 resize-y min-h-60 max-h-40"
                   placeholder={userNotes}
                   defaultValue={userNotes}
                   onFocus={(e) => {
