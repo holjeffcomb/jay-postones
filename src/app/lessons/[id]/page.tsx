@@ -1,11 +1,12 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../lib/sanityClient";
 import { FaFont, FaVideo, FaMusic } from "react-icons/fa";
 import { PortableText } from "@portabletext/react";
 import { urlFor, getUrlFromId } from "../../../lib/sanityClient";
+import { createClient } from "../../utils/supabase/client";
 
 const typeToIcon = {
   portableText: <FaFont />,
@@ -23,6 +24,38 @@ export default function LessonPage() {
   );
   const [exerciseContent, setExerciseContent] = useState<any>(null);
   const params = useParams();
+  const supabase = createClient();
+
+  const markLessonComplete = async (lessonId: string) => {
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
+      if (authError || !user) {
+        redirect("/login");
+      }
+
+      const { error: functionError } = await supabase.rpc(
+        "append_to_complete",
+        {
+          lessonid: lessonId, // Match SQL function parameter
+          userid: user.id, // Match SQL function parameter
+        }
+      );
+
+      if (functionError) {
+        console.error("Error calling append_to_complete:", functionError);
+        alert("Failed to mark lesson as complete");
+      }
+
+      alert("Lesson marked as complete");
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      alert("An unexpected error occurred");
+    }
+  };
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -116,7 +149,10 @@ export default function LessonPage() {
                   ) : (
                     <></>
                   )}
-                  <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
+                  <button
+                    onClick={() => markLessonComplete(params.id as string)}
+                    className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded"
+                  >
                     Mark Complete
                   </button>
                 </div>
