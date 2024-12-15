@@ -4,7 +4,12 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../lib/sanityClient";
 import { FaFont, FaVideo, FaMusic } from "react-icons/fa";
-import { PortableText, PortableTextBlock } from "@portabletext/react";
+import {
+  PortableText,
+  PortableTextBlock,
+  PortableTextReactComponents,
+  PortableTextComponentProps,
+} from "@portabletext/react";
 import { urlFor, getUrlFromId } from "../../../lib/sanityClient";
 import { markLessonComplete } from "@/app/utils/lessonService";
 
@@ -80,7 +85,7 @@ export default function LessonPage() {
     fetchLesson();
   }, [params.id]);
 
-  const components = {
+  const components: PortableTextReactComponents = {
     types: {
       image: ({
         value,
@@ -96,15 +101,35 @@ export default function LessonPage() {
         ) : null,
     },
     block: {
-      h1: ({ children }: { children: React.ReactNode }) => (
-        <h1 className="text-2xl font-bold text-[var(--secondary-color)]">
+      h1: ({
+        children,
+        ...props
+      }: PortableTextComponentProps<PortableTextBlock>) => (
+        <h1
+          className="text-2xl font-bold text-[var(--secondary-color)]"
+          {...props}
+        >
           {children}
         </h1>
       ),
-      normal: ({ children }: { children: React.ReactNode }) => (
-        <p className="text-[var(--secondary-color)]">{children}</p>
+      normal: ({
+        children,
+        ...props
+      }: PortableTextComponentProps<PortableTextBlock>) => (
+        <p className="text-[var(--secondary-color)]" {...props}>
+          {children}
+        </p>
       ),
     },
+    marks: {},
+    list: {},
+    listItem: {},
+    hardBreak: () => <br />,
+    unknownMark: () => null,
+    unknownType: () => null,
+    unknownBlockStyle: () => null,
+    unknownList: () => null,
+    unknownListItem: () => null,
   };
 
   return (
