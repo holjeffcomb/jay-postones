@@ -180,11 +180,11 @@ export default function LessonPage() {
             <div className="text-left mb-2">
               <h2 className="font-bold mb-2">NOTES FROM JAY</h2>
               <div style={{ whiteSpace: "pre-wrap", lineHeight: "1.2" }}>
-                {lesson.description}
+                {lesson?.description}
               </div>
             </div>
             <div className="flex flex-col items-stretch justify-start w-full gap-2 my-2">
-              {lesson.exercises.map((exercise, index) => (
+              {lesson?.exercises.map((exercise, index) => (
                 <button
                   key={index}
                   className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-start gap-2 hover:bg-gray-100 transition w-full"
@@ -232,6 +232,29 @@ export default function LessonPage() {
                   </div>
                 </button>
               ))}
+            </div>
+            {/* User Notes Section */}
+            <div className="text-left w-full mt-auto">
+              <h2 className="font-bold">USER NOTES</h2>
+              <textarea
+                className="w-full p-2 border rounded-md text-gray-400 resize-y min-h-60 max-h-40"
+                placeholder={userNotes}
+                defaultValue={userNotes}
+                onFocus={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.value = target.value === userNotes ? "" : target.value;
+                }}
+                onChange={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  if (target.value !== userNotes) {
+                    target.classList.remove("text-gray-400");
+                    target.classList.add("text-black");
+                  } else {
+                    target.classList.remove("text-black");
+                    target.classList.add("text-gray-400");
+                  }
+                }}
+              />
             </div>
           </div>
         </div>
