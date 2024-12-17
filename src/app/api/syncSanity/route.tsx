@@ -5,16 +5,51 @@ import { createClient } from "@/app/utils/supabase/client";
 const supabase = createClient();
 
 async function fetchSanityData() {
+  // Fetch courses
   const courses = await sanity.fetch(
     `*[_type == "course"] { _id, title, description }`
   );
+
+  // Fetch lessons with course relationship
   const lessons = await sanity.fetch(
-    `*[_type == "lesson"] { _id, title, "course_id": course._ref, description }`
+    `*[_type == "lesson"] {
+      _id,
+      title,
+      description,
+      "course_id": course->_id // Fetch the course ID via reference
+    }`
   );
+
+  // Fetch exercises with lesson relationship
   const exercises = await sanity.fetch(
-    `*[_type == "exercise"] { _id, title, "lesson_id": lesson._ref, description }`
+    `*[_type == "lesson"] {
+      _id, // Lesson ID
+      exercises[]{
+        _key, // Use _key as unique ID for exercises
+        title,
+        type,
+        "lesson_id": ^._id, // Parent lesson ID
+        description,
+        videoUrl,
+        soundsliceUrl
+      }
+    }`
   );
-  return { courses, lessons, exercises };
+
+  // Flatten exercises for easier handling
+  const flattenedExercises = exercises.flatMap((lesson) =>
+    lesson.exercises.map((exercise) => ({
+      id: exercise._key, // Unique ID for Supabase
+      title: exercise.title,
+      type: exercise.type,
+      description: exercise.description,
+      video_url: exercise.videoUrl || null,
+      soundslice_url: exercise.soundsliceUrl || null,
+      lesson_id: exercise.lesson_id, // Reference to the parent lesson
+    }))
+  );
+
+  return { courses, lessons, exercises: flattenedExercises };
 }
 
 async function syncToSupabase() {
@@ -36,7 +71,7 @@ async function syncToSupabase() {
     await supabase.from("lessons").upsert([
       {
         id: lesson._id,
-        course_id: lesson.course_id || null,
+        course_id: lesson.course_id || null, // Set to null if no parent course
         title: lesson.title,
         description: lesson.description,
       },
@@ -47,10 +82,13 @@ async function syncToSupabase() {
   for (const exercise of exercises) {
     await supabase.from("exercises").upsert([
       {
-        id: exercise._id,
-        lesson_id: exercise.lesson_id || null,
+        id: exercise.id, // Use _key as unique ID
+        lesson_id: exercise.lesson_id || null, // Reference parent lesson
         title: exercise.title,
+        type: exercise.type,
         description: exercise.description,
+        video_url: exercise.video_url,
+        soundslice_url: exercise.soundslice_url,
       },
     ]);
   }
