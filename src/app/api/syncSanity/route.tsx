@@ -4,14 +4,42 @@ import { createClient } from "@/app/utils/supabase/client";
 
 const supabase = createClient();
 
-async function fetchSanityData() {
+// Define types for Sanity data
+interface SanityCourse {
+  _id: string;
+  title: string;
+  description: string;
+}
+
+interface SanityLesson {
+  _id: string;
+  title: string;
+  description: string;
+  course_id?: string | null; // Optional if no course exists
+}
+
+interface SanityExercise {
+  id: string; // Flattened from _key
+  title: string;
+  type?: string; // Optional
+  description?: string; // Optional
+  video_url?: string | null;
+  soundslice_url?: string | null;
+  lesson_id: string; // Reference to the parent lesson
+}
+
+async function fetchSanityData(): Promise<{
+  courses: SanityCourse[];
+  lessons: SanityLesson[];
+  exercises: SanityExercise[];
+}> {
   // Fetch courses
-  const courses = await sanity.fetch(
+  const courses: SanityCourse[] = await sanity.fetch(
     `*[_type == "course"] { _id, title, description }`
   );
 
-  // Fetch lessons with course relationship
-  const lessons = await sanity.fetch(
+  // Fetch lessons with course relationships
+  const lessons: SanityLesson[] = await sanity.fetch(
     `*[_type == "lesson"] {
       _id,
       title,
@@ -20,8 +48,8 @@ async function fetchSanityData() {
     }`
   );
 
-  // Fetch exercises with lesson relationship
-  const exercises = await sanity.fetch(
+  // Fetch exercises with lesson relationships
+  const lessonWithExercises = await sanity.fetch(
     `*[_type == "lesson"] {
       _id, // Lesson ID
       exercises[]{
@@ -37,16 +65,17 @@ async function fetchSanityData() {
   );
 
   // Flatten exercises for easier handling
-  const flattenedExercises = exercises.flatMap((lesson) =>
-    lesson.exercises.map((exercise) => ({
-      id: exercise._key, // Unique ID for Supabase
-      title: exercise.title,
-      type: exercise.type,
-      description: exercise.description,
-      video_url: exercise.videoUrl || null,
-      soundslice_url: exercise.soundsliceUrl || null,
-      lesson_id: exercise.lesson_id, // Reference to the parent lesson
-    }))
+  const flattenedExercises: SanityExercise[] = lessonWithExercises.flatMap(
+    (lesson: { _id: string; exercises: any[] }) =>
+      lesson.exercises.map((exercise) => ({
+        id: exercise._key, // Use _key as unique ID
+        title: exercise.title,
+        type: exercise.type || null,
+        description: exercise.description || null,
+        video_url: exercise.videoUrl || null,
+        soundslice_url: exercise.soundsliceUrl || null,
+        lesson_id: lesson._id, // Reference to the parent lesson
+      }))
   );
 
   return { courses, lessons, exercises: flattenedExercises };
@@ -83,7 +112,7 @@ async function syncToSupabase() {
     await supabase.from("exercises").upsert([
       {
         id: exercise.id, // Use _key as unique ID
-        lesson_id: exercise.lesson_id || null, // Reference parent lesson
+        lesson_id: exercise.lesson_id, // Reference parent lesson
         title: exercise.title,
         type: exercise.type,
         description: exercise.description,
@@ -103,7 +132,7 @@ export async function POST() {
       { message: "Sanity data synced successfully!" },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Sync failed:", error);
     return NextResponse.json(
       { error: "Failed to sync data." },
