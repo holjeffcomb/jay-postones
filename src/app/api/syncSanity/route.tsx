@@ -82,7 +82,10 @@ async function fetchSanityData(): Promise<{
         lesson_id: lesson._id, // Reference to the parent lesson
       }))
   );
-
+  console.log(
+    "Flattened Exercises:",
+    JSON.stringify(flattenedExercises, null, 2)
+  );
   return { courses, lessons, exercises: flattenedExercises };
 }
 
