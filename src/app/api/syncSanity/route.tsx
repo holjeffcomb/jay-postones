@@ -19,7 +19,7 @@ interface SanityLesson {
 }
 
 interface SanityExercise {
-  id: string; // Flattened from _key
+  id: string; // Use the UUID from Sanity schema
   title: string;
   type?: string; // Optional
   description?: string; // Optional
@@ -53,10 +53,10 @@ async function fetchSanityData(): Promise<{
     `*[_type == "lesson"] {
       _id, // Lesson ID
       exercises[]{
-        _key, // Use _key as unique ID for exercises
+        id, // Use the UUID from the schema
         title,
         type,
-        "lesson_id": ^._id, // Parent lesson ID
+        "lesson_id": ^._id, // Inject parent lesson ID
         description,
         videoUrl,
         soundsliceUrl
@@ -68,7 +68,7 @@ async function fetchSanityData(): Promise<{
   const flattenedExercises: SanityExercise[] = lessonWithExercises.flatMap(
     (lesson: { _id: string; exercises: any[] }) =>
       lesson.exercises.map((exercise) => ({
-        id: exercise._key, // Use _key as unique ID
+        id: exercise.id, // Use the UUID field
         title: exercise.title,
         type: exercise.type || null,
         description: exercise.description || null,
@@ -111,7 +111,7 @@ async function syncToSupabase() {
   for (const exercise of exercises) {
     await supabase.from("exercises").upsert([
       {
-        id: exercise.id, // Use _key as unique ID
+        id: exercise.id, // Use the explicit UUID
         lesson_id: exercise.lesson_id, // Reference parent lesson
         title: exercise.title,
         type: exercise.type,
