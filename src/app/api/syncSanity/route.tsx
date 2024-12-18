@@ -36,7 +36,7 @@ async function fetchSanityData(): Promise<{
 }> {
   // Fetch courses
   const courses: SanityCourse[] = await sanity.fetch(
-    `*[_type == "course"] { _id, title, description }`
+    `*[_type == "course"] { _id, title }`
   );
 
   // Fetch lessons with course relationships
@@ -44,7 +44,7 @@ async function fetchSanityData(): Promise<{
     `*[_type == "lesson"] {
       _id,
       title,
-      description,
+
       "course_id": course->_id,
     }`
   );
@@ -58,9 +58,6 @@ async function fetchSanityData(): Promise<{
         title,
         type,
         "lesson_id": ^._id,
-        description,
-        videoUrl,
-        soundsliceUrl
       }
     }`
   );
@@ -77,9 +74,6 @@ async function fetchSanityData(): Promise<{
         id: exercise.id || uuidv4(), // Generate a new UUID if id is missing
         title: exercise.title || "Untitled Exercise",
         type: exercise.type || null,
-        description: exercise.description || null,
-        video_url: exercise.videoUrl || null,
-        soundslice_url: exercise.soundsliceUrl || null,
         lesson_id: lesson._id, // Parent lesson ID
       }))
   );
@@ -99,7 +93,6 @@ async function syncToSupabase() {
       {
         id: course._id,
         title: course.title,
-        description: course.description,
       },
     ]);
   }
@@ -111,7 +104,6 @@ async function syncToSupabase() {
         id: lesson._id,
         course_id: lesson.course_id || null, // Set to null if no parent course
         title: lesson.title,
-        description: lesson.description,
       },
     ]);
   }
@@ -130,9 +122,6 @@ async function syncToSupabase() {
         id: exerciseId, // Explicitly ensure this is a UUID string
         lesson_id: exercise.lesson_id,
         title: exercise.title || "Untitled Exercise",
-        description: exercise.description || null,
-        video_url: exercise.video_url || null,
-        soundslice_url: exercise.soundslice_url || null,
       },
     ]);
 
