@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { client as sanity } from "@/lib/sanityClient";
 import { createClient } from "@/app/utils/supabase/client";
+import { v4 as uuidv4 } from "uuid";
 
 const supabase = createClient();
 
@@ -73,13 +74,13 @@ async function fetchSanityData(): Promise<{
   const flattenedExercises: SanityExercise[] = lessonWithExercises.flatMap(
     (lesson: { _id: string; exercises: any[] }) =>
       lesson.exercises.map((exercise) => ({
-        id: exercise.id, // Use the UUID field
-        title: exercise.title,
+        id: exercise.id || uuidv4(), // Generate a new UUID if id is missing
+        title: exercise.title || "Untitled Exercise",
         type: exercise.type || null,
         description: exercise.description || null,
         video_url: exercise.videoUrl || null,
         soundslice_url: exercise.soundsliceUrl || null,
-        lesson_id: lesson._id, // Reference to the parent lesson
+        lesson_id: lesson._id, // Parent lesson ID
       }))
   );
   console.log(
