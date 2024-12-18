@@ -44,19 +44,19 @@ async function fetchSanityData(): Promise<{
       _id,
       title,
       description,
-      "course_id": course->_id // Fetch the course ID via reference
+      "course_id": course->_id,
     }`
   );
 
   // Fetch exercises with lesson relationships
   const lessonWithExercises = await sanity.fetch(
     `*[_type == "lesson"] {
-      _id, // Lesson ID
+      _id,
       exercises[]{
-        id, // Use the UUID from the schema
+        id,
         title,
         type,
-        "lesson_id": ^._id, // Inject parent lesson ID
+        "lesson_id": ^._id,
         description,
         videoUrl,
         soundsliceUrl
@@ -111,8 +111,8 @@ async function syncToSupabase() {
   for (const exercise of exercises) {
     await supabase.from("exercises").upsert([
       {
-        id: exercise.id, // Use the explicit UUID
-        lesson_id: exercise.lesson_id, // Reference parent lesson
+        id: exercise.id,
+        lesson_id: exercise.lesson_id,
         title: exercise.title,
         type: exercise.type,
         description: exercise.description,
