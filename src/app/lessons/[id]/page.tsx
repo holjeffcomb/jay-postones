@@ -44,6 +44,49 @@ const typeToIcon: Record<ExerciseType, JSX.Element> = {
   soundslice: <FaMusic />,
 };
 
+const components: PortableTextReactComponents = {
+  types: {
+    image: ({ value }: { value: { asset: { _ref: string }; alt?: string } }) =>
+      value?.asset ? (
+        <img
+          src={urlFor(value.asset).width(800).url()}
+          alt={value.alt || "Image"}
+          className="my-4 h-auto"
+        />
+      ) : null,
+  },
+  block: {
+    h1: ({
+      children,
+      ...props
+    }: PortableTextComponentProps<PortableTextBlock>) => (
+      <h1
+        className="text-2xl font-bold text-[var(--secondary-color)]"
+        {...props}
+      >
+        {children}
+      </h1>
+    ),
+    normal: ({
+      children,
+      ...props
+    }: PortableTextComponentProps<PortableTextBlock>) => (
+      <p className="text-[var(--secondary-color)]" {...props}>
+        {children}
+      </p>
+    ),
+  },
+  marks: {},
+  list: {},
+  listItem: {},
+  hardBreak: () => <br />,
+  unknownMark: () => null,
+  unknownType: () => null,
+  unknownBlockStyle: () => null,
+  unknownList: () => null,
+  unknownListItem: () => null,
+};
+
 export default function LessonPage() {
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [userNotes, setUserNotes] = useState<string>(
@@ -59,78 +102,52 @@ export default function LessonPage() {
       const fetchedLesson = await client.fetch<Lesson>(
         `*[_type == "lesson" && _id == "${params.id}"][0]`
       );
+
       setLesson(fetchedLesson);
 
-      // Update exerciseContent based on videoUrl
-      if (fetchedLesson?.videoUrl?.startsWith("https://vimeo.com")) {
-        setExerciseContent(
-          <iframe
-            src={fetchedLesson.videoUrl.replace(
-              "https://vimeo.com/",
-              "https://player.vimeo.com/video/"
-            )}
-            width="100%"
-            height="480"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
-            title="Exercise Video"
-          />
-        );
-      } else if (fetchedLesson?.videoUrl) {
-        setExerciseContent(<p>Unsupported video format.</p>);
+      // Load the first exercise by default
+      const firstExercise = fetchedLesson?.exercises?.[0];
+      if (firstExercise) {
+        if (firstExercise.type === "portableText") {
+          setExerciseContent(
+            <div className="w-10/12 flex flex-col m-auto">
+              <PortableText
+                value={firstExercise.content || []}
+                components={components}
+              />
+            </div>
+          );
+        } else if (firstExercise.type === "soundslice") {
+          setExerciseContent(
+            <iframe
+              src={firstExercise.soundsliceUrl}
+              width="100%"
+              height="400"
+              allowFullScreen
+            ></iframe>
+          );
+        } else if (firstExercise.type === "video") {
+          setExerciseContent(
+            <iframe
+              src={firstExercise.videoUrl?.replace(
+                "https://vimeo.com/",
+                "https://player.vimeo.com/video/"
+              )}
+              width="100%"
+              height="480"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              title="Exercise Video"
+            />
+          );
+        }
       } else {
-        setExerciseContent(<p>No content available for this exercise.</p>);
+        setExerciseContent(<p>No exercises available for this lesson.</p>);
       }
     };
+
     fetchLesson();
   }, [params.id]);
-
-  const components: PortableTextReactComponents = {
-    types: {
-      image: ({
-        value,
-      }: {
-        value: { asset: { _ref: string }; alt?: string };
-      }) =>
-        value?.asset ? (
-          <img
-            src={urlFor(value.asset).width(800).url()}
-            alt={value.alt || "Image"}
-            className="my-4 h-auto"
-          />
-        ) : null,
-    },
-    block: {
-      h1: ({
-        children,
-        ...props
-      }: PortableTextComponentProps<PortableTextBlock>) => (
-        <h1
-          className="text-2xl font-bold text-[var(--secondary-color)]"
-          {...props}
-        >
-          {children}
-        </h1>
-      ),
-      normal: ({
-        children,
-        ...props
-      }: PortableTextComponentProps<PortableTextBlock>) => (
-        <p className="text-[var(--secondary-color)]" {...props}>
-          {children}
-        </p>
-      ),
-    },
-    marks: {},
-    list: {},
-    listItem: {},
-    hardBreak: () => <br />,
-    unknownMark: () => null,
-    unknownType: () => null,
-    unknownBlockStyle: () => null,
-    unknownList: () => null,
-    unknownListItem: () => null,
-  };
 
   return (
     <div className="flex flex-row items-center justify-center h-auto">
