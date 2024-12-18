@@ -101,7 +101,7 @@ async function syncToSupabase() {
     await supabase.from("lessons").upsert([
       {
         id: lesson._id,
-        course_id: lesson.course_id || null, // Set to null if no parent course
+        course_id: lesson.course_id || null,
         title: lesson.title,
       },
     ]);
