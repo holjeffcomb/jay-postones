@@ -44,8 +44,7 @@ async function fetchSanityData(): Promise<{
     `*[_type == "lesson"] {
       _id,
       title,
-
-      "course_id": course->_id,
+      "course_id": *[_type == "course" && references(^._id)][0]._id
     }`
   );
 
@@ -74,7 +73,7 @@ async function fetchSanityData(): Promise<{
         id: exercise.id || uuidv4(), // Generate a new UUID if id is missing
         title: exercise.title || "Untitled Exercise",
         type: exercise.type || null,
-        lesson_id: lesson._id, // Parent lesson ID
+        lesson_id: lesson._id.replace(/^drafts\./, ""), // Parent lesson ID
       }))
   );
   console.log(
