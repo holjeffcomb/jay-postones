@@ -116,19 +116,36 @@ async function syncToSupabase() {
     ]);
   }
 
-  // Upsert exercises
   for (const exercise of exercises) {
-    await supabase.from("exercises").upsert([
+    // Ensure the id is valid as a UUID
+    const exerciseId = exercise.id || uuidv4();
+
+    console.log("Attempting to upsert exercise:", {
+      ...exercise,
+      id: exerciseId,
+    });
+
+    const { error } = await supabase.from("exercises").upsert([
       {
-        id: exercise.id,
+        id: exerciseId, // Explicitly ensure this is a UUID string
         lesson_id: exercise.lesson_id,
-        title: exercise.title,
-        type: exercise.type,
-        description: exercise.description,
-        video_url: exercise.video_url,
-        soundslice_url: exercise.soundslice_url,
+        title: exercise.title || "Untitled Exercise",
+        description: exercise.description || null,
+        video_url: exercise.video_url || null,
+        soundslice_url: exercise.soundslice_url || null,
       },
     ]);
+
+    if (error) {
+      console.error(
+        `Failed to insert exercise "${exercise.title}" (ID: ${exerciseId}):`,
+        error
+      );
+    } else {
+      console.log(
+        `Exercise "${exercise.title}" (ID: ${exerciseId}) upserted successfully.`
+      );
+    }
   }
 
   console.log("Sanity data synced to Supabase!");
