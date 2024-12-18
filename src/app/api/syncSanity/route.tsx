@@ -64,6 +64,11 @@ async function fetchSanityData(): Promise<{
     }`
   );
 
+  console.log(
+    "Lessons with Exercises:",
+    JSON.stringify(lessonWithExercises, null, 2)
+  );
+
   // Flatten exercises for easier handling
   const flattenedExercises: SanityExercise[] = lessonWithExercises.flatMap(
     (lesson: { _id: string; exercises: any[] }) =>
