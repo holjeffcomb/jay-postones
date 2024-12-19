@@ -34,7 +34,9 @@ export const handleProgressUpdate = async (
       alert("Failed to update progress tracker");
     } else {
       alert("Exercise added to progress tracker");
-      console.log("Progress updated successfully!");
+      if (status !== "in progress") {
+        console.log("Progress updated successfully!");
+      }
     }
   } catch (err) {
     console.error("Unexpected error:", err);
