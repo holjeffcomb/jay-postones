@@ -4,7 +4,10 @@ import { redirect } from "next/navigation";
 
 const supabase = createClient();
 
-export const markLessonComplete = async (lessonId: string) => {
+export const handleProgressUpdate = async (
+  exerciseId: string,
+  status: "complete" | "in progress" | "too difficult" | "not interested"
+) => {
   try {
     const {
       data: { user },
@@ -15,24 +18,33 @@ export const markLessonComplete = async (lessonId: string) => {
       redirect("/login");
     }
 
-    const { error: functionError } = await supabase.rpc("append_to_complete", {
-      lessonid: lessonId,
-      userid: user.id,
-    });
+    const userId = user.id;
 
-    if (functionError) {
-      console.error("Error calling append_to_complete:", functionError);
-      alert("Failed to mark lesson as complete");
+    const { error } = await supabase.from("progress").upsert([
+      {
+        id: `${userId}--${exerciseId}`,
+        user_id: userId,
+        exercise_id: exerciseId,
+        status: status,
+      },
+    ]);
+
+    if (error) {
+      console.error("Error updating progress tracker:", error);
+      alert("Failed to update progress tracker");
+    } else {
+      alert("Exercise added to progress tracker");
+      if (status !== "in progress") {
+        console.log("Progress updated successfully!");
+      }
     }
-
-    alert("Lesson marked as complete");
   } catch (err) {
     console.error("Unexpected error:", err);
     alert("An unexpected error occurred");
   }
 };
 
-export const markLessonInProgress = async (lessonId: string) => {
+export const handleAddToPracticeList = async (lessonId: string) => {
   try {
     const {
       data: { user },
@@ -43,20 +55,22 @@ export const markLessonInProgress = async (lessonId: string) => {
       redirect("/login");
     }
 
-    const { error: functionError } = await supabase.rpc(
-      "append_to_in_progress",
+    const userId = user.id;
+
+    const { error } = await supabase.from("practice_list").upsert([
       {
-        lessonid: lessonId,
-        userid: user.id,
-      }
-    );
-
-    if (functionError) {
-      console.error("Error calling append_to_in_progress:", functionError);
-      alert("Failed to mark lesson as in progress");
+        id: `${userId}--${lessonId}`,
+        user_id: userId,
+        lesson_id: lessonId,
+      },
+    ]);
+    if (error) {
+      console.error("Error updating practice list tracker:", error);
+      alert("Failed to update practice list");
+    } else {
+      console.log("Progress updated successfully!");
+      alert("Lesson added to practice list");
     }
-
-    alert("Lesson marked as in progress");
   } catch (err) {
     console.error("Unexpected error:", err);
     alert("An unexpected error occurred");
