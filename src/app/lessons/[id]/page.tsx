@@ -3,7 +3,9 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../lib/sanityClient";
-import { FaFont, FaVideo, FaMusic } from "react-icons/fa";
+import { FaFont, FaVideo, FaMusic, FaCheck } from "react-icons/fa";
+import { LiaGrinBeamSweat } from "react-icons/lia";
+import { AiOutlinePlus } from "react-icons/ai";
 import {
   PortableText,
   PortableTextBlock,
@@ -11,7 +13,10 @@ import {
   PortableTextComponentProps,
 } from "@portabletext/react";
 import { urlFor, getUrlFromId } from "../../../lib/sanityClient";
-import { handleProgressUpdate } from "@/app/utils/lessonService";
+import {
+  handleProgressUpdate,
+  handleAddToPracticeList,
+} from "@/app/utils/lessonService";
 
 // Type for exercise types
 type ExerciseType = "portableText" | "video" | "soundslice";
@@ -172,9 +177,6 @@ export default function LessonPage() {
               </div>
               <div className="h-full w-full">{exerciseContent}</div>
               <div className="flex gap-2 text-xs">
-                <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
-                  Add to Practice List
-                </button>
                 {lesson.downloadableFile?.asset._ref && (
                   <a
                     href={getUrlFromId(lesson.downloadableFile.asset._ref)}
@@ -186,12 +188,26 @@ export default function LessonPage() {
                   </a>
                 )}
                 {exerciseId ? (
-                  <button
-                    onClick={() => handleProgressUpdate(exerciseId, "complete")}
-                    className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded"
-                  >
-                    Mark Complete
-                  </button>
+                  <>
+                    <button
+                      onClick={() =>
+                        handleProgressUpdate(exerciseId, "too difficult")
+                      }
+                      className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded flex items-center gap-2"
+                    >
+                      <LiaGrinBeamSweat className="w-5 h-5 text-white" />
+                      Mark as Too Difficult
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleProgressUpdate(exerciseId, "complete")
+                      }
+                      className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded flex items-center gap-2"
+                    >
+                      <FaCheck className="w-3 h-3 text-white" />
+                      Mark as Complete
+                    </button>
+                  </>
                 ) : (
                   <></>
                 )}
@@ -202,6 +218,15 @@ export default function LessonPage() {
           {/* Right Column */}
           <div className="flex flex-col items-start lg:w-1/3 w-full p-4 bg-[var(--highlight-color)] text-[var(--primary-color)]">
             <div className="text-left mb-2">
+              <h1 className="font-bold text-2xl">{lesson.title}</h1>
+              <button
+                className="text-xs border border-[var(--primary-color)] bg-[var(--accent-color)] hover:bg-[var(--secondary-color)] text-[var(--primary-color)] hover:text-[var(--text-color)] py-1 px-2 rounded-xl flex items-center gap-2 my-2"
+                onClick={() => handleAddToPracticeList(lesson._id)}
+              >
+                <AiOutlinePlus className="w-3 h-3" />
+                Add Lesson to Practice List
+              </button>
+
               <h2 className="font-bold mb-2">NOTES FROM JAY</h2>
               <div style={{ whiteSpace: "pre-wrap", lineHeight: "1.2" }}>
                 {lesson?.description}
