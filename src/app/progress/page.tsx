@@ -13,7 +13,7 @@ export default function ProgressPage() {
     const fetchExercises = async () => {
       const { data, error } = await supabase
         .from("exercises")
-        .select("id, title");
+        .select("id, title, lesson_id");
       if (error) {
         console.error("Error fetching exercises:", error);
       } else {
@@ -32,9 +32,7 @@ export default function ProgressPage() {
       <h1>Exercises</h1>
       <ul>
         {exercises?.map((exercise: any) => (
-          <li key={exercise.id}>
-            {exercise.title} - {exercise.lesson_id}
-          </li>
+          <li key={exercise.id}>{exercise.title}</li>
         ))}
       </ul>
     </div>
