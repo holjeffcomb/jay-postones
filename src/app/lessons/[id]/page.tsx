@@ -11,13 +11,14 @@ import {
   PortableTextComponentProps,
 } from "@portabletext/react";
 import { urlFor, getUrlFromId } from "../../../lib/sanityClient";
-import { markLessonComplete } from "@/app/utils/lessonService";
+import { handleProgressUpdate } from "@/app/utils/lessonService";
 
 // Type for exercise types
 type ExerciseType = "portableText" | "video" | "soundslice";
 
 // Type for each exercise
 type Exercise = {
+  id: string;
   type: ExerciseType;
   title: string;
   videoUrl?: string;
@@ -95,6 +96,7 @@ export default function LessonPage() {
   const [exerciseContent, setExerciseContent] = useState<JSX.Element | null>(
     null
   );
+  const [exerciseId, setExerciseId] = useState<string | null>(null);
   const params = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -107,6 +109,7 @@ export default function LessonPage() {
 
       // Load the first exercise by default
       const firstExercise = fetchedLesson?.exercises?.[0];
+      setExerciseId(firstExercise.id);
       if (firstExercise) {
         if (firstExercise.type === "portableText") {
           setExerciseContent(
@@ -182,12 +185,16 @@ export default function LessonPage() {
                     </button>
                   </a>
                 )}
-                <button
-                  onClick={() => markLessonComplete(params.id)}
-                  className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded"
-                >
-                  Mark Complete
-                </button>
+                {exerciseId ? (
+                  <button
+                    onClick={() => handleProgressUpdate(exerciseId, "complete")}
+                    className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded"
+                  >
+                    Mark Complete
+                  </button>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>
@@ -206,6 +213,7 @@ export default function LessonPage() {
                   key={index}
                   className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-start gap-2 hover:bg-gray-100 transition w-full"
                   onClick={() => {
+                    setExerciseId(exercise.id);
                     if (exercise.type === "portableText") {
                       setExerciseContent(
                         <div className="w-10/12 flex flex-col m-auto">
