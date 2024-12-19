@@ -115,6 +115,7 @@ export default function LessonPage() {
       // Load the first exercise by default
       const firstExercise = fetchedLesson?.exercises?.[0];
       setExerciseId(firstExercise.id);
+      handleProgressUpdate(firstExercise.id, "in progress");
       if (firstExercise) {
         if (firstExercise.type === "portableText") {
           setExerciseContent(
@@ -239,6 +240,7 @@ export default function LessonPage() {
                   className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-start gap-2 hover:bg-gray-100 transition w-full"
                   onClick={() => {
                     setExerciseId(exercise.id);
+                    handleProgressUpdate(exercise.id, "in progress");
                     if (exercise.type === "portableText") {
                       setExerciseContent(
                         <div className="w-10/12 flex flex-col m-auto">
