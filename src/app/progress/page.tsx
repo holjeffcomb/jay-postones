@@ -7,6 +7,9 @@ const supabase = createClient();
 
 export default function ProgressPage() {
   const [lessonsWithExercises, setLessonsWithExercises] = useState<any>({});
+  const [progress, setProgress] = useState<{ [exerciseId: string]: string }>(
+    {}
+  );
   const [loading, setLoading] = useState(true);
   const [expandedLessons, setExpandedLessons] = useState<{
     [key: string]: boolean;
@@ -58,6 +61,36 @@ export default function ProgressPage() {
         });
 
         setLessonsWithExercises(groupedData);
+
+        // Fetch progress data for the logged-in user
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) {
+          console.error("User not logged in.");
+          return;
+        }
+
+        const { data: progressData, error: progressError } = await supabase
+          .from("progress")
+          .select("exercise_id, status")
+          .eq("user_id", user.id);
+
+        if (progressError) {
+          console.error("Error fetching progress:", progressError);
+          return;
+        }
+
+        // Map progress data by exercise_id
+        const progressMap: { [exerciseId: string]: string } = {};
+        progressData.forEach(
+          (entry: { exercise_id: string; status: string }) => {
+            progressMap[entry.exercise_id] = entry.status;
+          }
+        );
+
+        setProgress(progressMap);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -78,8 +111,8 @@ export default function ProgressPage() {
           <tr>
             <th className="border border-gray-300 p-2"></th>
             <th className="border border-gray-300 p-2">Not Started</th>
-            <th className="border border-gray-300 p-2">Hard</th>
             <th className="border border-gray-300 p-2">In Progress</th>
+            <th className="border border-gray-300 p-2">Too Difficult</th>
             <th className="border border-gray-300 p-2">Complete</th>
           </tr>
         </thead>
@@ -108,17 +141,29 @@ export default function ProgressPage() {
               {/* Exercise Rows */}
               {expandedLessons[lessonId] &&
                 lessonsWithExercises[lessonId].exercises.map(
-                  (exercise: any) => (
-                    <tr key={exercise.id} className="text-center">
-                      <td className="border border-gray-300 p-2 text-left pl-8">
-                        {exercise.title}
-                      </td>
-                      <td className="border border-gray-300 p-2"></td>
-                      <td className="border border-gray-300 p-2"></td>
-                      <td className="border border-gray-300 p-2"></td>
-                      <td className="border border-gray-300 p-2"></td>
-                    </tr>
-                  )
+                  (exercise: any) => {
+                    const status = progress[exercise.id] || "not started";
+
+                    return (
+                      <tr key={exercise.id} className="text-center">
+                        <td className="border border-gray-300 p-2 text-left pl-8">
+                          {exercise.title}
+                        </td>
+                        <td className="border border-gray-300 p-2">
+                          {status === "not started" ? "X" : ""}
+                        </td>
+                        <td className="border border-gray-300 p-2">
+                          {status === "in progress" ? "X" : ""}
+                        </td>
+                        <td className="border border-gray-300 p-2">
+                          {status === "too difficult" ? "X" : ""}
+                        </td>
+                        <td className="border border-gray-300 p-2">
+                          {status === "complete" ? "X" : ""}
+                        </td>
+                      </tr>
+                    );
+                  }
                 )}
             </>
           ))}
