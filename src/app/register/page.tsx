@@ -32,7 +32,9 @@ export default function RegistrationPage() {
       }
     } else {
       // On success, redirect or notify the user
-      alert("Registration successful! You can now log in.");
+      alert(
+        "Registration successful! Check your inbox to validate your email address."
+      );
     }
   };
 
