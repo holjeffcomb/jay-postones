@@ -149,19 +149,29 @@ export default function LessonsPage() {
         </select>
         <select className="p-2 border rounded-md text-black">
           <option value="">Select category</option>
-          <option value="drum-fills">Drum fills</option>
           <option value="grooves">Grooves</option>
-          <option value="rudiments">Rudiments</option>
+          <option value="drum-fills">Drum Fills</option>
+          <option value="tesseract">TesseracT</option>
+          <option value="odd-timing">Odd timing</option>
           <option value="polyrhythms">Polyrhythms</option>
-          <option value="odd-timing">Odd Timing</option>
+          <option value="displacement">Displacement</option>
+          <option value="metric-modulation">Metric Modulation</option>
+          <option value="single-kick">Single kick</option>
           <option value="double-kick">Double Kick</option>
-          <option value="single-kick">Single Kick</option>
-          <option value="basic-techniques">Basic techniques</option>
+          <option value="hand-technique">Hand Technique</option>
+          <option value="foot-technique">Foot Technique</option>
+          <option value="rudiments">Rudiments</option>
+          <option value="gear">Gear</option>
+          <option value="programming-drums">Programming drums</option>
+          <option value="practice-routine">Practice routine</option>
+          <option value="technique">Technique</option>
           <option value="flow">Flow</option>
           <option value="limb-independence">Limb Independence</option>
-          <option value="tesseract">TesseracT</option>
-          <option value="single-strokes">Single Strokes</option>
-          <option value="double-strokes">Double Strokes</option>
+          <option value="ghost-notes">Ghost Notes</option>
+          <option value="three">Three</option>
+          <option value="five">Five</option>
+          <option value="seven">Seven</option>
+          <option value="nine">Nine</option>
         </select>
       </div>
       <LessonGrid lessons={lessons} />
