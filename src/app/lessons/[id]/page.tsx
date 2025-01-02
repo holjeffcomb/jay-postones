@@ -17,6 +17,7 @@ import {
   handleProgressUpdate,
   handleAddToPracticeList,
 } from "@/app/utils/lessonService";
+import Image from "next/image";
 
 // Type for exercise types
 type ExerciseType = "portableText" | "video" | "soundslice";
@@ -93,6 +94,8 @@ const components: PortableTextReactComponents = {
   unknownListItem: () => null,
 };
 
+const LoadingWheel = "/images/animations/loadingwheel.svg";
+
 export default function LessonPage() {
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [userNotes, setUserNotes] = useState<string>(
@@ -103,6 +106,10 @@ export default function LessonPage() {
   );
   const [exerciseId, setExerciseId] = useState<string | null>(null);
   const params = useParams<{ id: string }>();
+  const [isMarkCompleteLoading, setIsMarkCompleteLoading] =
+    useState<boolean>(false);
+  const [isTooDifficultLoading, setIsTooDifficultLoading] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -158,6 +165,18 @@ export default function LessonPage() {
     fetchLesson();
   }, [params.id]);
 
+  const handleMarkComplete = async (exerciseId: string) => {
+    setIsMarkCompleteLoading(true);
+    await handleProgressUpdate(exerciseId, "complete");
+    setIsMarkCompleteLoading(false);
+  };
+
+  const handleMarkTooDifficult = async (exerciseId: string) => {
+    setIsTooDifficultLoading(true);
+    await handleProgressUpdate(exerciseId, "too difficult");
+    setIsTooDifficultLoading(false);
+  };
+
   return (
     <div className="flex flex-row items-center justify-center h-auto">
       {lesson ? (
@@ -191,21 +210,35 @@ export default function LessonPage() {
                 {exerciseId ? (
                   <>
                     <button
-                      onClick={() =>
-                        handleProgressUpdate(exerciseId, "too difficult")
-                      }
+                      onClick={() => handleMarkTooDifficult(exerciseId)}
                       className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded flex items-center gap-2"
                     >
-                      <LiaGrinBeamSweat className="w-5 h-5 text-white" />
+                      {isTooDifficultLoading ? (
+                        <Image
+                          src={LoadingWheel}
+                          width={18}
+                          height={18}
+                          alt="loading"
+                        />
+                      ) : (
+                        <LiaGrinBeamSweat className="w-5 h-5 text-white" />
+                      )}
                       Mark as Too Difficult
                     </button>
                     <button
-                      onClick={() =>
-                        handleProgressUpdate(exerciseId, "complete")
-                      }
+                      onClick={() => handleMarkComplete(exerciseId)}
                       className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded flex items-center gap-2"
                     >
-                      <FaCheck className="w-3 h-3 text-white" />
+                      {isMarkCompleteLoading ? (
+                        <Image
+                          src={LoadingWheel}
+                          width={18}
+                          height={18}
+                          alt="loading"
+                        />
+                      ) : (
+                        <FaCheck className="w-3 h-3 text-white" />
+                      )}
                       Mark as Complete
                     </button>
                   </>
