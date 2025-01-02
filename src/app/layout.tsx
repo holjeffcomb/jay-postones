@@ -3,6 +3,7 @@ import Header from "./_components/Header";
 import Footer from "./_components/Footer";
 import { Inter, Raleway } from "next/font/google";
 import "./globals.css";
+// import ClientProvider from "./_context/ClientProvider";
 
 const raleway = Raleway({ subsets: ["latin"] });
 

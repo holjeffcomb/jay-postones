@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../lib/sanityClient";
 import { FaFont, FaVideo, FaMusic, FaCheck } from "react-icons/fa";
@@ -16,8 +16,11 @@ import { urlFor, getUrlFromId } from "../../../lib/sanityClient";
 import {
   handleProgressUpdate,
   handleAddToPracticeList,
-} from "@/app/utils/lessonService";
+  fetchProgress,
+  fetchUserId,
+} from "@/app/utils/supabaseService";
 import Image from "next/image";
+import { Progress, ProgressList } from "../../../../types/types";
 
 // Type for exercise types
 type ExerciseType = "portableText" | "video" | "soundslice";
@@ -110,6 +113,13 @@ export default function LessonPage() {
     useState<boolean>(false);
   const [isTooDifficultLoading, setIsTooDifficultLoading] =
     useState<boolean>(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [completedExerciseIds, setCompletedExerciseIds] = useState<string[]>(
+    []
+  );
+  const [difficultExerciseIds, setDifficultExerciseIds] = useState<string[]>(
+    []
+  );
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -121,8 +131,33 @@ export default function LessonPage() {
 
       // Load the first exercise by default
       const firstExercise = fetchedLesson?.exercises?.[0];
+
+      // mark in progress if not already marked
       setExerciseId(firstExercise.id);
-      handleProgressUpdate(firstExercise.id, "in progress");
+      if (
+        !completedExerciseIds.includes(firstExercise.id) ||
+        !difficultExerciseIds.includes(firstExercise.id)
+      ) {
+        handleProgressUpdate(firstExercise.id, "in progress");
+      }
+
+      // Fetch current user, redirect to login if not found
+      const userId = await fetchUserId();
+      if (!userId) {
+        redirect("/login");
+      } else {
+        setUserId(userId);
+      }
+      const progress = await fetchProgress(firstExercise.id, userId);
+
+      // populate complete and difficult exercise IDs
+      if (!progress) {
+        console.error("Progress not available");
+      } else {
+        setCompletedExerciseIds(returnCompletedExercises(progress));
+        setDifficultExerciseIds(returnedDifficultExercises(progress));
+      }
+
       if (firstExercise) {
         if (firstExercise.type === "portableText") {
           setExerciseContent(
@@ -165,14 +200,28 @@ export default function LessonPage() {
     fetchLesson();
   }, [params.id]);
 
+  const returnCompletedExercises = (progressData: ProgressList): string[] => {
+    return progressData
+      .filter((progress: Progress) => progress.status === "complete")
+      .map((progress: Progress) => progress.exercise_id);
+  };
+
+  const returnedDifficultExercises = (progressData: ProgressList): string[] => {
+    return progressData
+      .filter((progress: Progress) => progress.status === "too difficult")
+      .map((progress: Progress) => progress.exercise_id);
+  };
+
   const handleMarkComplete = async (exerciseId: string) => {
     setIsMarkCompleteLoading(true);
+    completedExerciseIds.push(exerciseId);
     await handleProgressUpdate(exerciseId, "complete");
     setIsMarkCompleteLoading(false);
   };
 
   const handleMarkTooDifficult = async (exerciseId: string) => {
     setIsTooDifficultLoading(true);
+    difficultExerciseIds.push(exerciseId);
     await handleProgressUpdate(exerciseId, "too difficult");
     setIsTooDifficultLoading(false);
   };
@@ -273,7 +322,6 @@ export default function LessonPage() {
                   className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-start gap-2 hover:bg-gray-100 transition w-full"
                   onClick={() => {
                     setExerciseId(exercise.id);
-                    handleProgressUpdate(exercise.id, "in progress");
                     if (exercise.type === "portableText") {
                       setExerciseContent(
                         <div className="w-10/12 flex flex-col m-auto">
@@ -312,7 +360,14 @@ export default function LessonPage() {
                   <div className="flex items-start gap-2">
                     {typeToIcon[exercise.type] || <span>?</span>}
                     <div>
-                      <h3 className="font-normal">{exercise.title}</h3>
+                      <h3 className="font-normal">
+                        {exercise.title}{" "}
+                        {completedExerciseIds.includes(exercise.id) ? (
+                          <span>***</span>
+                        ) : difficultExerciseIds.includes(exercise.id) ? (
+                          <span>!!!</span>
+                        ) : null}
+                      </h3>
                     </div>
                   </div>
                 </button>

@@ -76,3 +76,40 @@ export const handleAddToPracticeList = async (lessonId: string) => {
     alert("An unexpected error occurred");
   }
 };
+
+export const fetchProgress = async (exerciseId: string, userId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from("progress")
+      .select("*") // Select all columns, or specify specific columns if needed
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error("Error fetching progress:", error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    return null;
+  }
+};
+
+export const fetchUserId = async () => {
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      redirect("/login");
+    }
+
+    return user.id;
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    return null;
+  }
+};
