@@ -58,9 +58,11 @@ const components: PortableTextReactComponents = {
   types: {
     image: ({ value }: { value: { asset: { _ref: string }; alt?: string } }) =>
       value?.asset ? (
-        <img
+        <Image
           src={urlFor(value.asset).width(800).url()}
           alt={value.alt || "Image"}
+          width={800}
+          height={600}
           className="my-4 h-auto"
         />
       ) : null,
@@ -69,22 +71,36 @@ const components: PortableTextReactComponents = {
     h1: ({
       children,
       ...props
-    }: PortableTextComponentProps<PortableTextBlock>) => (
-      <h1
-        className="text-2xl font-bold text-[var(--secondary-color)]"
-        {...props}
-      >
-        {children}
-      </h1>
-    ),
+    }: PortableTextComponentProps<PortableTextBlock>) => {
+      // Only pick necessary props to avoid passing invalid ones
+      const { id, className } = props as { id?: string; className?: string };
+
+      return (
+        <h1
+          id={id}
+          className={`text-2xl font-bold text-[var(--secondary-color)] ${
+            className || ""
+          }`}
+        >
+          {children}
+        </h1>
+      );
+    },
     normal: ({
       children,
       ...props
-    }: PortableTextComponentProps<PortableTextBlock>) => (
-      <p className="text-[var(--secondary-color)]" {...props}>
-        {children}
-      </p>
-    ),
+    }: PortableTextComponentProps<PortableTextBlock>) => {
+      const { id, className } = props as { id?: string; className?: string };
+
+      return (
+        <p
+          id={id}
+          className={`text-[var(--secondary-color)] ${className || ""}`}
+        >
+          {children}
+        </p>
+      );
+    },
   },
   marks: {},
   list: {},
@@ -134,12 +150,6 @@ export default function LessonPage() {
 
       // mark in progress if not already marked
       setExerciseId(firstExercise.id);
-      if (
-        !completedExerciseIds.includes(firstExercise.id) ||
-        !difficultExerciseIds.includes(firstExercise.id)
-      ) {
-        handleProgressUpdate(firstExercise.id, "in progress");
-      }
 
       // Fetch current user, redirect to login if not found
       const userId = await fetchUserId();
@@ -214,15 +224,29 @@ export default function LessonPage() {
 
   const handleMarkComplete = async (exerciseId: string) => {
     setIsMarkCompleteLoading(true);
-    completedExerciseIds.push(exerciseId);
+    // Add to completedExerciseIds
+
+    // Update progress
     await handleProgressUpdate(exerciseId, "complete");
+    completedExerciseIds.push(exerciseId);
+    // Remove from difficultExerciseIds if it exists
+    if (difficultExerciseIds.includes(exerciseId)) {
+      setDifficultExerciseIds(
+        difficultExerciseIds.filter((id) => id !== exerciseId)
+      );
+    }
     setIsMarkCompleteLoading(false);
   };
 
   const handleMarkTooDifficult = async (exerciseId: string) => {
     setIsTooDifficultLoading(true);
-    difficultExerciseIds.push(exerciseId);
     await handleProgressUpdate(exerciseId, "too difficult");
+    if (completedExerciseIds.includes(exerciseId)) {
+      setCompletedExerciseIds(
+        completedExerciseIds.filter((id) => id !== exerciseId)
+      );
+    }
+    difficultExerciseIds.push(exerciseId);
     setIsTooDifficultLoading(false);
   };
 
@@ -319,7 +343,7 @@ export default function LessonPage() {
               {lesson?.exercises.map((exercise, index) => (
                 <button
                   key={index}
-                  className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-start gap-2 hover:bg-gray-100 transition w-full"
+                  className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-center justify-between hover:bg-gray-100 transition w-full"
                   onClick={() => {
                     setExerciseId(exercise.id);
                     if (exercise.type === "portableText") {
@@ -360,16 +384,14 @@ export default function LessonPage() {
                   <div className="flex items-start gap-2">
                     {typeToIcon[exercise.type] || <span>?</span>}
                     <div>
-                      <h3 className="font-normal">
-                        {exercise.title}{" "}
-                        {completedExerciseIds.includes(exercise.id) ? (
-                          <span>***</span>
-                        ) : difficultExerciseIds.includes(exercise.id) ? (
-                          <span>!!!</span>
-                        ) : null}
-                      </h3>
+                      <h3 className="font-normal">{exercise.title}</h3>
                     </div>
                   </div>
+                  {completedExerciseIds.includes(exercise.id) ? (
+                    <FaCheck className="w-3 h-3 text-[var(--primary-color)]" />
+                  ) : difficultExerciseIds.includes(exercise.id) ? (
+                    <LiaGrinBeamSweat className="w-5 h-5 text-[var(--primary-color)]" />
+                  ) : null}
                 </button>
               ))}
             </div>
