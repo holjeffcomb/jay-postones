@@ -136,6 +136,9 @@ export default function LessonPage() {
   const [difficultExerciseIds, setDifficultExerciseIds] = useState<string[]>(
     []
   );
+  const [selectedExerciseTitle, setSelectedExerciseTitle] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -147,9 +150,10 @@ export default function LessonPage() {
 
       // Load the first exercise by default
       const firstExercise = fetchedLesson?.exercises?.[0];
-
-      // mark in progress if not already marked
-      setExerciseId(firstExercise.id);
+      if (firstExercise) {
+        setExerciseId(firstExercise.id);
+        setSelectedExerciseTitle(firstExercise.title);
+      }
 
       // Fetch current user, redirect to login if not found
       const userId = await fetchUserId();
@@ -158,9 +162,8 @@ export default function LessonPage() {
       } else {
         setUserId(userId);
       }
-      const progress = await fetchProgress(firstExercise.id, userId);
 
-      // populate complete and difficult exercise IDs
+      const progress = await fetchProgress(firstExercise.id, userId);
       if (!progress) {
         console.error("Progress not available");
       } else {
@@ -227,26 +230,53 @@ export default function LessonPage() {
     // Add to completedExerciseIds
 
     // Update progress
-    await handleProgressUpdate(exerciseId, "complete");
-    completedExerciseIds.push(exerciseId);
-    // Remove from difficultExerciseIds if it exists
-    if (difficultExerciseIds.includes(exerciseId)) {
-      setDifficultExerciseIds(
-        difficultExerciseIds.filter((id) => id !== exerciseId)
-      );
+    const progressUpdateResponse = await handleProgressUpdate(
+      exerciseId,
+      "complete"
+    );
+
+    if (!progressUpdateResponse.success) {
+      console.error(progressUpdateResponse.error);
+      alert("Failed to mark exercise as complete. Please try again later.");
+    } else {
+      // if success
+      alert("Exercise marked as complete!");
+
+      // Remove from difficultExerciseIds if it exists
+      if (difficultExerciseIds.includes(exerciseId)) {
+        setDifficultExerciseIds(
+          difficultExerciseIds.filter((id) => id !== exerciseId)
+        );
+      }
+      completedExerciseIds.push(exerciseId);
     }
     setIsMarkCompleteLoading(false);
   };
 
   const handleMarkTooDifficult = async (exerciseId: string) => {
     setIsTooDifficultLoading(true);
-    await handleProgressUpdate(exerciseId, "too difficult");
-    if (completedExerciseIds.includes(exerciseId)) {
-      setCompletedExerciseIds(
-        completedExerciseIds.filter((id) => id !== exerciseId)
+    const progressUpdateResponse = await handleProgressUpdate(
+      exerciseId,
+      "too difficult"
+    );
+
+    if (!progressUpdateResponse.success) {
+      console.error(progressUpdateResponse.error);
+      alert(
+        "Failed to mark exercise as too difficult. Please try again later."
       );
+    } else {
+      alert("Exercise marked as too difficult!");
+
+      // Remove from completedExerciseIds if it exists
+      if (completedExerciseIds.includes(exerciseId)) {
+        setCompletedExerciseIds(
+          completedExerciseIds.filter((id) => id !== exerciseId)
+        );
+      }
+      difficultExerciseIds.push(exerciseId);
     }
-    difficultExerciseIds.push(exerciseId);
+
     setIsTooDifficultLoading(false);
   };
 
@@ -259,7 +289,7 @@ export default function LessonPage() {
             <div className="flex flex-col items-center gap-6 justify-between p-5 w-full">
               <div className="flex flex-row items-center justify-between w-full">
                 <h1 className="font-extrabold text-2xl text-[var(--secondary-color)]">
-                  {lesson.title}
+                  {selectedExerciseTitle || lesson.title}
                 </h1>
                 <button
                   onClick={() => window.history.back()}
@@ -346,6 +376,8 @@ export default function LessonPage() {
                   className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-center justify-between hover:bg-gray-100 transition w-full"
                   onClick={() => {
                     setExerciseId(exercise.id);
+                    setSelectedExerciseTitle(exercise.title);
+
                     if (exercise.type === "portableText") {
                       setExerciseContent(
                         <div className="w-10/12 flex flex-col m-auto">

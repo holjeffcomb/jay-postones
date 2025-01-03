@@ -7,7 +7,7 @@ const supabase = createClient();
 export const handleProgressUpdate = async (
   exerciseId: string,
   status: "complete" | "in progress" | "too difficult" | "not interested"
-) => {
+): Promise<{ success: boolean; error?: string }> => {
   try {
     const {
       data: { user },
@@ -15,7 +15,10 @@ export const handleProgressUpdate = async (
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      redirect("/login");
+      return {
+        success: false,
+        error: "User not authenticated. Redirecting to login.",
+      };
     }
 
     const userId = user.id;
@@ -30,17 +33,19 @@ export const handleProgressUpdate = async (
     ]);
 
     if (error) {
-      console.error("Error updating progress tracker:", error);
-      alert("Failed to update progress tracker");
-    } else {
-      console.log("Progress updated successfully!");
-      if (status !== "in progress") {
-        alert("Exercise added to progress tracker");
-      }
+      return {
+        success: false,
+        error: "Failed to update progress tracker. Please try again later.",
+      };
     }
+
+    return { success: true };
   } catch (err) {
     console.error("Unexpected error:", err);
-    alert("An unexpected error occurred");
+    return {
+      success: false,
+      error: "An unexpected error occurred. Please try again.",
+    };
   }
 };
 
