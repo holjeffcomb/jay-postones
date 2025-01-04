@@ -18,6 +18,7 @@ type ExerciseSectionProps = {
   isTooDifficultLoading: boolean;
 };
 const LoadingWheel = "/images/animations/loadingwheel.svg";
+const LoadingDots = "/images/animations/loadingdots.svg";
 
 export default function ExerciseSection({
   selectedExerciseTitle,

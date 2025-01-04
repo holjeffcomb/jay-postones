@@ -26,7 +26,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "types/portableTextComponents.js"
+    "types/portableTextComponents.js",
+    "src/app/lessons/[id]/lessonContext.js"
   ],
   "exclude": ["node_modules"]
 }
