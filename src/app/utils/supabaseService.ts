@@ -49,6 +49,42 @@ export const handleProgressUpdate = async (
   }
 };
 
+export const handleClearProgress = async (exerciseId: string) => {
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      redirect("/login");
+    }
+
+    const userId = user.id;
+
+    const { error } = await supabase.from("progress").upsert([
+      {
+        id: `${userId}--${exerciseId}`,
+        user_id: userId,
+        exercise_id: exerciseId,
+        status: null,
+      },
+    ]);
+    if (error) {
+      return {
+        success: false,
+        error: "Failed to update progress tracker. Please try again later.",
+      };
+    }
+    return {
+      success: true,
+    };
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    alert("An unexpected error occurred");
+  }
+};
+
 export const handleAddToPracticeList = async (lessonId: string) => {
   try {
     const {

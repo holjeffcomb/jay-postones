@@ -13,12 +13,7 @@ import {
 } from "@/app/utils/supabaseService";
 import { PortableText } from "@portabletext/react";
 import { redirect } from "next/navigation";
-import {
-  Exercise,
-  Lesson,
-  Progress,
-  ProgressList,
-} from "../../../../types/types";
+import { Exercise, Lesson, ProgressList } from "../../../../types/types";
 
 interface LessonContextType {
   lesson: Lesson | null;
@@ -40,6 +35,8 @@ interface LessonContextType {
   setExerciseContent: (content: React.ReactNode) => void;
   completedExerciseIds: string[];
   difficultExerciseIds: string[];
+  setCompletedExerciseIds: React.Dispatch<React.SetStateAction<string[]>>;
+  setDifficultExerciseIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const LessonContext = createContext<LessonContextType | undefined>(undefined);
@@ -157,7 +154,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
 
     const response = await handleProgressUpdate(exerciseId, "complete");
     if (response.success) {
-      alert("Exercise marked as complete!");
+      console.log("Exercise marked as complete!");
       setCompletedExerciseIds((prev) => [...prev, exerciseId]);
       setDifficultExerciseIds((prev) => prev.filter((id) => id !== exerciseId));
     } else {
@@ -171,7 +168,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
 
     const response = await handleProgressUpdate(exerciseId, "too difficult");
     if (response.success) {
-      alert("Exercise marked as too difficult!");
+      console.log("Exercise marked as too difficult!");
       setDifficultExerciseIds((prev) => [...prev, exerciseId]);
       setCompletedExerciseIds((prev) => prev.filter((id) => id !== exerciseId));
     } else {
@@ -198,6 +195,8 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         setSelectedExerciseTitle,
         selectedExerciseTitle,
         exerciseId,
+        setCompletedExerciseIds,
+        setDifficultExerciseIds,
       }}
     >
       {children}

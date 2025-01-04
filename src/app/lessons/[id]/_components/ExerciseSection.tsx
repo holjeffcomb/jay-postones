@@ -2,11 +2,9 @@ import React from "react";
 
 import Image from "next/image";
 import { getUrlFromId } from "../../../../lib/sanityClient";
-import { LiaGrinBeamSweat } from "react-icons/lia";
-import { FaCheck } from "react-icons/fa";
 import { useLessonContext } from "../lessonContext";
-import { Lesson } from "../../../../../types/types";
 import MarkButton from "./MarkButton";
+import ClearButton from "./ClearButton";
 
 const LoadingWheel = "/images/animations/loadingwheel.svg";
 const LoadingDots = "/images/animations/loadingdots.svg";
@@ -17,10 +15,6 @@ export default function ExerciseSection() {
     lesson,
     exerciseContent,
     exerciseId,
-    handleMarkTooDifficult,
-    handleMarkComplete,
-    isMarkCompleteLoading,
-    isTooDifficultLoading,
     completedExerciseIds,
     difficultExerciseIds,
   } = useLessonContext();
@@ -55,6 +49,12 @@ export default function ExerciseSection() {
             <>
               <MarkButton kind="difficult" />
               <MarkButton kind="complete" />
+              {difficultExerciseIds.includes(exerciseId) ||
+              completedExerciseIds.includes(exerciseId) ? (
+                <ClearButton />
+              ) : (
+                <div className="w-8"></div>
+              )}
             </>
           ) : (
             <Image src={LoadingDots} width={18} height={18} alt="loading" />

@@ -20,32 +20,24 @@ export default function MarkButton({ kind }: MarkButtonProps) {
     difficultExerciseIds,
   } = useLessonContext();
 
-  const buttonBackground =
+  // Determine if the button is marked
+  const isMarked =
     kind === "difficult"
-      ? difficultExerciseIds.includes(exerciseId || "") // Check if the exercise is in the difficult list
-        ? "bg-[var(--secondary-color)]"
-        : "bg-[#D9D9D9]"
-      : completedExerciseIds.includes(exerciseId || "") // Check if the exercise is in the completed list
-      ? "bg-[var(--secondary-color)]"
-      : "bg-[#D9D9D9]";
+      ? difficultExerciseIds.includes(exerciseId || "")
+      : completedExerciseIds.includes(exerciseId || "");
 
-  const buttonTextColor =
-    kind === "difficult"
-      ? difficultExerciseIds.includes(exerciseId || "") // Check if the exercise is in the difficult list
-        ? "text-[var(--highlight-color)]"
-        : "text-[var(--primary-color)]"
-      : completedExerciseIds.includes(exerciseId || "") // Check if the exercise is in the completed list
-      ? "text-[var(--highlight-color)]"
-      : "text-[var(--primary-color)]";
+  const buttonBackground = isMarked
+    ? "bg-[var(--secondary-color)]"
+    : "bg-[#D9D9D9]";
 
-  const hoverButtonTextColor =
-    kind === "difficult"
-      ? difficultExerciseIds.includes(exerciseId || "") // Check if the exercise is in the difficult list
-        ? "hover:text-[var(--primary-color)]"
-        : "hover:text-[var(--text-color)]"
-      : completedExerciseIds.includes(exerciseId || "") // Check if the exercise is in the completed list
-      ? "hover:text-[var(--primary-color)]"
-      : "hover:text-[var(--text-color)]";
+  const buttonTextColor = isMarked
+    ? "text-[var(--highlight-color)]"
+    : "text-[var(--primary-color)]";
+
+  // Ensure hover text color stays light when marked
+  const hoverButtonTextColor = isMarked
+    ? "hover:text-[var(--highlight-color)]"
+    : "hover:text-[var(--text-color)]";
 
   return (
     <button
@@ -56,31 +48,32 @@ export default function MarkButton({ kind }: MarkButtonProps) {
       }}
       className={`w-48 h-8 ${buttonBackground} hover:bg-[var(--primary-color)] border border-[var(--primary-color)] ${buttonTextColor} ${hoverButtonTextColor} font-bold py-2 px-4 rounded flex items-center justify-center gap-2 transition-all duration-200 ease-in-out`}
     >
-      {kind === "difficult" ? (
-        isTooDifficultLoading ? (
-          <Image src={LoadingWheel} width={18} height={18} alt="loading" />
-        ) : exerciseId && difficultExerciseIds.includes(exerciseId) ? (
-          <>
-            <LiaGrinBeamSweat className="w-4 h-4 text-white" />
-            <p>Marked as Too Difficult</p>
-          </>
-        ) : (
-          <>
-            <p>Mark as Too Difficult</p>
-          </>
-        )
-      ) : isMarkCompleteLoading ? (
-        <Image src={LoadingWheel} width={18} height={18} alt="loading" />
-      ) : exerciseId && completedExerciseIds.includes(exerciseId) ? (
+      {isMarked ? (
         <>
-          <FaCheck className="w-3 h-3 text-white" />
-          <p>Marked Complete</p>
+          {kind === "difficult" ? (
+            <LiaGrinBeamSweat className="w-4 h-4" />
+          ) : (
+            <FaCheck className="w-3 h-3" />
+          )}
+          <p>
+            {kind === "difficult"
+              ? "Marked as Too Difficult"
+              : "Marked Complete"}
+          </p>
         </>
+      ) : isMarkedLoading(kind) ? (
+        <Image src={LoadingWheel} width={18} height={18} alt="loading" />
       ) : (
         <>
-          <p>Mark Complete</p>
+          <p>
+            {kind === "difficult" ? "Mark as Too Difficult" : "Mark Complete"}
+          </p>
         </>
       )}
     </button>
   );
+
+  function isMarkedLoading(kind: string): boolean {
+    return kind === "difficult" ? isTooDifficultLoading : isMarkCompleteLoading;
+  }
 }
