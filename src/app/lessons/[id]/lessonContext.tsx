@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { client } from "../../../lib/sanityClient";
 import {
   fetchProgress,
@@ -6,24 +12,62 @@ import {
   handleProgressUpdate,
 } from "@/app/utils/supabaseService";
 import { PortableText } from "@portabletext/react";
+import { redirect } from "next/navigation";
+import {
+  Exercise,
+  Lesson,
+  Progress,
+  ProgressList,
+} from "../../../../types/types";
 
-const LessonContext = createContext();
+interface LessonContextType {
+  lesson: Lesson | null;
+  userNotes: string;
+  exerciseContent: React.ReactNode;
+  setUserNotes: (notes: string) => void;
+  setExerciseContent: (content: React.ReactNode) => void;
+  handleMarkComplete: (exerciseId: string) => Promise<void>;
+  handleMarkTooDifficult: (exerciseId: string) => Promise<void>;
+  isMarkCompleteLoading: boolean;
+  isTooDifficultLoading: boolean;
+  completedExerciseIds: string[];
+  difficultExerciseIds: string[];
+  setExerciseId: (id: string | null) => void;
+  setSelectedExerciseTitle: (title: string | null) => void;
+  selectedExerciseTitle: string | null;
+  exerciseId: string | null;
+}
 
-export const LessonProvider = ({ children, lessonId }) => {
-  const [lesson, setLesson] = useState(null);
-  const [userNotes, setUserNotes] = useState("enter your own notes here...");
-  const [exerciseContent, setExerciseContent] = useState(null);
-  const [exerciseId, setExerciseId] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [completedExerciseIds, setCompletedExerciseIds] = useState([]);
-  const [difficultExerciseIds, setDifficultExerciseIds] = useState([]);
-  const [selectedExerciseTitle, setSelectedExerciseTitle] = useState(null);
+const LessonContext = createContext<LessonContextType | undefined>(undefined);
+
+interface LessonProviderProps {
+  children: ReactNode;
+  lessonId: string;
+}
+
+export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
+  const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [userNotes, setUserNotes] = useState<string>(
+    "enter your own notes here..."
+  );
+  const [exerciseContent, setExerciseContent] = useState<React.ReactNode>(null);
+  const [exerciseId, setExerciseId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [completedExerciseIds, setCompletedExerciseIds] = useState<string[]>(
+    []
+  );
+  const [difficultExerciseIds, setDifficultExerciseIds] = useState<string[]>(
+    []
+  );
+  const [selectedExerciseTitle, setSelectedExerciseTitle] = useState<
+    string | null
+  >(null);
   const [isMarkCompleteLoading, setIsMarkCompleteLoading] = useState(false);
   const [isTooDifficultLoading, setIsTooDifficultLoading] = useState(false);
 
   useEffect(() => {
     const fetchLesson = async () => {
-      const fetchedLesson = await client.fetch(
+      const fetchedLesson = await client.fetch<Lesson>(
         `*[_type == "lesson" && _id == "${lessonId}"][0]`
       );
 
@@ -44,6 +88,10 @@ export const LessonProvider = ({ children, lessonId }) => {
       }
 
       const progress = await fetchProgress(firstExercise.id, userId);
+      if (!progress) {
+        console.error("Failed to fetch progress data.");
+        return;
+      }
       setCompletedExerciseIds(returnCompletedExercises(progress));
       setDifficultExerciseIds(returnDifficultExercises(progress));
     };
@@ -51,7 +99,7 @@ export const LessonProvider = ({ children, lessonId }) => {
     fetchLesson();
   }, [lessonId]);
 
-  const loadExerciseContent = (exercise) => {
+  const loadExerciseContent = (exercise: Exercise) => {
     if (exercise.type === "portableText") {
       setExerciseContent(
         <div className="w-10/12 flex flex-col m-auto">
@@ -86,17 +134,17 @@ export const LessonProvider = ({ children, lessonId }) => {
     }
   };
 
-  const returnCompletedExercises = (progressData) =>
+  const returnCompletedExercises = (progressData: ProgressList): string[] =>
     progressData
       .filter((progress) => progress.status === "complete")
       .map((progress) => progress.exercise_id);
 
-  const returnDifficultExercises = (progressData) =>
+  const returnDifficultExercises = (progressData: ProgressList): string[] =>
     progressData
       .filter((progress) => progress.status === "too difficult")
       .map((progress) => progress.exercise_id);
 
-  const handleMarkComplete = async (exerciseId) => {
+  const handleMarkComplete = async (exerciseId: string) => {
     setIsMarkCompleteLoading(true);
 
     const response = await handleProgressUpdate(exerciseId, "complete");
@@ -110,7 +158,7 @@ export const LessonProvider = ({ children, lessonId }) => {
     setIsMarkCompleteLoading(false);
   };
 
-  const handleMarkTooDifficult = async (exerciseId) => {
+  const handleMarkTooDifficult = async (exerciseId: string) => {
     setIsTooDifficultLoading(true);
 
     const response = await handleProgressUpdate(exerciseId, "too difficult");

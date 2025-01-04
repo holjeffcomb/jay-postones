@@ -2,34 +2,29 @@ import React from "react";
 
 import Image from "next/image";
 import { getUrlFromId } from "../../../../lib/sanityClient";
-import { Lesson } from "@/../types/types";
 import { LiaGrinBeamSweat } from "react-icons/lia";
 import { FaCheck } from "react-icons/fa";
+import { useLessonContext } from "../lessonContext";
+import { Lesson } from "../../../../../types/types";
 
-type ExerciseSectionProps = {
-  lesson: Lesson;
-  exerciseContent: JSX.Element | null;
-  exerciseId: string | null;
-  setExerciseId: (id: string) => void;
-  selectedExerciseTitle: string | null;
-  handleMarkTooDifficult: (exerciseId: string) => void;
-  handleMarkComplete: (exerciseId: string) => void;
-  isMarkCompleteLoading: boolean;
-  isTooDifficultLoading: boolean;
-};
 const LoadingWheel = "/images/animations/loadingwheel.svg";
 const LoadingDots = "/images/animations/loadingdots.svg";
 
-export default function ExerciseSection({
-  selectedExerciseTitle,
-  lesson,
-  exerciseContent,
-  exerciseId,
-  handleMarkTooDifficult,
-  handleMarkComplete,
-  isMarkCompleteLoading,
-  isTooDifficultLoading,
-}: ExerciseSectionProps) {
+export default function ExerciseSection() {
+  const {
+    selectedExerciseTitle,
+    lesson,
+    exerciseContent,
+    exerciseId,
+    handleMarkTooDifficult,
+    handleMarkComplete,
+    isMarkCompleteLoading,
+    isTooDifficultLoading,
+  } = useLessonContext();
+
+  if (!lesson) {
+    return <Image src={LoadingDots} width={250} height={120} alt="loading" />;
+  }
   return (
     <div className="flex flex-col items-center justify-start lg:w-2/3 w-full bg-[var(--accent-color)]">
       <div className="flex flex-col items-center gap-6 justify-between p-5 w-full">
@@ -89,7 +84,7 @@ export default function ExerciseSection({
               </button>
             </>
           ) : (
-            <></>
+            <Image src={LoadingDots} width={18} height={18} alt="loading" />
           )}
         </div>
       </div>

@@ -1,6 +1,4 @@
 import React from "react";
-import { Lesson } from "../../../../../types/types";
-
 import { AiOutlinePlus } from "react-icons/ai";
 import {
   PortableTextReactComponents,
@@ -10,17 +8,10 @@ import {
 import Image from "next/image";
 import { urlFor } from "../../../../lib/sanityClient";
 import ExerciseThumbnail from "./ExerciseThumbnail";
+import { useLessonContext } from "../lessonContext";
+import { Exercise } from "../../../../../types/types";
 
-type LessonSectionProps = {
-  lesson: Lesson;
-  handleAddToPracticeList: (lessonId: string) => void;
-  setExerciseId: (id: string) => void;
-  setSelectedExerciseTitle: (title: string) => void;
-  setExerciseContent: (content: JSX.Element) => void;
-  completedExerciseIds: string[];
-  difficultExerciseIds: string[];
-  userNotes: string;
-};
+const LoadingDots = "/images/animations/loadingdots.svg";
 
 export const components: PortableTextReactComponents = {
   types: {
@@ -81,24 +72,24 @@ export const components: PortableTextReactComponents = {
   unknownListItem: () => null,
 };
 
-export default function LessonSection({
-  lesson,
-  handleAddToPracticeList,
-  setExerciseId,
-  setSelectedExerciseTitle,
-  setExerciseContent,
-  completedExerciseIds,
-  difficultExerciseIds,
-  userNotes,
-}: LessonSectionProps) {
+export default function LessonSection() {
+  const {
+    lesson,
+    setExerciseId,
+    setSelectedExerciseTitle,
+    setExerciseContent,
+    completedExerciseIds,
+    difficultExerciseIds,
+    userNotes,
+  } = useLessonContext();
+  if (!lesson) {
+    return <Image src={LoadingDots} width={250} height={120} alt="loading" />;
+  }
   return (
     <div className="flex flex-col items-start lg:w-1/3 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
       <div className="text-left mb-2">
         <h1 className="font-bold text-2xl">{lesson.title}</h1>
-        <button
-          className="text-xs border border-[var(--primary-color)] bg-[var(--accent-color)] hover:bg-[var(--secondary-color)] text-[var(--primary-color)] hover:text-[var(--text-color)] py-1 px-2 rounded-xl flex items-center gap-2 my-2"
-          onClick={() => handleAddToPracticeList(lesson._id)}
-        >
+        <button className="text-xs border border-[var(--primary-color)] bg-[var(--accent-color)] hover:bg-[var(--secondary-color)] text-[var(--primary-color)] hover:text-[var(--text-color)] py-1 px-2 rounded-xl flex items-center gap-2 my-2">
           <AiOutlinePlus className="w-3 h-3" />
           Add Lesson to Practice List
         </button>
@@ -109,7 +100,7 @@ export default function LessonSection({
         </div>
       </div>
       <div className="flex flex-col items-stretch justify-start w-full gap-2 my-2">
-        {lesson?.exercises.map((exercise, index) => (
+        {lesson?.exercises.map((exercise: Exercise, index: number) => (
           <ExerciseThumbnail
             key={index}
             setExerciseId={setExerciseId}
