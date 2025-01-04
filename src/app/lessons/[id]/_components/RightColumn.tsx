@@ -99,7 +99,7 @@ export default function RightColumn({
   userNotes,
 }: RightColumnProps) {
   return (
-    <div className="flex flex-col items-start lg:w-1/3 w-full p-4 bg-[var(--highlight-color)] text-[var(--primary-color)]">
+    <div className="flex flex-col items-start lg:w-1/3 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
       <div className="text-left mb-2">
         <h1 className="font-bold text-2xl">{lesson.title}</h1>
         <button
@@ -174,7 +174,7 @@ export default function RightColumn({
         ))}
       </div>
       {/* User Notes Section */}
-      <div className="text-left w-full mt-auto">
+      {/* <div className="text-left w-full mt-auto">
         <h2 className="font-bold">USER NOTES</h2>
         <textarea
           className="w-full p-2 border rounded-md text-gray-400 resize-y min-h-60 max-h-40"
@@ -195,7 +195,7 @@ export default function RightColumn({
             }
           }}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -47,7 +47,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="relative w-full flex items-end justify-between p-4 drop-shadow-custom">
+    <header className="h-[150px] relative w-full flex items-end justify-between p-4 drop-shadow-custom bg-[var(--primary-color-color)]">
       <Link href="/">
         <Image
           src="/images/logos/JPDL LOGO 2.0 white.png"

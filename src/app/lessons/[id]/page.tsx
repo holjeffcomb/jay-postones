@@ -13,13 +13,7 @@ import {
   fetchProgress,
   fetchUserId,
 } from "@/app/utils/supabaseService";
-import Image from "next/image";
-import {
-  Progress,
-  ProgressList,
-  Exercise,
-  ExerciseType,
-} from "../../../../types/types";
+import { Progress, ProgressList } from "../../../../types/types";
 
 export default function LessonPage() {
   const [lesson, setLesson] = useState<Lesson | null>(null);
@@ -74,7 +68,7 @@ export default function LessonPage() {
         console.error("Progress not available");
       } else {
         setCompletedExerciseIds(returnCompletedExercises(progress));
-        setDifficultExerciseIds(returnedDifficultExercises(progress));
+        setDifficultExerciseIds(returnDifficultExercises(progress));
       }
 
       if (firstExercise) {
@@ -125,7 +119,7 @@ export default function LessonPage() {
       .map((progress: Progress) => progress.exercise_id);
   };
 
-  const returnedDifficultExercises = (progressData: ProgressList): string[] => {
+  const returnDifficultExercises = (progressData: ProgressList): string[] => {
     return progressData
       .filter((progress: Progress) => progress.status === "too difficult")
       .map((progress: Progress) => progress.exercise_id);
@@ -187,9 +181,9 @@ export default function LessonPage() {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center h-auto">
+    <div className="flex flex-col flex-grow h-full w-full">
       {lesson ? (
-        <div className="flex lg:flex-row flex-col justify-between w-full bg-gray-300 items-stretch">
+        <div className="flex flex-grow lg:flex-row flex-col justify-between items-stretch w-full h-full">
           <LeftColumn
             lesson={lesson}
             exerciseContent={exerciseContent}
@@ -201,7 +195,6 @@ export default function LessonPage() {
             isMarkCompleteLoading={isMarkCompleteLoading}
             isTooDifficultLoading={isTooDifficultLoading}
           />
-
           <RightColumn
             lesson={lesson}
             handleAddToPracticeList={handleAddToPracticeList}
