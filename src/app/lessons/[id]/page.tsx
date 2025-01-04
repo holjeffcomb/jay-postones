@@ -1,6 +1,6 @@
 "use client";
-import LeftColumn from "./_components/ExerciseSection";
-import RightColumn from "./_components/LessonSection";
+import ExerciseSection from "./_components/ExerciseSection";
+import LessonSection from "./_components/LessonSection";
 import { Lesson } from "../../../../types/types";
 import { components } from "./_components/LessonSection";
 import { redirect, useParams } from "next/navigation";
@@ -14,6 +14,8 @@ import {
   fetchUserId,
 } from "@/app/utils/supabaseService";
 import { Progress, ProgressList } from "../../../../types/types";
+
+const LoadingDots = "/images/animations/loadingdots.svg";
 
 export default function LessonPage() {
   const [lesson, setLesson] = useState<Lesson | null>(null);
@@ -184,7 +186,7 @@ export default function LessonPage() {
     <div className="flex flex-col flex-grow h-full w-full">
       {lesson ? (
         <div className="flex flex-grow lg:flex-row flex-col justify-between items-stretch w-full h-full">
-          <LeftColumn
+          <ExerciseSection
             lesson={lesson}
             exerciseContent={exerciseContent}
             exerciseId={exerciseId}
@@ -195,7 +197,7 @@ export default function LessonPage() {
             isMarkCompleteLoading={isMarkCompleteLoading}
             isTooDifficultLoading={isTooDifficultLoading}
           />
-          <RightColumn
+          <LessonSection
             lesson={lesson}
             handleAddToPracticeList={handleAddToPracticeList}
             setExerciseId={setExerciseId}

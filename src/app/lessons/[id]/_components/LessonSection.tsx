@@ -11,7 +11,7 @@ import Image from "next/image";
 import { urlFor } from "../../../../lib/sanityClient";
 import ExerciseThumbnail from "./ExerciseThumbnail";
 
-type RightColumnProps = {
+type LessonSectionProps = {
   lesson: Lesson;
   handleAddToPracticeList: (lessonId: string) => void;
   setExerciseId: (id: string) => void;
@@ -90,7 +90,7 @@ export default function LessonSection({
   completedExerciseIds,
   difficultExerciseIds,
   userNotes,
-}: RightColumnProps) {
+}: LessonSectionProps) {
   return (
     <div className="flex flex-col items-start lg:w-1/3 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
       <div className="text-left mb-2">

@@ -6,7 +6,7 @@ import { Lesson } from "@/../types/types";
 import { LiaGrinBeamSweat } from "react-icons/lia";
 import { FaCheck } from "react-icons/fa";
 
-type LeftColumnProps = {
+type ExerciseSectionProps = {
   lesson: Lesson;
   exerciseContent: JSX.Element | null;
   exerciseId: string | null;
@@ -28,7 +28,7 @@ export default function ExerciseSection({
   handleMarkComplete,
   isMarkCompleteLoading,
   isTooDifficultLoading,
-}: LeftColumnProps) {
+}: ExerciseSectionProps) {
   return (
     <div className="flex flex-col items-center justify-start lg:w-2/3 w-full bg-[var(--accent-color)]">
       <div className="flex flex-col items-center gap-6 justify-between p-5 w-full">
