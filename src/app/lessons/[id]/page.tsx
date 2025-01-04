@@ -1,8 +1,8 @@
 "use client";
-import LeftColumn from "./_components/LeftColumn";
-import RightColumn from "./_components/RightColumn";
+import LeftColumn from "./_components/ExerciseSection";
+import RightColumn from "./_components/LessonSection";
 import { Lesson } from "../../../../types/types";
-import { components } from "./_components/RightColumn";
+import { components } from "./_components/LessonSection";
 import { redirect, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../lib/sanityClient";

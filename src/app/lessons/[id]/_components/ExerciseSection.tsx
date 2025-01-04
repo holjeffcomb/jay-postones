@@ -19,7 +19,7 @@ type LeftColumnProps = {
 };
 const LoadingWheel = "/images/animations/loadingwheel.svg";
 
-export default function LeftColumn({
+export default function ExerciseSection({
   selectedExerciseTitle,
   lesson,
   exerciseContent,

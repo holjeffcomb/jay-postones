@@ -1,16 +1,15 @@
 import React from "react";
-import { Lesson, ExerciseType } from "../../../../../types/types";
-import { FaFont, FaVideo, FaMusic, FaCheck } from "react-icons/fa";
+import { Lesson } from "../../../../../types/types";
+
 import { AiOutlinePlus } from "react-icons/ai";
-import { LiaGrinBeamSweat } from "react-icons/lia";
 import {
   PortableTextReactComponents,
   PortableTextComponentProps,
   PortableTextBlock,
-  PortableText,
 } from "@portabletext/react";
 import Image from "next/image";
 import { urlFor } from "../../../../lib/sanityClient";
+import ExerciseThumbnail from "./ExerciseThumbnail";
 
 type RightColumnProps = {
   lesson: Lesson;
@@ -21,12 +20,6 @@ type RightColumnProps = {
   completedExerciseIds: string[];
   difficultExerciseIds: string[];
   userNotes: string;
-};
-
-export const typeToIcon: Record<ExerciseType, JSX.Element> = {
-  portableText: <FaFont />,
-  video: <FaVideo />,
-  soundslice: <FaMusic />,
 };
 
 export const components: PortableTextReactComponents = {
@@ -88,7 +81,7 @@ export const components: PortableTextReactComponents = {
   unknownListItem: () => null,
 };
 
-export default function RightColumn({
+export default function LessonSection({
   lesson,
   handleAddToPracticeList,
   setExerciseId,
@@ -117,60 +110,16 @@ export default function RightColumn({
       </div>
       <div className="flex flex-col items-stretch justify-start w-full gap-2 my-2">
         {lesson?.exercises.map((exercise, index) => (
-          <button
+          <ExerciseThumbnail
             key={index}
-            className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-center justify-between hover:bg-gray-100 transition w-full"
-            onClick={() => {
-              setExerciseId(exercise.id);
-              setSelectedExerciseTitle(exercise.title);
-
-              if (exercise.type === "portableText") {
-                setExerciseContent(
-                  <div className="w-10/12 flex flex-col m-auto">
-                    <PortableText
-                      value={exercise.content || []}
-                      components={components}
-                    />
-                  </div>
-                );
-              } else if (exercise.type === "soundslice") {
-                setExerciseContent(
-                  <iframe
-                    src={exercise.soundsliceUrl}
-                    width="100%"
-                    height="400"
-                    allowFullScreen
-                  ></iframe>
-                );
-              } else if (exercise.type === "video") {
-                setExerciseContent(
-                  <iframe
-                    src={lesson.videoUrl?.replace(
-                      "https://vimeo.com/",
-                      "https://player.vimeo.com/video/"
-                    )}
-                    width="100%"
-                    height="480"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowFullScreen
-                    title="Exercise Video"
-                  />
-                );
-              }
-            }}
-          >
-            <div className="flex items-start gap-2">
-              {typeToIcon[exercise.type] || <span>?</span>}
-              <div>
-                <h3 className="font-normal">{exercise.title}</h3>
-              </div>
-            </div>
-            {completedExerciseIds.includes(exercise.id) ? (
-              <FaCheck className="w-3 h-3 text-[var(--primary-color)]" />
-            ) : difficultExerciseIds.includes(exercise.id) ? (
-              <LiaGrinBeamSweat className="w-5 h-5 text-[var(--primary-color)]" />
-            ) : null}
-          </button>
+            setExerciseId={setExerciseId}
+            exercise={exercise}
+            setSelectedExerciseTitle={setSelectedExerciseTitle}
+            setExerciseContent={setExerciseContent}
+            lesson={lesson}
+            completedExerciseIds={completedExerciseIds}
+            difficultExerciseIds={difficultExerciseIds}
+          />
         ))}
       </div>
       {/* User Notes Section */}
