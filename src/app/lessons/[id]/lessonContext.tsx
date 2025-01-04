@@ -13,7 +13,12 @@ import {
 } from "@/app/utils/supabaseService";
 import { PortableText } from "@portabletext/react";
 import { redirect } from "next/navigation";
-import { Exercise, Lesson, ProgressList } from "../../../../types/types";
+import {
+  Exercise,
+  Lesson,
+  ProgressList,
+  ExerciseType,
+} from "../../../../types/types";
 
 interface LessonContextType {
   lesson: Lesson | null;

@@ -105,16 +105,7 @@ export default function LessonSection() {
       </div>
       <div className="flex flex-col items-stretch justify-start w-full gap-2 my-2">
         {lesson?.exercises.map((exercise: Exercise, index: number) => (
-          <ExerciseThumbnail
-            key={index}
-            setExerciseId={setExerciseId}
-            exercise={exercise}
-            setSelectedExerciseTitle={setSelectedExerciseTitle}
-            setExerciseContent={setExerciseContent}
-            lesson={lesson}
-            completedExerciseIds={completedExerciseIds}
-            difficultExerciseIds={difficultExerciseIds}
-          />
+          <ExerciseThumbnail key={index} exercise={exercise} />
         ))}
       </div>
       {/* User Notes Section */}

@@ -3,15 +3,10 @@ import { PortableText } from "@portabletext/react";
 import { components } from "./LessonSection";
 import { FaFont, FaVideo, FaMusic, FaCheck } from "react-icons/fa";
 import { LiaGrinBeamSweat } from "react-icons/lia";
+import { useLessonContext } from "../lessonContext";
 
 type ExerciseThumbnailProps = {
-  setExerciseId: (id: string) => void;
-  setSelectedExerciseTitle: (title: string) => void;
   exercise: Exercise;
-  setExerciseContent: (content: JSX.Element) => void;
-  lesson: Lesson;
-  completedExerciseIds: string[];
-  difficultExerciseIds: string[];
 };
 
 export const typeToIcon: Record<ExerciseType, JSX.Element> = {
@@ -21,14 +16,19 @@ export const typeToIcon: Record<ExerciseType, JSX.Element> = {
 };
 
 export default function ExerciseThumbnail({
-  setExerciseId,
   exercise,
-  setSelectedExerciseTitle,
-  setExerciseContent,
-  lesson,
-  completedExerciseIds,
-  difficultExerciseIds,
 }: ExerciseThumbnailProps) {
+  const {
+    setExerciseId,
+    setSelectedExerciseTitle,
+    setExerciseContent,
+    lesson,
+    completedExerciseIds,
+    difficultExerciseIds,
+  } = useLessonContext();
+
+  if (!lesson) return null;
+
   return (
     <button
       className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-center justify-between hover:bg-gray-100 transition w-full"
