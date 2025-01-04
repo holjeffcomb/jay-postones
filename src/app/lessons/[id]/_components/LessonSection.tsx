@@ -87,7 +87,7 @@ export default function LessonSection() {
     return <Image src={LoadingDots} width={250} height={120} alt="loading" />;
   }
   return (
-    <div className="flex flex-col items-start lg:w-1/3 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
+    <div className="flex flex-col items-start lg:w-1/4 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
       <div className="text-left mb-2">
         <h1 className="font-bold text-2xl">{lesson.title}</h1>
         <button

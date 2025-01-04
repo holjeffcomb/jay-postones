@@ -23,19 +23,23 @@ import {
 interface LessonContextType {
   lesson: Lesson | null;
   userNotes: string;
-  exerciseContent: React.ReactNode;
+
   setUserNotes: (notes: string) => void;
-  setExerciseContent: (content: React.ReactNode) => void;
+
   handleMarkComplete: (exerciseId: string) => Promise<void>;
   handleMarkTooDifficult: (exerciseId: string) => Promise<void>;
   isMarkCompleteLoading: boolean;
   isTooDifficultLoading: boolean;
+
+  // exercise state
+  selectedExerciseTitle: string | null;
+  setSelectedExerciseTitle: (title: string | null) => void;
+  exerciseId: string | null;
+  setExerciseId: (id: string | null) => void;
+  exerciseContent: React.ReactNode;
+  setExerciseContent: (content: React.ReactNode) => void;
   completedExerciseIds: string[];
   difficultExerciseIds: string[];
-  setExerciseId: (id: string | null) => void;
-  setSelectedExerciseTitle: (title: string | null) => void;
-  selectedExerciseTitle: string | null;
-  exerciseId: string | null;
 }
 
 const LessonContext = createContext<LessonContextType | undefined>(undefined);
@@ -92,6 +96,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         console.error("Failed to fetch progress data.");
         return;
       }
+
       setCompletedExerciseIds(returnCompletedExercises(progress));
       setDifficultExerciseIds(returnDifficultExercises(progress));
     };
@@ -134,10 +139,13 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
     }
   };
 
-  const returnCompletedExercises = (progressData: ProgressList): string[] =>
-    progressData
+  const returnCompletedExercises = (progressData: ProgressList): string[] => {
+    const data = progressData
       .filter((progress) => progress.status === "complete")
       .map((progress) => progress.exercise_id);
+    console.log("exercise IDs:", data);
+    return data;
+  };
 
   const returnDifficultExercises = (progressData: ProgressList): string[] =>
     progressData

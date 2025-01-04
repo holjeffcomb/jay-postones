@@ -19,8 +19,8 @@ export default function LessonPage() {
 const LessonContent = () => {
   return (
     <div className="flex flex-grow lg:flex-row flex-col justify-between items-stretch w-full h-full">
-      <ExerciseSection />
       <LessonSection />
+      <ExerciseSection />
     </div>
   );
 };
