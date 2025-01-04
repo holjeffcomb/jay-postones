@@ -10,6 +10,7 @@ import { urlFor } from "../../../../lib/sanityClient";
 import ExerciseThumbnail from "./ExerciseThumbnail";
 import { useLessonContext } from "../lessonContext";
 import { Exercise } from "../../../../../types/types";
+import { handleAddToPracticeList } from "@/app/utils/supabaseService";
 
 const LoadingDots = "/images/animations/loadingdots.svg";
 
@@ -89,7 +90,10 @@ export default function LessonSection() {
     <div className="flex flex-col items-start lg:w-1/3 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
       <div className="text-left mb-2">
         <h1 className="font-bold text-2xl">{lesson.title}</h1>
-        <button className="text-xs border border-[var(--primary-color)] bg-[var(--accent-color)] hover:bg-[var(--secondary-color)] text-[var(--primary-color)] hover:text-[var(--text-color)] py-1 px-2 rounded-xl flex items-center gap-2 my-2">
+        <button
+          className="text-xs border border-[var(--primary-color)] bg-[var(--accent-color)] hover:bg-[var(--secondary-color)] text-[var(--primary-color)] hover:text-[var(--text-color)] py-1 px-2 rounded-xl flex items-center gap-2 my-2"
+          onClick={() => handleAddToPracticeList(lesson._id)}
+        >
           <AiOutlinePlus className="w-3 h-3" />
           Add Lesson to Practice List
         </button>

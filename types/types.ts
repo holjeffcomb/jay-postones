@@ -1,4 +1,4 @@
-import { LayoutProps } from "./../.next/types/app/api/getLatestLesson/route";
+// import { LayoutProps } from "./../.next/types/app/api/getLatestLesson/route";
 import { PortableTextBlock } from "@portabletext/react";
 export type Progress = {
   id: string;
