@@ -24,7 +24,7 @@ export default function ExerciseSection() {
   }
   return (
     <div className="flex flex-col items-center justify-start lg:w-3/4 w-full bg-[var(--accent-color)]">
-      <div className="flex flex-col items-center gap-6 justify-between p-5 w-full">
+      <div className="flex flex-col items-center gap-6 justify-between p-5 h-full w-full">
         <div className="flex flex-row items-center justify-between w-full">
           <h1 className="font-extrabold text-2xl text-[var(--secondary-color)]">
             {selectedExerciseTitle || lesson.title}
@@ -53,7 +53,7 @@ export default function ExerciseSection() {
               completedExerciseIds.includes(exerciseId) ? (
                 <ClearButton />
               ) : (
-                <div className="w-8"></div>
+                <div className="w-16"></div>
               )}
             </>
           ) : (
