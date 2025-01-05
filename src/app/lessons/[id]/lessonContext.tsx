@@ -13,12 +13,8 @@ import {
 } from "@/app/utils/supabaseService";
 import { PortableText } from "@portabletext/react";
 import { redirect } from "next/navigation";
-import {
-  Exercise,
-  Lesson,
-  ProgressList,
-  ExerciseType,
-} from "../../../../types/types";
+import { Exercise, Lesson, ProgressList } from "../../../../types/types";
+import { components } from "./_components/LessonSection";
 
 interface LessonContextType {
   lesson: Lesson | null;
@@ -43,6 +39,8 @@ interface LessonContextType {
   setCompletedExerciseIds: React.Dispatch<React.SetStateAction<string[]>>;
   setDifficultExerciseIds: React.Dispatch<React.SetStateAction<string[]>>;
   lessonExercises: Exercise[];
+  loadExerciseContent: (exercise: Exercise) => void;
+  isPageLoading: boolean;
 }
 
 const LessonContext = createContext<LessonContextType | undefined>(undefined);
@@ -57,6 +55,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
   const [userNotes, setUserNotes] = useState<string>(
     "enter your own notes here..."
   );
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [exerciseContent, setExerciseContent] = useState<React.ReactNode>(null);
   const [exerciseId, setExerciseId] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -83,9 +82,9 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
 
       const firstExercise = fetchedLesson?.exercises?.[0];
       if (firstExercise) {
-        setExerciseId(firstExercise.id);
-        setSelectedExerciseTitle(firstExercise.title);
         loadExerciseContent(firstExercise);
+      } else {
+        console.error("No exercises found for this lesson.");
       }
 
       const userId = await fetchUserId();
@@ -98,22 +97,28 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
       const progress = await fetchProgress(firstExercise.id, userId);
       if (!progress) {
         console.error("Failed to fetch progress data.");
-        return;
+      } else {
+        setCompletedExerciseIds(returnCompletedExercises(progress));
+        setDifficultExerciseIds(returnDifficultExercises(progress));
       }
-
-      setCompletedExerciseIds(returnCompletedExercises(progress));
-      setDifficultExerciseIds(returnDifficultExercises(progress));
       setLessonExercises(fetchedLesson?.exercises);
     };
 
     fetchLesson();
+    setIsPageLoading(false);
   }, [lessonId]);
 
   const loadExerciseContent = (exercise: Exercise) => {
+    setExerciseId(exercise.id);
+    setSelectedExerciseTitle(exercise.title);
+
     if (exercise.type === "portableText") {
       setExerciseContent(
         <div className="w-10/12 flex flex-col m-auto">
-          <PortableText value={exercise.content || []} />
+          <PortableText
+            value={exercise.content || []}
+            components={components}
+          />
         </div>
       );
     } else if (exercise.type === "soundslice") {
@@ -206,6 +211,8 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         setCompletedExerciseIds,
         setDifficultExerciseIds,
         lessonExercises,
+        loadExerciseContent,
+        isPageLoading,
       }}
     >
       {children}

@@ -26,6 +26,7 @@ export default function ExerciseThumbnail({
     lesson,
     completedExerciseIds,
     difficultExerciseIds,
+    loadExerciseContent,
   } = useLessonContext();
 
   if (!lesson) return null;
@@ -51,42 +52,7 @@ export default function ExerciseThumbnail({
     <button
       className={buttonClasses}
       onClick={() => {
-        setExerciseId(exercise.id);
-        setSelectedExerciseTitle(exercise.title);
-
-        if (exercise.type === "portableText") {
-          setExerciseContent(
-            <div className="w-10/12 flex flex-col m-auto">
-              <PortableText
-                value={exercise.content || []}
-                components={components}
-              />
-            </div>
-          );
-        } else if (exercise.type === "soundslice") {
-          setExerciseContent(
-            <iframe
-              src={exercise.soundsliceUrl}
-              width="100%"
-              height="400"
-              allowFullScreen
-            ></iframe>
-          );
-        } else if (exercise.type === "video") {
-          setExerciseContent(
-            <iframe
-              src={lesson.videoUrl?.replace(
-                "https://vimeo.com/",
-                "https://player.vimeo.com/video/"
-              )}
-              width="100%"
-              height="480"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-              title="Exercise Video"
-            />
-          );
-        }
+        loadExerciseContent(exercise);
       }}
     >
       <div className="flex items-start gap-2">

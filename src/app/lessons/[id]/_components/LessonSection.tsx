@@ -12,8 +12,6 @@ import { useLessonContext } from "../lessonContext";
 import { Exercise } from "../../../../../types/types";
 import { handleAddToPracticeList } from "@/app/utils/supabaseService";
 
-const LoadingDots = "/images/animations/loadingdots.svg";
-
 export const components: PortableTextReactComponents = {
   types: {
     image: ({ value }: { value: { asset: { _ref: string }; alt?: string } }) =>
@@ -84,7 +82,9 @@ export default function LessonSection() {
     userNotes,
   } = useLessonContext();
   if (!lesson) {
-    return <Image src={LoadingDots} width={250} height={120} alt="loading" />;
+    return (
+      <div className="flex flex-col items-center justify-center lg:w-1/4 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]"></div>
+    );
   }
   return (
     <div className="flex flex-col items-start lg:w-1/4 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
