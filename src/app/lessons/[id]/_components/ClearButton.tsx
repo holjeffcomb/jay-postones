@@ -27,7 +27,7 @@ export default function ClearButton() {
 
   return (
     <button
-      className="text-gray-600 hover:text-gray-800 px-4 font-bold transition-colors duration-200 ease-in-out"
+      className="text-gray-600 hover:text-gray-800 px-4 font-bold transition-colors w-24 duration-200 ease-in-out"
       onClick={() => handleClear()}
     >
       <p className="font-normal text-bold">Clear</p>

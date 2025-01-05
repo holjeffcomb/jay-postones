@@ -42,6 +42,7 @@ interface LessonContextType {
   difficultExerciseIds: string[];
   setCompletedExerciseIds: React.Dispatch<React.SetStateAction<string[]>>;
   setDifficultExerciseIds: React.Dispatch<React.SetStateAction<string[]>>;
+  lessonExercises: Exercise[];
 }
 
 const LessonContext = createContext<LessonContextType | undefined>(undefined);
@@ -70,6 +71,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
   >(null);
   const [isMarkCompleteLoading, setIsMarkCompleteLoading] = useState(false);
   const [isTooDifficultLoading, setIsTooDifficultLoading] = useState(false);
+  const [lessonExercises, setLessonExercises] = useState<Exercise[]>([]);
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -101,6 +103,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
 
       setCompletedExerciseIds(returnCompletedExercises(progress));
       setDifficultExerciseIds(returnDifficultExercises(progress));
+      setLessonExercises(fetchedLesson?.exercises);
     };
 
     fetchLesson();
@@ -202,6 +205,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         exerciseId,
         setCompletedExerciseIds,
         setDifficultExerciseIds,
+        lessonExercises,
       }}
     >
       {children}

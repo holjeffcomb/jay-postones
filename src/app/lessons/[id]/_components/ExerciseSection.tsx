@@ -1,5 +1,5 @@
 import React from "react";
-
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Image from "next/image";
 import { getUrlFromId } from "../../../../lib/sanityClient";
 import { useLessonContext } from "../lessonContext";
@@ -17,11 +17,44 @@ export default function ExerciseSection() {
     exerciseId,
     completedExerciseIds,
     difficultExerciseIds,
+    lessonExercises = [], // Ensure default to an empty array
+    setExerciseId,
+    setSelectedExerciseTitle,
   } = useLessonContext();
+
+  console.log("lessonExercises:", lessonExercises);
+  console.log("exerciseId:", exerciseId);
 
   if (!lesson) {
     return <Image src={LoadingDots} width={250} height={120} alt="loading" />;
   }
+
+  const currentExerciseIndex = lessonExercises.findIndex(
+    (exercise) => exercise.id === exerciseId
+  );
+  console.log("currentExerciseIndex:", currentExerciseIndex);
+
+  const hasPrevExercise = currentExerciseIndex > 0;
+  const hasNextExercise = currentExerciseIndex < lessonExercises.length - 1;
+  console.log("hasPrevExercise:", hasPrevExercise);
+  console.log("hasNextExercise:", hasNextExercise);
+
+  const goToPrevExercise = () => {
+    if (hasPrevExercise) {
+      const prevExercise = lessonExercises[currentExerciseIndex - 1];
+      setExerciseId(prevExercise.id);
+      setSelectedExerciseTitle(prevExercise.title);
+    }
+  };
+
+  const goToNextExercise = () => {
+    if (hasNextExercise) {
+      const nextExercise = lessonExercises[currentExerciseIndex + 1];
+      setExerciseId(nextExercise.id);
+      setSelectedExerciseTitle(nextExercise.title);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-start lg:w-3/4 w-full bg-[var(--accent-color)]">
       <div className="flex flex-col items-center gap-6 justify-between p-5 h-full w-full">
@@ -36,29 +69,79 @@ export default function ExerciseSection() {
             back
           </button>
         </div>
+
         <div className="h-full w-full">{exerciseContent}</div>
-        <div className="flex gap-2 text-xs">
-          {lesson.downloadableFile?.asset._ref && (
-            <a href={getUrlFromId(lesson.downloadableFile.asset._ref)} download>
-              <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
-                Download
+
+        <div className="flex gap-2 text-xs items-center justify-between w-full">
+          {/* Previous Exercise Button */}
+          <div className="flex justify-center items-center w-24 ml-18">
+            {hasPrevExercise ? (
+              <button
+                onClick={goToPrevExercise}
+                className="flex flex-col items-center text-gray-600 hover:text-[var(--primary-color)] font-medium transition-colors"
+              >
+                <FaArrowLeft className="text-lg mb-1" />
+                <p>Prev Exercise</p>
               </button>
-            </a>
-          )}
-          {exerciseId ? (
-            <>
-              <MarkButton kind="difficult" />
-              <MarkButton kind="complete" />
-              {difficultExerciseIds.includes(exerciseId) ||
-              completedExerciseIds.includes(exerciseId) ? (
-                <ClearButton />
-              ) : (
-                <div className="w-16"></div>
-              )}
-            </>
-          ) : (
-            <Image src={LoadingDots} width={18} height={18} alt="loading" />
-          )}
+            ) : (
+              <div className="flex flex-col items-center invisible">
+                <FaArrowLeft className="text-lg mb-1" />
+                <p>Prev Exercise</p>
+              </div>
+            )}
+          </div>
+
+          {/* Download Button */}
+          {/* <div className="flex justify-center items-center w-24">
+            {lesson.downloadableFile?.asset._ref ? (
+              <a
+                href={getUrlFromId(lesson.downloadableFile.asset._ref)}
+                download
+              >
+                <button className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">
+                  Download
+                </button>
+              </a>
+            ) : (
+              <div className="invisible">Download</div>
+            )}
+          </div> */}
+
+          {/* Mark Buttons and Clear Button */}
+          <div className="flex justify-center items-center gap-2 w-124">
+            {exerciseId ? (
+              <>
+                <MarkButton kind="difficult" />
+                <MarkButton kind="complete" />
+                {difficultExerciseIds.includes(exerciseId) ||
+                completedExerciseIds.includes(exerciseId) ? (
+                  <ClearButton />
+                ) : (
+                  <div className="w-24"></div>
+                )}
+              </>
+            ) : (
+              <Image src={LoadingDots} width={18} height={18} alt="loading" />
+            )}
+          </div>
+
+          {/* Next Exercise Button */}
+          <div className="flex justify-center items-center w-24">
+            {hasNextExercise ? (
+              <button
+                onClick={goToNextExercise}
+                className="flex flex-col items-center text-gray-600 hover:text-[var(--primary-color)] font-medium transition-colors mr-18"
+              >
+                <FaArrowRight className="text-lg mb-1" />
+                <p>Next Exercise</p>
+              </button>
+            ) : (
+              <div className="flex flex-col items-center invisible">
+                <FaArrowRight className="text-lg mb-1" />
+                <p>Next Exercise</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
