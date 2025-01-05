@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-[var(--background-color)] text-[var(--text-color)] py-8">
+    <footer className="h-[200px] bg-[var(--primary-color)] text-[var(--text-color)] py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-between items-center">
           <div className="w-full md:w-1/4 mb-4 md:mb-0">

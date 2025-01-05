@@ -18,10 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={raleway.className}>
+      <body className={`${raleway.className} flex flex-col min-h-screen`}>
         <Header />
-        <main className="flex flex-col justify-center align-center">
-          {children} {/* This is where the BackgroundVideo and content go */}
+        <main className="flex-grow bg-[var(--primary-color)] flex flex-col justify-between">
+          {children}
         </main>
         <Footer />
       </body>
