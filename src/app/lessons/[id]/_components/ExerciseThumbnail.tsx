@@ -19,6 +19,7 @@ export default function ExerciseThumbnail({
   exercise,
 }: ExerciseThumbnailProps) {
   const {
+    exerciseId,
     setExerciseId,
     setSelectedExerciseTitle,
     setExerciseContent,
@@ -29,9 +30,26 @@ export default function ExerciseThumbnail({
 
   if (!lesson) return null;
 
+  // Dynamically determine button classes
+  const isCompleted = completedExerciseIds.includes(exercise.id);
+  const isDifficult = difficultExerciseIds.includes(exercise.id);
+
+  const buttonClasses = `
+    p-2 rounded-md shadow-md flex items-center justify-between transition w-full
+    ${
+      exercise.id === exerciseId
+        ? "bg-[var(--secondary-color)] text-white"
+        : isCompleted || isDifficult
+        ? "bg-gray-500 text-[var(--text-color)] border-[var(--secondary-color)] hover:bg-gray-400 hover:text-[var(--secondary-color)]" // Dark background, light text, matching border
+        : "bg-white text-[var(--primary-color)] border-gray-400 hover:bg-gray-600 hover:text-[var(--text-color)]"
+      // Default background, dark text, light gray border
+    }
+    
+  `;
+
   return (
     <button
-      className="p-2 border rounded-md bg-white text-[var(--primary-color)] shadow-md flex items-center justify-between hover:bg-gray-100 transition w-full"
+      className={buttonClasses}
       onClick={() => {
         setExerciseId(exercise.id);
         setSelectedExerciseTitle(exercise.title);
@@ -77,10 +95,10 @@ export default function ExerciseThumbnail({
           <h3 className="font-normal">{exercise.title}</h3>
         </div>
       </div>
-      {completedExerciseIds.includes(exercise.id) ? (
-        <FaCheck className="w-3 h-3 text-[var(--primary-color)]" />
-      ) : difficultExerciseIds.includes(exercise.id) ? (
-        <LiaGrinBeamSweat className="w-5 h-5 text-[var(--primary-color)]" />
+      {isCompleted ? (
+        <FaCheck className="w-3 h-3 text-white" />
+      ) : isDifficult ? (
+        <LiaGrinBeamSweat className="w-5 h-5 text-white" />
       ) : null}
     </button>
   );
