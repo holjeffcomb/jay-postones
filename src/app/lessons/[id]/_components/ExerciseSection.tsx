@@ -1,7 +1,6 @@
 import React from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Image from "next/image";
-import { getUrlFromId } from "../../../../lib/sanityClient";
 import { useLessonContext } from "../lessonContext";
 import MarkButton from "./MarkButton";
 import ClearButton from "./ClearButton";
@@ -22,18 +21,12 @@ export default function ExerciseSection() {
     loadExerciseContent,
   } = useLessonContext();
 
-  console.log("lessonExercises:", lessonExercises);
-  console.log("exerciseId:", exerciseId);
-
   const currentExerciseIndex = lessonExercises.findIndex(
     (exercise) => exercise.id === exerciseId
   );
-  console.log("currentExerciseIndex:", currentExerciseIndex);
 
   const hasPrevExercise = currentExerciseIndex > 0;
   const hasNextExercise = currentExerciseIndex < lessonExercises.length - 1;
-  console.log("hasPrevExercise:", hasPrevExercise);
-  console.log("hasNextExercise:", hasNextExercise);
 
   const goToPrevExercise = () => {
     if (hasPrevExercise) {
