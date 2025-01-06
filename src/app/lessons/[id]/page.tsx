@@ -1,7 +1,7 @@
 "use client";
 import ExerciseSection from "./_components/ExerciseSection";
 import LessonSection from "./_components/LessonSection";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { LessonProvider, useLessonContext } from "./lessonContext";
 
 export default function LessonPage() {
@@ -9,12 +9,25 @@ export default function LessonPage() {
 
   return (
     <LessonProvider lessonId={params.id}>
-      <div className="flex flex-col flex-grow h-full w-full">
-        <LessonContent />
-      </div>
+      <LessonContentWrapper />
     </LessonProvider>
   );
 }
+
+const LessonContentWrapper = () => {
+  const { userId, isPageLoading } = useLessonContext();
+
+  // Redirect if user is not logged in and not loading
+  if (!userId && !isPageLoading) {
+    redirect("/login");
+  }
+
+  return (
+    <div className="flex flex-col flex-grow h-full w-full">
+      <LessonContent />
+    </div>
+  );
+};
 
 const LessonContent = () => {
   return (

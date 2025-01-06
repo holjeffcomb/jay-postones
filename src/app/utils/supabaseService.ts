@@ -137,7 +137,7 @@ export const fetchProgress = async (exerciseId: string, userId: string) => {
   }
 };
 
-export const fetchUserId = async () => {
+export const fetchUserId = async (): Promise<string | null> => {
   try {
     const {
       data: { user },
@@ -145,12 +145,13 @@ export const fetchUserId = async () => {
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      redirect("/login");
+      console.warn("User is not logged in");
+      return null; // Return null if no user is logged in
     }
 
     return user.id;
   } catch (error) {
-    console.error("Unexpected error:", error);
-    return null;
+    console.error("Unexpected error during fetchUserId:", error);
+    return null; // Ensure null is returned on error
   }
 };

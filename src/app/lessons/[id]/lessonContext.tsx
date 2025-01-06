@@ -41,6 +41,7 @@ interface LessonContextType {
   lessonExercises: Exercise[];
   loadExerciseContent: (exercise: Exercise) => void;
   isPageLoading: boolean;
+  userId: string | null;
 }
 
 const LessonContext = createContext<LessonContextType | undefined>(undefined);
@@ -74,38 +75,46 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
 
   useEffect(() => {
     const fetchLesson = async () => {
-      const fetchedLesson = await client.fetch<Lesson>(
-        `*[_type == "lesson" && _id == "${lessonId}"][0]`
-      );
+      try {
+        const fetchedLesson = await client.fetch<Lesson>(
+          `*[_type == "lesson" && _id == "${lessonId}"][0]`
+        );
 
-      setLesson(fetchedLesson);
+        setLesson(fetchedLesson);
 
-      const firstExercise = fetchedLesson?.exercises?.[0];
-      if (firstExercise) {
-        loadExerciseContent(firstExercise);
-      } else {
-        console.error("No exercises found for this lesson.");
-      }
+        const firstExercise = fetchedLesson?.exercises?.[0];
+        if (firstExercise) {
+          loadExerciseContent(firstExercise);
+        } else {
+          console.error("No exercises found for this lesson.");
+        }
 
-      const userId = await fetchUserId();
-      if (!userId) {
-        redirect("/login");
-      } else {
+        const userId = await fetchUserId();
+
+        if (!userId) {
+          console.warn("User is not logged in");
+          setUserId(null); // Explicitly set userId to null
+          return; // Stop execution if no user is logged in
+        }
+
         setUserId(userId);
-      }
 
-      const progress = await fetchProgress(firstExercise.id, userId);
-      if (!progress) {
-        console.error("Failed to fetch progress data.");
-      } else {
-        setCompletedExerciseIds(returnCompletedExercises(progress));
-        setDifficultExerciseIds(returnDifficultExercises(progress));
+        const progress = await fetchProgress(firstExercise.id, userId);
+        if (!progress) {
+          console.error("Failed to fetch progress data.");
+        } else {
+          setCompletedExerciseIds(returnCompletedExercises(progress));
+          setDifficultExerciseIds(returnDifficultExercises(progress));
+        }
+        setLessonExercises(fetchedLesson?.exercises);
+      } catch (error) {
+        console.error("Unexpected error in fetchLesson:", error);
+      } finally {
+        setIsPageLoading(false);
       }
-      setLessonExercises(fetchedLesson?.exercises);
     };
 
     fetchLesson();
-    setIsPageLoading(false);
   }, [lessonId]);
 
   const loadExerciseContent = (exercise: Exercise) => {
@@ -213,6 +222,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         lessonExercises,
         loadExerciseContent,
         isPageLoading,
+        userId,
       }}
     >
       {children}
