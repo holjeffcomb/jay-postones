@@ -21,6 +21,31 @@ export type Lesson = {
   videoUrl?: string;
   downloadableFile?: { asset: { _ref: string } };
   exercises: Exercise[];
+  imageUrl: string;
+  membershipLevel: string;
+  subtitle: string;
+  level: "beginner" | "intermediate" | "advanced" | "all";
+  tags: string[];
+  summary: string;
+};
+
+export type GridItem = {
+  _id: string;
+  title: string;
+  description: string;
+  sticking?: string;
+  tempo?: string;
+  timeSignature?: string;
+  videoUrl?: string;
+  downloadableFile?: { asset: { _ref: string } };
+  exercises: Exercise[];
+  imageUrl: string;
+  membershipLevel: string;
+  subtitle: string;
+  level: "beginner" | "intermediate" | "advanced" | "all";
+  tags: string[];
+  summary: string;
+  lessons?: Lesson[];
 };
 
 export type ExerciseType = "portableText" | "video" | "soundslice";

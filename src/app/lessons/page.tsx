@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { client } from "../../lib/sanityClient";
-import LessonGrid from "./_components/LessonGrid";
+import ItemGrid from "./_components/ItemGrid";
+import FilterSection from "./_components/FilterSection";
+import { GridItem } from "../../../types/types";
+
+export type BucketType = "courses" | "individualLessons" | "playthroughs";
 
 export default function LessonsPage() {
-  const [bucket, setBucket] = useState<
-    "courses" | "individualLessons" | "playthroughs"
-  >("courses");
-  const [lessons, setLessons] = useState([]);
+  const [bucket, setBucket] = useState<BucketType>("courses");
+  const [items, setItems] = useState<GridItem[]>([]); // Full list of items
+  const [filteredItems, setFilteredItems] = useState<GridItem[]>([]); // Filtered items
 
   const queries = {
     courses: `*[_type == "course"] | order(_createdAt desc) {
@@ -99,7 +102,8 @@ export default function LessonsPage() {
             ? lesson.description.slice(0, 200) + " [...]"
             : lesson.description,
       }));
-      setLessons(truncatedLessons);
+      setItems(truncatedLessons);
+      setFilteredItems(truncatedLessons); // Initially show all items
     };
 
     fetchLessons();
@@ -107,74 +111,13 @@ export default function LessonsPage() {
 
   return (
     <div className="flex flex-col items-start justify-start p-4 gap-4">
-      <div className="flex flex-row relative gap-4">
-        <button
-          onClick={() => setBucket("courses")}
-          className={`text-l ${
-            bucket === "courses" ? "font-bold underline" : "font-normal"
-          }`}
-        >
-          Courses
-        </button>
-        <button
-          onClick={() => setBucket("individualLessons")}
-          className={`text-l ${
-            bucket === "individualLessons"
-              ? "font-bold underline"
-              : "font-normal"
-          }`}
-        >
-          Individual Lessons
-        </button>
-        <button
-          onClick={() => setBucket("playthroughs")}
-          className={`text-l ${
-            bucket === "playthroughs" ? "font-bold underline" : "font-normal"
-          }`}
-        >
-          Playthroughs
-        </button>
-      </div>
-      <div className="flex flex-row relative gap-4">
-        <input
-          type="text"
-          placeholder="Search lessons..."
-          className="p-2 border rounded-md text-black"
-        />
-        <select className="p-2 border rounded-md text-black">
-          <option value="">Select difficulty</option>
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="advanced">Advanced</option>
-        </select>
-        <select className="p-2 border rounded-md text-black">
-          <option value="">Select category</option>
-          <option value="grooves">Grooves</option>
-          <option value="drum-fills">Drum Fills</option>
-          <option value="tesseract">TesseracT</option>
-          <option value="odd-timing">Odd timing</option>
-          <option value="polyrhythms">Polyrhythms</option>
-          <option value="displacement">Displacement</option>
-          <option value="metric-modulation">Metric Modulation</option>
-          <option value="single-kick">Single kick</option>
-          <option value="double-kick">Double Kick</option>
-          <option value="hand-technique">Hand Technique</option>
-          <option value="foot-technique">Foot Technique</option>
-          <option value="rudiments">Rudiments</option>
-          <option value="gear">Gear</option>
-          <option value="programming-drums">Programming drums</option>
-          <option value="practice-routine">Practice routine</option>
-          <option value="technique">Technique</option>
-          <option value="flow">Flow</option>
-          <option value="limb-independence">Limb Independence</option>
-          <option value="ghost-notes">Ghost Notes</option>
-          <option value="three">Three</option>
-          <option value="five">Five</option>
-          <option value="seven">Seven</option>
-          <option value="nine">Nine</option>
-        </select>
-      </div>
-      <LessonGrid lessons={lessons} />
+      <FilterSection
+        bucket={bucket}
+        setBucket={setBucket}
+        items={items} // Pass the full dataset
+        setFilteredItems={setFilteredItems} // Update filtered items
+      />
+      <ItemGrid items={filteredItems} bucket={bucket} />
     </div>
   );
 }
