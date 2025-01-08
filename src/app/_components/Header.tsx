@@ -7,7 +7,6 @@ import { createClient } from "../utils/supabase/client";
 import { FaCaretDown } from "react-icons/fa";
 import Dropdown from "./Dropdown";
 import { useGlobalContext } from "../_context/GlobalContext";
-import { useRouter } from "next/navigation";
 
 const supabase = createClient();
 const LoadingWheel = "/images/animations/loadingwheel.svg";
@@ -24,19 +23,14 @@ export default function Header() {
     setUser,
   } = useGlobalContext();
 
-  const router = useRouter();
-
   const toggleDropdown = () => {
-    isDropdownShowing
-      ? setIsDropdownShowing(false)
-      : setIsDropdownShowing(true);
+    setIsDropdownShowing((prevState) => !prevState);
   };
 
   useEffect(() => {
     const checkLogin = async () => {
       try {
         setIsLoggingIn(true);
-        // Get the logged-in user
         const {
           data: { user },
           error: userError,
@@ -47,7 +41,6 @@ export default function Header() {
           return;
         }
 
-        // Fetch the user's profile
         const { data: profile, error } = await supabase
           .from("profiles")
           .select("first_name, last_name")
@@ -96,14 +89,12 @@ export default function Header() {
           <span>
             Logged in as {user?.firstName} {user?.lastName}
           </span>
-          <button
-            onClick={() => {
-              toggleDropdown();
-            }}
-          >
+          <button onClick={toggleDropdown}>
             <FaCaretDown />
           </button>
-          {isDropdownShowing ? <Dropdown /> : <></>}
+          {isDropdownShowing && (
+            <Dropdown setIsDropdownShowing={setIsDropdownShowing} />
+          )}
         </div>
       ) : (
         <div className="flex gap-1 px-6 text-xs">
