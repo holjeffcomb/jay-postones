@@ -2,7 +2,7 @@ import styles from "./BackgroundVideo.module.css";
 
 export default function BackgroundVideo() {
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-screen overflow-hidden z-0">
       <video
         className={`w-full object-cover ${styles.video}`}
         autoPlay

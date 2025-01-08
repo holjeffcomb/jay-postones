@@ -12,7 +12,6 @@ import {
   handleProgressUpdate,
 } from "@/app/utils/supabaseService";
 import { PortableText } from "@portabletext/react";
-import { redirect } from "next/navigation";
 import { Exercise, Lesson, ProgressList } from "../../../../types/types";
 import { components } from "./_components/LessonSection";
 

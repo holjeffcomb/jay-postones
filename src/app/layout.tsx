@@ -4,6 +4,7 @@ import Header from "./_components/Header";
 import Footer from "./_components/Footer";
 import { Inter, Raleway } from "next/font/google";
 import "./globals.css";
+import { GlobalProvider } from "./_context/GlobalContext";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -20,12 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${raleway.className} flex flex-col min-h-screen`}>
-        <SpeedInsights />
-        <Header />
-        <main className="flex-grow bg-[var(--primary-color)] flex flex-col justify-between">
-          {children}
-        </main>
-        <Footer />
+        <GlobalProvider>
+          <SpeedInsights />
+          <Header />
+          <main className="flex-grow bg-[var(--primary-color)] flex flex-col justify-between">
+            {children}
+          </main>
+          <Footer />
+        </GlobalProvider>
       </body>
     </html>
   );

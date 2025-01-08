@@ -4,16 +4,38 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createClient } from "../utils/supabase/client";
+import { FaCaretDown } from "react-icons/fa";
+import Dropdown from "./Dropdown";
+import { useGlobalContext } from "../_context/GlobalContext";
+import { useRouter } from "next/navigation";
 
 const supabase = createClient();
+const LoadingWheel = "/images/animations/loadingwheel.svg";
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [isDropdownShowing, setIsDropdownShowing] = useState<boolean>(false);
+
+  const {
+    isLoggingIn,
+    setIsLoggingIn,
+    isLoggedIn,
+    setIsLoggedIn,
+    user,
+    setUser,
+  } = useGlobalContext();
+
+  const router = useRouter();
+
+  const toggleDropdown = () => {
+    isDropdownShowing
+      ? setIsDropdownShowing(false)
+      : setIsDropdownShowing(true);
+  };
 
   useEffect(() => {
     const checkLogin = async () => {
       try {
+        setIsLoggingIn(true);
         // Get the logged-in user
         const {
           data: { user },
@@ -35,11 +57,16 @@ export default function Header() {
         if (error) {
           console.error(error);
         } else if (profile) {
+          setUser({
+            firstName: profile.first_name,
+            lastName: profile.last_name,
+          });
           setIsLoggedIn(true);
-          setUserName(`${profile.first_name} ${profile.last_name}`);
         }
       } catch (err) {
         console.error("Error checking login:", err);
+      } finally {
+        setIsLoggingIn(false);
       }
     };
 
@@ -47,7 +74,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="h-[150px] relative w-full flex items-end justify-between p-4 drop-shadow-custom bg-[var(--primary-color-color)]">
+    <header className="h-[150px] relative w-full flex items-end justify-between p-4 drop-shadow-custom bg-[var(--primary-color-color)] z-30">
       <Link href="/">
         <Image
           src="/images/logos/JPDL LOGO 2.0 white.png"
@@ -56,21 +83,34 @@ export default function Header() {
           alt="Jay Postones Logo"
         />
       </Link>
-      {isLoggedIn ? (
-        <div className="flex flex-col">
-          <div className="px-6 text-xs">
-            <span>Logged in as {userName}</span>
-          </div>
+      {isLoggingIn ? (
+        <Image
+          className="mx-6"
+          src={LoadingWheel}
+          width={20}
+          height={20}
+          alt="loading..."
+        />
+      ) : isLoggedIn ? (
+        <div className="flex px-6 text-xs gap-2 relative">
+          <span>
+            Logged in as {user?.firstName} {user?.lastName}
+          </span>
+          <button
+            onClick={() => {
+              toggleDropdown();
+            }}
+          >
+            <FaCaretDown />
+          </button>
+          {isDropdownShowing ? <Dropdown /> : <></>}
         </div>
       ) : (
-        <Link href="/login" className="px-6">
-          <Image
-            src="/images/icons/User.png"
-            width={30}
-            height={30}
-            alt="Login/Register"
-          />
-        </Link>
+        <div className="flex gap-1 px-6 text-xs">
+          <Link href="/login">Login </Link>
+          <p>{" or "}</p>
+          <Link href="/register"> Register</Link>
+        </div>
       )}
     </header>
   );

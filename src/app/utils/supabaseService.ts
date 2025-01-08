@@ -155,3 +155,20 @@ export const fetchUserId = async (): Promise<string | null> => {
     return null; // Ensure null is returned on error
   }
 };
+
+export const signOut = async (): Promise<string | null> => {
+  try {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.warn("Sign out error:", error);
+    } else {
+      console.log("Signed out successfully.");
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Sign out error:", error);
+    return null;
+  }
+};
