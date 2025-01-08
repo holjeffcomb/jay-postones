@@ -34,3 +34,8 @@ export type Exercise = {
   soundsliceUrl?: string;
   content?: PortableTextBlock[]; // PortableText content type
 };
+
+export type User = {
+  firstName: string;
+  lastName: string;
+};
