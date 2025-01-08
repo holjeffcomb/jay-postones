@@ -1,36 +1,44 @@
 import Image from "next/image";
 import Link from "next/link";
+import { GridItem } from "../../../../types/types";
+import { BucketType } from "../page";
 
-export default function LessonGrid({ lessons }: { lessons: any[] }) {
+export default function ItemGrid({
+  items: items,
+  bucket,
+}: {
+  items: GridItem[];
+  bucket: BucketType;
+}) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-      {lessons.map((course) => (
-        <Link href={`/lessons/${course._id}`} key={course._id}>
+      {items?.map((item) => (
+        <Link href={`/lessons/${item._id}`} key={item._id}>
           <div className="flex flex-col bg-[var(--secondary-color)] rounded-lg shadow-[4px_4px_4px_rgba(0,0,0,0.8)] transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg hover:bg-[#3D3F5D] group min-w-[300px] w-full min-h-[460px] max-h-[none] overflow-visible">
-            {course.imageUrl && (
+            {item.imageUrl && (
               <div className="relative w-full pt-[56.25%]">
                 <Image
-                  src={course.imageUrl}
-                  alt={course.title}
+                  src={item.imageUrl}
+                  alt={item.title}
                   layout="fill"
                   objectFit="cover"
                   className="absolute top-0 left-0 w-full h-full"
                 />
                 <div
                   className={`absolute top-0 right-0 px-2 rounded-sm m-2 text-[var(--text-color)] ${
-                    course.membershipLevel === "free"
+                    item.membershipLevel === "free"
                       ? "bg-blue-500"
-                      : course.membershipLevel === "silver"
-                        ? "bg-gray-500"
-                        : course.membershipLevel === "gold"
-                          ? "bg-yellow-500"
-                          : course.membershipLevel === "platinum"
-                            ? "bg-purple-500"
-                            : "bg-[var(--accent-color)]"
+                      : item.membershipLevel === "silver"
+                      ? "bg-gray-500"
+                      : item.membershipLevel === "gold"
+                      ? "bg-yellow-500"
+                      : item.membershipLevel === "platinum"
+                      ? "bg-purple-500"
+                      : "bg-[var(--accent-color)]"
                   }`}
                 >
                   <span className="text-sm font-normal">
-                    {course.membershipLevel?.toUpperCase()}
+                    {item.membershipLevel?.toUpperCase()}
                   </span>
                 </div>
                 <div
@@ -42,26 +50,26 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
                   }}
                 >
                   <h2 className="text-xl font-bold break-words">
-                    {course.title.toUpperCase()}
+                    {item.title.toUpperCase()}
                   </h2>
-                  <h3 className="text-sm">{course.subtitle}</h3>
+                  <h3 className="text-sm">{item.subtitle}</h3>
                 </div>
               </div>
             )}
             <div className="p-3 flex flex-col gap-1 flex-grow">
               <span
                 className={`text-sm font-normal ${
-                  course.level === "beginner"
+                  item.level === "beginner"
                     ? "text-green-500"
-                    : course.level === "intermediate"
-                      ? "text-yellow-500"
-                      : "text-red-500"
+                    : item.level === "intermediate"
+                    ? "text-yellow-500"
+                    : "text-red-500"
                 }`}
               >
-                {course.level}
+                {item.level}
               </span>
               <div className="flex flex-wrap gap-1">
-                {course.tags?.map((tag: string, index: number) => (
+                {item.tags?.map((tag: string, index: number) => (
                   <span
                     key={index}
                     className="px-1 py-0.5 text-xs font-normal bg-[var(--accent-color)] text-[var(--primary-color)] rounded-md"
@@ -71,13 +79,15 @@ export default function LessonGrid({ lessons }: { lessons: any[] }) {
                 ))}
               </div>
               <p className="text-[var(--text-color)] text-sm italic break-words flex-grow">
-                {course.summary}
+                {item.summary}
               </p>
               <div className="flex justify-between items-center mt-auto">
-                {course.lessons?.length > 0 && (
+                {(bucket === "courses" && item.lessons?.length) ?? 0 > 0 ? (
                   <span className="text-sm text-[var(--accent-color)]">
-                    {course.lessons.length} lessons
+                    {item.lessons?.length} lessons
                   </span>
+                ) : (
+                  <></>
                 )}
               </div>
             </div>
