@@ -8,7 +8,6 @@ import Link from "next/link";
 const supabase = createClient();
 
 export default function PracticePage() {
-  const [practiceList, setPracticeList] = useState<{ lesson_id: string }[]>([]);
   const [practiceItems, setPracticeItems] = useState<
     {
       lessonId: string;
@@ -53,8 +52,6 @@ export default function PracticePage() {
             console.error("No lessons found in practice list");
             return;
           }
-
-          setPracticeList(practiceLessons);
 
           // Fetch the lessons with the extracted lessonIds
           const { data: lessons, error: lessonsError } = await supabase
@@ -186,10 +183,8 @@ export default function PracticePage() {
     <>
       {practiceItems ? (
         practiceItems.map((item, index) => (
-          <div className="flex flex-row">
-            <Link href={`/lessons/${item.lessonId}`} key={index}>
-              {item.title}
-            </Link>
+          <div key={index} className="flex flex-row">
+            <Link href={`/lessons/${item.lessonId}`}>{item.title}</Link>
             <p>{item.description}</p>
           </div>
         ))
