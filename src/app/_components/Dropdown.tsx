@@ -49,6 +49,9 @@ export default function Dropdown({ setIsDropdownShowing }: DropdownProps) {
         <Link href="/progress">Dashboard</Link>
       </div>
       <div className="flex justify-center w-full hover:bg-[var(--text-color)]">
+        <Link href="/practice">Practice List</Link>
+      </div>
+      <div className="flex justify-center w-full hover:bg-[var(--text-color)]">
         <button onClick={() => handleSignOut()}>Sign Out</button>
       </div>
     </div>
