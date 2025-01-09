@@ -1,5 +1,5 @@
 import React from "react";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import {
   PortableTextReactComponents,
   PortableTextComponentProps,
@@ -10,7 +10,11 @@ import { urlFor } from "../../../../lib/sanityClient";
 import ExerciseThumbnail from "./ExerciseThumbnail";
 import { useLessonContext } from "../lessonContext";
 import { Exercise } from "../../../../../types/types";
-import { handleAddToPracticeList } from "@/app/utils/supabaseService";
+import {
+  handleAddToPracticeList,
+  handleRemoveFromPracticeList,
+} from "@/app/utils/supabaseService";
+import { useState } from "react";
 
 export const components: PortableTextReactComponents = {
   types: {
@@ -71,31 +75,74 @@ export const components: PortableTextReactComponents = {
   unknownListItem: () => null,
 };
 
+const LoadingWheel = "/images/animations/loadingwheel.svg";
+
 export default function LessonSection() {
-  const {
-    lesson,
-    setExerciseId,
-    setSelectedExerciseTitle,
-    setExerciseContent,
-    completedExerciseIds,
-    difficultExerciseIds,
-    userNotes,
-  } = useLessonContext();
+  const { lesson, isInPracticeList, setIsInPracticeList } = useLessonContext();
+  const [isPracticeListUpdating, setIsPracticeListUpdating] =
+    useState<boolean>(false);
+
   if (!lesson) {
     return (
       <div className="flex flex-col items-center justify-center lg:w-1/4 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]"></div>
     );
   }
+
+  // Handler function for button click
+  const handleButtonClick = async () => {
+    if (isInPracticeList) {
+      setIsPracticeListUpdating(true);
+      await handleRemoveFromPracticeList(lesson._id);
+      setIsInPracticeList(false); // Remove lesson from practice list
+      setIsPracticeListUpdating(false);
+    } else {
+      setIsPracticeListUpdating(true);
+      await handleAddToPracticeList(lesson._id);
+      setIsInPracticeList(true); // Add lesson to practice list
+      setIsPracticeListUpdating(false);
+    }
+  };
   return (
     <div className="flex flex-col items-start lg:w-1/4 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
       <div className="text-left mb-2">
         <h1 className="font-bold text-2xl">{lesson.title}</h1>
         <button
-          className="text-xs border border-[var(--primary-color)] bg-[var(--accent-color)] hover:bg-[var(--secondary-color)] text-[var(--primary-color)] hover:text-[var(--text-color)] py-1 px-2 rounded-xl flex items-center gap-2 my-2"
-          onClick={() => handleAddToPracticeList(lesson._id)}
+          className={`text-xs border border-[var(--primary-color)] py-1 px-2 rounded-xl flex items-center gap-2 my-2 ${
+            isInPracticeList
+              ? "bg-[var(--secondary-color)] text-[var(--text-color)] hover:bg-[var(--accent-color)]"
+              : "bg-[var(--accent-color)] text-[var(--primary-color)]"
+          }`}
+          onClick={handleButtonClick}
         >
-          <AiOutlinePlus className="w-3 h-3" />
-          Add Lesson to Practice List
+          {isInPracticeList ? (
+            <>
+              {isPracticeListUpdating ? (
+                <Image
+                  src={LoadingWheel}
+                  width={16}
+                  height={16}
+                  alt="Loading..."
+                />
+              ) : (
+                <AiOutlineMinus className="w-3 h-3" />
+              )}
+              Remove from Practice List
+            </>
+          ) : (
+            <>
+              {isPracticeListUpdating ? (
+                <Image
+                  src={LoadingWheel}
+                  width={16}
+                  height={16}
+                  alt="Loading..."
+                />
+              ) : (
+                <AiOutlinePlus className="w-3 h-3" />
+              )}
+              Add to Practice List
+            </>
+          )}
         </button>
 
         <h2 className="font-bold mb-2">NOTES FROM JAY</h2>

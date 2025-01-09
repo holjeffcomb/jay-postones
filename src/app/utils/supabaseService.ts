@@ -118,6 +118,39 @@ export const handleAddToPracticeList = async (lessonId: string) => {
   }
 };
 
+export const handleRemoveFromPracticeList = async (lessonId: string) => {
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      redirect("/login");
+      return;
+    }
+
+    const userId = user.id;
+
+    // Delete the entry from the practice_list table
+    const { error } = await supabase
+      .from("practice_list")
+      .delete()
+      .eq("id", `${userId}--${lessonId}`); // Match the composite key (userId--lessonId)
+
+    if (error) {
+      console.error("Error removing lesson from practice list:", error);
+      alert("Failed to remove lesson from practice list");
+    } else {
+      console.log("Lesson removed from practice list successfully!");
+      alert("Lesson removed from practice list");
+    }
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    alert("An unexpected error occurred");
+  }
+};
+
 export const fetchProgress = async (exerciseId: string, userId: string) => {
   try {
     const { data, error } = await supabase
