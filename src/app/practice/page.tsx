@@ -15,15 +15,7 @@ export default function PracticePage() {
       description: string;
     }[]
   >([]);
-  const [lessonsWithExercises, setLessonsWithExercises] = useState<any>({});
-  const [progress, setProgress] = useState<{ [exerciseId: string]: string }>(
-    {}
-  );
   const [loading, setLoading] = useState(true);
-  const [expandedLessons, setExpandedLessons] = useState<{
-    [key: string]: boolean;
-  }>({});
-
   const router = useRouter();
 
   useEffect(() => {
@@ -90,92 +82,6 @@ export default function PracticePage() {
     };
     fetchData();
   }, []);
-
-  // const toggleLesson = (lessonId: string) => {
-  //   setExpandedLessons((prev) => ({
-  //     ...prev,
-  //     [lessonId]: !prev[lessonId], // Toggle expanded state
-  //   }));
-  // };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // Fetch exercises with lesson titles
-  //       const { data: exercises, error: exercisesError } = await supabase
-  //         .from("exercises")
-  //         .select("id, title, lesson_id");
-
-  //       if (exercisesError) {
-  //         console.error("Error fetching exercises:", exercisesError);
-  //         return;
-  //       }
-
-  //       // Fetch lessons to get lesson titles
-  //       const { data: lessons, error: lessonsError } = await supabase
-  //         .from("lessons")
-  //         .select("id, title");
-
-  //       if (lessonsError) {
-  //         console.error("Error fetching lessons:", lessonsError);
-  //         return;
-  //       }
-
-  //       // Group exercises by lesson_id
-  //       const groupedData: any = {};
-  //       exercises.forEach((exercise) => {
-  //         const lessonTitle =
-  //           lessons.find((lesson) => lesson.id === exercise.lesson_id)?.title ||
-  //           "Unknown Lesson";
-  //         if (!groupedData[exercise.lesson_id]) {
-  //           groupedData[exercise.lesson_id] = {
-  //             lessonTitle,
-  //             exercises: [],
-  //           };
-  //         }
-  //         groupedData[exercise.lesson_id].exercises.push(exercise);
-  //       });
-
-  //       setLessonsWithExercises(groupedData);
-
-  //       // Fetch progress data for the logged-in user
-  //       const {
-  //         data: { user },
-  //       } = await supabase.auth.getUser();
-
-  //       if (!user) {
-  //         console.error("User not logged in.");
-  //         return;
-  //       }
-
-  //       const { data: progressData, error: progressError } = await supabase
-  //         .from("progress")
-  //         .select("exercise_id, status")
-  //         .eq("user_id", user.id);
-
-  //       if (progressError) {
-  //         console.error("Error fetching progress:", progressError);
-  //         return;
-  //       }
-
-  //       // Map progress data by exercise_id
-  //       const progressMap: { [exerciseId: string]: string } = {};
-  //       progressData.forEach(
-  //         (entry: { exercise_id: string; status: string }) => {
-  //           progressMap[entry.exercise_id] = entry.status;
-  //         }
-  //       );
-
-  //       setProgress(progressMap);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   if (loading) return <div>Loading...</div>;
 
