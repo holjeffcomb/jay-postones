@@ -14,6 +14,9 @@ import {
 import { PortableText } from "@portabletext/react";
 import { Exercise, Lesson, ProgressList } from "../../../../types/types";
 import { components } from "./_components/LessonSection";
+import { createClient } from "@/app/utils/supabase/client";
+
+const supabase = createClient();
 
 interface LessonContextType {
   lesson: Lesson | null;
@@ -41,6 +44,8 @@ interface LessonContextType {
   loadExerciseContent: (exercise: Exercise) => void;
   isPageLoading: boolean;
   userId: string | null;
+  isInPracticeList: boolean;
+  setIsInPracticeList: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const LessonContext = createContext<LessonContextType | undefined>(undefined);
@@ -71,6 +76,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
   const [isMarkCompleteLoading, setIsMarkCompleteLoading] = useState(false);
   const [isTooDifficultLoading, setIsTooDifficultLoading] = useState(false);
   const [lessonExercises, setLessonExercises] = useState<Exercise[]>([]);
+  const [isInPracticeList, setIsInPracticeList] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -97,6 +103,22 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         }
 
         setUserId(userId);
+
+        const { data, error } = await supabase
+          .from("practice_list")
+          .select("id") // Only select the ID or any column for existence check
+          .eq("user_id", userId)
+          .eq("lesson_id", lessonId) // Match the specific lesson ID
+          .limit(1); // Optimize query to stop after finding one match
+
+        if (error) {
+          console.error("Error checking practice list:", error);
+        }
+
+        // Check if any data is returned
+        const lessonExists = data && data.length > 0;
+        console.log("Lesson exists in practice list:", lessonExists);
+        setIsInPracticeList(lessonExists || false);
 
         const progress = await fetchProgress(firstExercise.id, userId);
         if (!progress) {
@@ -222,6 +244,8 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         loadExerciseContent,
         isPageLoading,
         userId,
+        isInPracticeList,
+        setIsInPracticeList,
       }}
     >
       {children}
