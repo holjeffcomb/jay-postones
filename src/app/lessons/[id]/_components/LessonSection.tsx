@@ -109,7 +109,7 @@ export default function LessonSection() {
         <button
           className={`text-xs border border-[var(--primary-color)] py-1 px-2 rounded-xl flex items-center gap-2 my-2 ${
             isInPracticeList
-              ? "bg-[var(--secondary-color)] text-[var(--text-color)] hover:bg-[var(--accent-color)]"
+              ? "bg-[var(--secondary-color)] text-[var(--text-color)] hover:bg-[var(--primary-color)]"
               : "bg-[var(--accent-color)] text-[var(--primary-color)]"
           }`}
           onClick={handleButtonClick}

@@ -24,7 +24,7 @@ export default function FilterSection({
 
   const tagOptions = [
     "Grooves",
-    "Drum fills",
+    "Drum Fills",
     "TesseracT",
     "Odd timing",
     "Polyrhythms",
