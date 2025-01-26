@@ -152,9 +152,10 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         </div>
       );
     } else if (exercise.type === "soundslice") {
+      const soundsliceUrlWithUser = exercise.soundsliceUrl + `?u=${userId}`;
       setExerciseContent(
         <iframe
-          src={exercise.soundsliceUrl}
+          src={soundsliceUrlWithUser}
           width="100%"
           height="400"
           allowFullScreen
