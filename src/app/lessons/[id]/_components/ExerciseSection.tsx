@@ -5,13 +5,11 @@ import { useLessonContext } from "../lessonContext";
 import MarkButton from "./MarkButton";
 import ClearButton from "./ClearButton";
 
-const LoadingWheel = "/images/animations/loadingwheel.svg";
 const LoadingDots = "/images/animations/loadingdots.svg";
 
 export default function ExerciseSection() {
   const {
     selectedExerciseTitle,
-    lesson,
     exerciseContent,
     exerciseId,
     completedExerciseIds,

@@ -34,7 +34,6 @@ export const components: PortableTextReactComponents = {
       children,
       ...props
     }: PortableTextComponentProps<PortableTextBlock>) => {
-      // Only pick necessary props to avoid passing invalid ones
       const { id, className } = props as { id?: string; className?: string };
 
       return (
@@ -64,9 +63,27 @@ export const components: PortableTextReactComponents = {
       );
     },
   },
-  marks: {},
-  list: {},
-  listItem: {},
+  marks: {
+    strong: ({ children }: { children: React.ReactNode }) => (
+      <strong className="font-bold">{children}</strong>
+    ),
+  },
+  list: {
+    bullet: ({ children }) => (
+      <ul className="list-disc ml-5 text-[var(--secondary-color)]">
+        {children}
+      </ul>
+    ),
+    number: ({ children }) => (
+      <ol className="list-decimal ml-5 text-[var(--secondary-color)]">
+        {children}
+      </ol>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }) => <li className="my-2">{children}</li>,
+    number: ({ children }) => <li className="my-2">{children}</li>,
+  },
   hardBreak: () => <br />,
   unknownMark: () => null,
   unknownType: () => null,
