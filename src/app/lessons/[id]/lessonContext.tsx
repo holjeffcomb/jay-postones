@@ -81,6 +81,16 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
   useEffect(() => {
     const fetchLesson = async () => {
       try {
+        const userId = await fetchUserId();
+
+        if (!userId) {
+          console.warn("User is not logged in");
+          setUserId(null); // Explicitly set userId to null
+          return;
+        }
+
+        setUserId(userId);
+
         const fetchedLesson = await client.fetch<Lesson>(
           `*[_type == "lesson" && _id == "${lessonId}"][0]`
         );
@@ -89,20 +99,10 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
 
         const firstExercise = fetchedLesson?.exercises?.[0];
         if (firstExercise) {
-          loadExerciseContent(firstExercise);
+          loadExerciseContent(firstExercise, userId);
         } else {
           console.error("No exercises found for this lesson.");
         }
-
-        const userId = await fetchUserId();
-
-        if (!userId) {
-          console.warn("User is not logged in");
-          setUserId(null); // Explicitly set userId to null
-          return; // Stop execution if no user is logged in
-        }
-
-        setUserId(userId);
 
         const { data, error } = await supabase
           .from("practice_list")
@@ -138,7 +138,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
     fetchLesson();
   }, [lessonId]);
 
-  const loadExerciseContent = (exercise: Exercise) => {
+  const loadExerciseContent = (exercise: Exercise, userId: string) => {
     setExerciseId(exercise.id);
     setSelectedExerciseTitle(exercise.title);
 
