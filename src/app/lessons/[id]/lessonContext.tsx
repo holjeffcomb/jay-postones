@@ -41,7 +41,7 @@ interface LessonContextType {
   setCompletedExerciseIds: React.Dispatch<React.SetStateAction<string[]>>;
   setDifficultExerciseIds: React.Dispatch<React.SetStateAction<string[]>>;
   lessonExercises: Exercise[];
-  loadExerciseContent: (exercise: Exercise) => void;
+  loadExerciseContent: (exercise: Exercise, userId: string) => void;
   isPageLoading: boolean;
   userId: string | null;
   isInPracticeList: boolean;

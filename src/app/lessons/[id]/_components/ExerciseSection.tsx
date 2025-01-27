@@ -17,6 +17,7 @@ export default function ExerciseSection() {
     lessonExercises = [], // Ensure default to an empty array
     isPageLoading,
     loadExerciseContent,
+    userId,
   } = useLessonContext();
 
   const currentExerciseIndex = lessonExercises.findIndex(
@@ -27,16 +28,16 @@ export default function ExerciseSection() {
   const hasNextExercise = currentExerciseIndex < lessonExercises.length - 1;
 
   const goToPrevExercise = () => {
-    if (hasPrevExercise) {
+    if (hasPrevExercise && userId) {
       const prevExercise = lessonExercises[currentExerciseIndex - 1];
-      loadExerciseContent(prevExercise);
+      loadExerciseContent(prevExercise, userId);
     }
   };
 
   const goToNextExercise = () => {
-    if (hasNextExercise) {
+    if (hasNextExercise && userId) {
       const nextExercise = lessonExercises[currentExerciseIndex + 1];
-      loadExerciseContent(nextExercise);
+      loadExerciseContent(nextExercise, userId);
     }
   };
 

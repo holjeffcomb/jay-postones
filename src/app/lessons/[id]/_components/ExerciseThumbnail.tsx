@@ -27,6 +27,7 @@ export default function ExerciseThumbnail({
     completedExerciseIds,
     difficultExerciseIds,
     loadExerciseContent,
+    userId,
   } = useLessonContext();
 
   if (!lesson) return null;
@@ -49,23 +50,27 @@ export default function ExerciseThumbnail({
   `;
 
   return (
-    <button
-      className={buttonClasses}
-      onClick={() => {
-        loadExerciseContent(exercise);
-      }}
-    >
-      <div className="flex items-start gap-2">
-        {typeToIcon[exercise.type] || <span>?</span>}
-        <div>
-          <h3 className="font-normal">{exercise.title}</h3>
-        </div>
-      </div>
-      {isCompleted ? (
-        <FaCheck className="w-3 h-3 text-white" />
-      ) : isDifficult ? (
-        <LiaGrinBeamSweat className="w-5 h-5 text-white" />
-      ) : null}
-    </button>
+    <>
+      {userId && (
+        <button
+          className={buttonClasses}
+          onClick={() => {
+            loadExerciseContent(exercise, userId);
+          }}
+        >
+          <div className="flex items-start gap-2">
+            {typeToIcon[exercise.type] || <span>?</span>}
+            <div>
+              <h3 className="font-normal">{exercise.title}</h3>
+            </div>
+          </div>
+          {isCompleted ? (
+            <FaCheck className="w-3 h-3 text-white" />
+          ) : isDifficult ? (
+            <LiaGrinBeamSweat className="w-5 h-5 text-white" />
+          ) : null}
+        </button>
+      )}
+    </>
   );
 }
