@@ -36,6 +36,11 @@ export default function Footer() {
                   Contact
                 </a>
               </li>
+              <li>
+                <a href="/bug" className="hover:text-gray-300">
+                  Report Bug
+                </a>
+              </li>
             </ul>
           </div>
           <div className="w-full md:w-1/4 mb-4 md:mb-0">
