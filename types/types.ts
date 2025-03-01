@@ -33,6 +33,7 @@ export type GridItem = {
   _id: string;
   title: string;
   description: string;
+  fullDescription: string;
   sticking?: string;
   tempo?: string;
   timeSignature?: string;

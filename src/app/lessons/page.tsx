@@ -27,6 +27,7 @@ export default function LessonsPage() {
           title,
           description,
           videoUrl,
+          'imageUrl': lessonImage.asset->url + '?w=600&h=400&fit=crop',
           "exercises": exercises[]{
             _id,
             title,
@@ -95,15 +96,16 @@ export default function LessonsPage() {
   useEffect(() => {
     const fetchLessons = async () => {
       const fetchedLessons = await client.fetch(queries[bucket]);
-      const truncatedLessons = fetchedLessons.map((lesson: any) => ({
+      const processedLessons = fetchedLessons.map((lesson: any) => ({
         ...lesson,
+        fullDescription: lesson.description, // Keep the original full description
         description:
           lesson.description.length > 200
             ? lesson.description.slice(0, 200) + " [...]"
             : lesson.description,
       }));
-      setItems(truncatedLessons);
-      setFilteredItems(truncatedLessons); // Initially show all items
+      setItems(processedLessons);
+      setFilteredItems(processedLessons); // Initially show all items
     };
 
     fetchLessons();
