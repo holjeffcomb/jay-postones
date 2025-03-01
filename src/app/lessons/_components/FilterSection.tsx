@@ -94,7 +94,8 @@ export default function FilterSection({
       return matchesTags && matchesDifficulty && matchesSearchText;
     });
 
-    setFilteredItems(filtered);
+    setFilteredItems([]); // Temporarily clear items
+    setTimeout(() => setFilteredItems(filtered), 50); // Re-add items with animation delay
   }, [tags, difficulty, searchText, items, setFilteredItems]);
 
   return (
