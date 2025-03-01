@@ -20,6 +20,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/multer": "^1.4.12",
     "@vercel/speed-insights": "^1.1.0",
+    "framer-motion": "^12.4.7",
     "he": "^1.2.0",
     "multer": "^1.4.5-lts.1",
     "next": "14.2.5",
