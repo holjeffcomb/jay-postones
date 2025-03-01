@@ -10,11 +10,24 @@
   --primary-color: #161a30;
   --secondary-color: #31304d;
   --accent-color: #b6bbc4;
+  --light-grey: #d9d9d9;
 }
 
 body {
   color: var(--text-color);
   background-color: var(--background-color);
+}
+
+/* Hide the default scrollbar */
+.scroll-container {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  position: relative;
+}
+
+/* Hide scrollbar for Chrome/Safari */
+.scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
 @layer utilities {

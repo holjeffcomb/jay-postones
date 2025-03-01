@@ -120,7 +120,8 @@ export default function ItemGrid({
           onClick={() => setSelectedCourse(null)}
         >
           <div
-            className="bg-white  rounded-lg overflow-hidden shadow-lg max-w-lg w-full relative"
+            className="bg-white rounded-lg shadow-lg max-w-lg w-full relative 
+             max-h-[80vh] overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()} // Prevent modal close when clicking inside
           >
             <button
@@ -136,17 +137,51 @@ export default function ItemGrid({
               <h2 className="text-xl font-bold text-[var(--secondary-color)]">
                 DESCRIPTION
               </h2>
-              <p className="mt-2 text-[var(--secondary-color)] font-light">
-                {selectedCourse.description}
+              <p className="mt-2 text-sm text-[var(--secondary-color)] font-light whitespace-pre-line leading-tight">
+                {selectedCourse.fullDescription}
               </p>
             </div>
-            <ul className="mt-4">
-              {selectedCourse.lessons?.map((lesson) => (
-                <li key={lesson._id} className="mt-1 text-blue-500 underline">
-                  <Link href={`/lessons/${lesson._id}`}>{lesson.title}</Link>
-                </li>
-              ))}
-            </ul>
+            {/* "In This Course" Section */}
+            <div className="p-4 bg-[var(--accent-color)] flex-grow overflow-auto scroll-container relative">
+              <h2 className="text-xl font-bold text-[var(--secondary-color)]">
+                IN THIS COURSE
+              </h2>
+              <div className="mt-4 bg-[var(--light-grey)] rounded-md p-4 max-h-[30vh] overflow-auto scroll-container relative">
+                {selectedCourse.lessons?.map((lesson, index) => (
+                  <div
+                    key={lesson._id}
+                    className="flex text-[var(--secondary-color)] gap-3 py-3 relative"
+                  >
+                    <div className="relative w-20 h-20 flex-shrink-0">
+                      {lesson.imageUrl && (
+                        <Image
+                          src={lesson.imageUrl}
+                          alt={lesson.title}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-md"
+                        />
+                      )}
+                    </div>
+                    <div className="flex-grow">
+                      <Link
+                        className="font-bold text-sm"
+                        href={`/lessons/${lesson._id}`}
+                      >
+                        {lesson.title.toUpperCase()}
+                      </Link>
+                      <p className="text-xs line-clamp-4">
+                        {lesson.description}
+                      </p>
+                    </div>
+                    {selectedCourse.lessons &&
+                      index !== selectedCourse.lessons.length - 1 && (
+                        <div className="absolute left-0 right-0 bottom-0 border-t border-dashed border-[var(--secondary-color)]"></div>
+                      )}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}
