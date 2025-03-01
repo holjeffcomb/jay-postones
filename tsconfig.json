@@ -28,6 +28,6 @@
     ".next/types/**/*.ts",
     "types/portableTextComponents.js",
     "src/app/lessons/[id]/lessonContext.ts"
-  ],
+, "src/app/api/sendBugReport/route.js"  ],
   "exclude": ["node_modules"]
 }

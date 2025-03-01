@@ -1,8 +1,7 @@
 "use client";
 
 import { BucketType } from "../page";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { GridItem } from "../../../../types/types";
 
 interface FilterSectionProps {
@@ -21,6 +20,18 @@ export default function FilterSection({
   const [tags, setTags] = useState<string[]>([]);
   const [difficulty, setDifficulty] = useState<string>("all");
   const [searchText, setSearchText] = useState<string>("");
+  const [areTagsShown, setAreTagsShown] = useState<boolean>(false);
+
+  const tagContainerRef = useRef<HTMLDivElement>(null);
+  const [tagContainerHeight, setTagContainerHeight] = useState<number>(0);
+
+  useEffect(() => {
+    if (tagContainerRef.current) {
+      setTagContainerHeight(
+        areTagsShown ? tagContainerRef.current.scrollHeight : 0
+      );
+    }
+  }, [areTagsShown]);
 
   const tagOptions = [
     "Grooves",
@@ -55,34 +66,31 @@ export default function FilterSection({
 
   // Toggle tag selection
   const handleTagToggle = (tag: string) => {
-    setTags(
-      (prevTags) =>
-        prevTags.includes(tag)
-          ? prevTags.filter((t) => t !== tag) // Remove tag
-          : [...prevTags, tag] // Add tag
+    setTags((prevTags) =>
+      prevTags.includes(tag)
+        ? prevTags.filter((t) => t !== tag)
+        : [...prevTags, tag]
     );
+  };
+
+  const handleShowTagToggle = () => {
+    setAreTagsShown((prev) => !prev);
   };
 
   // Filtering logic
   useEffect(() => {
     const filtered = items.filter((item) => {
-      // Check if item matches all selected tags
       const matchesTags =
         tags.length === 0 || tags.every((tag) => item.tags?.includes(tag));
-
-      // Check if item matches the selected difficulty
       const matchesDifficulty =
         difficulty === "all" || item.level === difficulty;
-
-      // Check if item matches the search text in title, description, or tags
       const matchesSearchText =
         searchText.trim() === "" ||
         [item.title, item.description, ...(item.tags || [])]
-          .join(" ") // Combine title, description, and tags into a single string
+          .join(" ")
           .toLowerCase()
           .includes(searchText.trim().toLowerCase());
 
-      // Return true only if all conditions are satisfied
       return matchesTags && matchesDifficulty && matchesSearchText;
     });
 
@@ -119,25 +127,43 @@ export default function FilterSection({
           Playthroughs
         </button>
       </div>
+
       <div className="flex flex-col relative gap-4">
         <input
           type="text"
           placeholder="Search lessons..."
           className="p-2 border w-64 rounded-md text-black"
           value={searchText}
-          onChange={(e) => setSearchText(e.target.value)} // Update search text state
+          onChange={(e) => setSearchText(e.target.value)}
         />
-        <select
-          className="p-2 border w-48 rounded-md text-black"
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
+        <div className="flex items-center gap-6">
+          <select
+            className="p-2 border w-48 rounded-md text-black"
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+          >
+            <option value="all">All difficulties</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+          <button
+            onClick={handleShowTagToggle}
+            className="px-2 py-1 h-7 rounded-lg bg-[var(--accent-color)] text-[var(--primary-color)] text-sm font-normal"
+          >
+            {areTagsShown ? "Hide Tag Filter" : "Show Tag Filter"}
+          </button>
+        </div>
+
+        {/* Tag Filter Container with Smooth Expand/Collapse */}
+        <div
+          ref={tagContainerRef}
+          className="flex flex-wrap gap-2 w-[600px] overflow-hidden transition-all duration-500 ease-in-out"
+          style={{
+            height: tagContainerHeight,
+            opacity: areTagsShown ? 1 : 0,
+          }}
         >
-          <option value="all">All difficulties</option>
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="advanced">Advanced</option>
-        </select>
-        <div className="flex flex-wrap gap-2">
           {tagOptions.map((tag, index) => (
             <button
               key={index}
