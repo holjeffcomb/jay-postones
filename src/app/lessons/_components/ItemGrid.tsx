@@ -50,7 +50,7 @@ export default function ItemGrid({
                 href={`/lessons/${item._id}`}
                 onClick={(e) => handleItemClick(item, e)}
               >
-                <div className="flex flex-col bg-[var(--secondary-color)] rounded-lg shadow-[4px_4px_4px_rgba(0,0,0,0.8)] transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg hover:bg-[#3D3F5D] group min-w-[300px] w-full min-h-[460px] max-h-[none] overflow-visible">
+                <div className="flex flex-col bg-[var(--secondary-color)] rounded-lg shadow-[4px_4px_4px_rgba(0,0,0,0.8)] transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg hover:bg-[#3D3F5D] group min-w-[300px] w-full min-h-[460px] max-h-[none] overflow-hidden">
                   {item.imageUrl && (
                     <div className="relative w-full pt-[56.25%]">
                       <Image
