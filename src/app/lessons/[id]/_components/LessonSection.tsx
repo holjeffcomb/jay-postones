@@ -172,6 +172,24 @@ export default function LessonSection() {
               />
               <p className="text-xs font-semibold">Lesson Resources</p>
             </div>
+            <div className="mt-2 p-3 bg-white rounded-md shadow-md border w-full">
+              <h3 className="text-sm font-semibold mb-1 text-gray-700">
+                Downloadable Files:
+              </h3>
+              <ul className="text-sm text-gray-600 space-y-1">
+                {lesson.downloadableFiles.map((file, index) => (
+                  <li key={index} className="flex justify-between items-center">
+                    <a
+                      href={file.asset.url}
+                      download
+                      className="text-blue-500 hover:underline"
+                    >
+                      {file.asset.originalFilename}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </button>
         ) : (
           <></>
