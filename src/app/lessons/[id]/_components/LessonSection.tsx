@@ -161,6 +161,21 @@ export default function LessonSection() {
             </>
           )}
         </button>
+        {lesson.downloadableFiles ? (
+          <button className="rounded-md px-4 py-1 transition duration-300 ease-in-out hover:shadow-lg">
+            <div className="flex gap-2 justify-left items-center">
+              <Image
+                src="/images/icons/file-download.svg"
+                width={30}
+                height={30}
+                alt="Lesson Resources"
+              />
+              <p className="text-xs font-semibold">Lesson Resources</p>
+            </div>
+          </button>
+        ) : (
+          <></>
+        )}
 
         <h2 className="font-bold mb-2">NOTES FROM JAY</h2>
         <div style={{ whiteSpace: "pre-wrap", lineHeight: "1.2" }}>
