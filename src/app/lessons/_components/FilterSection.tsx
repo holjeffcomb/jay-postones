@@ -77,6 +77,10 @@ export default function FilterSection({
     setAreTagsShown((prev) => !prev);
   };
 
+  const handleClearTags = () => {
+    setTags([]);
+  };
+
   // Filtering logic
   useEffect(() => {
     const filtered = items.filter((item) => {
@@ -154,6 +158,11 @@ export default function FilterSection({
           >
             {areTagsShown ? "Hide Tag Filter" : "Show Tag Filter"}
           </button>
+          {tags.length > 0 ? (
+            <button onClick={handleClearTags}>Reset Tag Filter</button>
+          ) : (
+            <></>
+          )}
         </div>
 
         {/* Tag Filter Container with Smooth Expand/Collapse */}
