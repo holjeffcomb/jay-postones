@@ -165,7 +165,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         <iframe
           src={soundsliceUrlWithUser}
           width="100%"
-          height="400"
+          height="100%"
           allowFullScreen
         ></iframe>
       );
