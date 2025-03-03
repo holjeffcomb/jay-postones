@@ -98,6 +98,7 @@ export default function LessonSection() {
   const { lesson, isInPracticeList, setIsInPracticeList } = useLessonContext();
   const [isPracticeListUpdating, setIsPracticeListUpdating] =
     useState<boolean>(false);
+  const [showDownloads, setShowDownloads] = useState<boolean>(false);
 
   if (!lesson) {
     return (
@@ -119,6 +120,11 @@ export default function LessonSection() {
       setIsPracticeListUpdating(false);
     }
   };
+
+  const handleDownloadsToggle = () => {
+    showDownloads == true ? setShowDownloads(false) : setShowDownloads(true);
+  };
+
   return (
     <div className="flex flex-col items-start lg:w-1/4 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
       <div className="text-left mb-2">
@@ -162,35 +168,55 @@ export default function LessonSection() {
           )}
         </button>
         {lesson.downloadableFiles ? (
-          <button className="rounded-md px-4 py-1 transition duration-300 ease-in-out hover:shadow-lg">
-            <div className="flex gap-2 justify-left items-center">
-              <Image
-                src="/images/icons/file-download.svg"
-                width={30}
-                height={30}
-                alt="Lesson Resources"
-              />
-              <p className="text-xs font-semibold">Lesson Resources</p>
+          <>
+            <button
+              onClick={handleDownloadsToggle}
+              className="rounded-md px-4 py-1 transition duration-300 ease-in-out"
+            >
+              <div className="flex gap-2 justify-left items-center">
+                <Image
+                  src="/images/icons/file-download.svg"
+                  width={30}
+                  height={30}
+                  alt="Lesson Resources"
+                />
+                <p className="text-xs font-semibold">Lesson Resources</p>
+              </div>
+            </button>
+            <div
+              className={`${
+                showDownloads ? "p-2" : "p-0"
+              } bg-white rounded-sm my-2 shadow-md border w-full overflow-hidden transition-all duration-300 ease-in-out ${
+                showDownloads
+                  ? "max-h-screen opacity-100 scale-100"
+                  : "max-h-0 opacity-0 scale-95"
+              }`}
+            >
+              {showDownloads && (
+                <>
+                  <h3 className="text-sm font-semibold mb-1 text-gray-700">
+                    Downloadable Files:
+                  </h3>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    {lesson.downloadableFiles.map((file, index) => (
+                      <li
+                        key={index}
+                        className="flex justify-between items-center"
+                      >
+                        <a
+                          href={file.url}
+                          download
+                          className="text-blue-500 hover:underline"
+                        >
+                          {file.originalFilename || "Download File"}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </div>
-            <div className="mt-2 p-3 bg-white rounded-md shadow-md border w-full">
-              <h3 className="text-sm font-semibold mb-1 text-gray-700">
-                Downloadable Files:
-              </h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                {lesson.downloadableFiles.map((file, index) => (
-                  <li key={index} className="flex justify-between items-center">
-                    <a
-                      href={file.asset.url}
-                      download
-                      className="text-blue-500 hover:underline"
-                    >
-                      {file.asset.originalFilename}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </button>
+          </>
         ) : (
           <></>
         )}
