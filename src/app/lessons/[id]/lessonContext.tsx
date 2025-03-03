@@ -92,7 +92,15 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         setUserId(userId);
 
         const fetchedLesson = await client.fetch<Lesson>(
-          `*[_type == "lesson" && _id == "${lessonId}"][0]`
+          `*[_type == "lesson" && _id == "${lessonId}"][0]{
+            title,
+            description,
+            downloadableFiles[]{
+              "url": asset->url,
+              "originalFilename": asset->originalFilename
+            },
+            exercises
+          }`
         );
 
         setLesson(fetchedLesson);

@@ -19,7 +19,10 @@ export type Lesson = {
   tempo?: string;
   timeSignature?: string;
   videoUrl?: string;
-  downloadableFile?: { asset: { _ref: string } };
+  downloadableFiles: {
+    url: string;
+    originalFilename?: string;
+  }[];
   exercises: Exercise[];
   imageUrl: string;
   membershipLevel: string;
