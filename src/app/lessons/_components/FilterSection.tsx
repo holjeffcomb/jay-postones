@@ -9,6 +9,7 @@ interface FilterSectionProps {
   setBucket: Dispatch<SetStateAction<BucketType>>;
   items: GridItem[]; // Full list of items
   setFilteredItems: Dispatch<SetStateAction<GridItem[]>>;
+  tagOptions: string[];
 }
 
 export default function FilterSection({
@@ -16,6 +17,7 @@ export default function FilterSection({
   setBucket,
   items,
   setFilteredItems,
+  tagOptions,
 }: FilterSectionProps) {
   const [tags, setTags] = useState<string[]>([]);
   const [difficulty, setDifficulty] = useState<string>("all");
@@ -32,37 +34,6 @@ export default function FilterSection({
       );
     }
   }, [areTagsShown]);
-
-  const tagOptions = [
-    "Grooves",
-    "Drum Fills",
-    "TesseracT",
-    "Odd Timing",
-    "Polyrhythms",
-    "Displacement",
-    "Metric Modulation",
-    "Single Kick",
-    "Double Kick",
-    "Heel-Toe",
-    "Hand Technique",
-    "Foot Technique",
-    "Rudiments",
-    "Gear",
-    "Programming Drums",
-    "Practice Routine",
-    "Technique",
-    "Flow",
-    "Limb Independence",
-    "Ghost Notes",
-    "Triplets",
-    "Hertas",
-    "Slow",
-    "Dynamics",
-    "Three",
-    "Five",
-    "Seven",
-    "Nine",
-  ];
 
   // Toggle tag selection
   const handleTagToggle = (tag: string) => {

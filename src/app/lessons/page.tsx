@@ -12,6 +12,7 @@ export default function LessonsPage() {
   const [bucket, setBucket] = useState<BucketType>("courses");
   const [items, setItems] = useState<GridItem[]>([]); // Full list of items
   const [filteredItems, setFilteredItems] = useState<GridItem[]>([]); // Filtered items
+  const [tagOptions, setTagOptions] = useState<string[]>([]);
 
   const queries = {
     courses: `*[_type == "course"] | order(_createdAt desc) {
@@ -37,10 +38,10 @@ export default function LessonsPage() {
             videoUrl,
             content
           },
-          tags
+          "tags": tags[]->title,
         },
         level,
-        tags,
+        "tags": tags[]->title,
         membershipLevel,
         _createdAt
       }`,
@@ -72,7 +73,7 @@ export default function LessonsPage() {
           }
         },
         level,
-        tags,
+        "tags": tags[]->title,
         membershipLevel,
         downloadableFiles,
         _createdAt
@@ -87,7 +88,7 @@ export default function LessonsPage() {
         videoUrl,
         songTitle,
         artist,
-        tags,
+        "tags": tags[]->title,
         membershipLevel,
         _createdAt
       }`,
@@ -111,6 +112,16 @@ export default function LessonsPage() {
     fetchLessons();
   }, [bucket]);
 
+  useEffect(() => {
+    const fetchTags = async () => {
+      const fetchedTags = await client.fetch(`*[_type == "tag"]{title}`);
+      const tagTitles = fetchedTags.map((tag: { title: string }) => tag.title);
+      setTagOptions(tagTitles.sort()); // Sort alphabetically
+    };
+
+    fetchTags();
+  }, []);
+
   return (
     <div className="flex flex-col items-start justify-start p-4 gap-4">
       <FilterSection
@@ -118,6 +129,7 @@ export default function LessonsPage() {
         setBucket={setBucket}
         items={items} // Pass the full dataset
         setFilteredItems={setFilteredItems} // Update filtered items
+        tagOptions={tagOptions}
       />
       <ItemGrid items={filteredItems} bucket={bucket} />
     </div>
