@@ -95,6 +95,9 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
           `*[_type == "lesson" && _id == "${lessonId}"][0]{
             title,
             description,
+            sticking,
+            tempo,
+            timeSignature,
             downloadableFiles[]{
               "url": asset->url,
               "originalFilename": asset->originalFilename
