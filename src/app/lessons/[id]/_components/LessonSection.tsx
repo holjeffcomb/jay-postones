@@ -129,6 +129,26 @@ export default function LessonSection() {
     <div className="flex flex-col items-start lg:w-1/4 w-full p-4 bg-[#D9D9D9] text-[var(--primary-color)]">
       <div className="text-left mb-2">
         <h1 className="font-bold text-2xl">{lesson.title}</h1>
+        {/* Sticking, Time Signature, and Tempo Data */}
+        {(lesson.sticking || lesson.timeSignature || lesson.tempo) && (
+          <div className="mt-2 text-sm text-[var(--secondary-color)]">
+            {lesson.sticking && (
+              <p>
+                <strong>Sticking:</strong> {lesson.sticking}
+              </p>
+            )}
+            {lesson.timeSignature && (
+              <p>
+                <strong>Time Signature:</strong> {lesson.timeSignature}
+              </p>
+            )}
+            {lesson.tempo && (
+              <p>
+                <strong>Tempo:</strong> {lesson.tempo} BPM
+              </p>
+            )}
+          </div>
+        )}
         <button
           className={`text-xs border border-[var(--primary-color)] py-1 px-2 rounded-xl flex items-center gap-2 my-2 ${
             isInPracticeList
