@@ -27,7 +27,6 @@ export default function ItemGrid({
 
   const decideIfLocked = (userLevel: string, itemLevel: string): boolean => {
     const levels = ["free", "silver", "gold", "platinum"];
-
     return levels.indexOf(userLevel) < levels.indexOf(itemLevel);
   };
 

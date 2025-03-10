@@ -10,7 +10,7 @@ interface DropdownProps {
 
 export default function Dropdown({ setIsDropdownShowing }: DropdownProps) {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const { setIsLoggingIn, setIsLoggedIn } = useGlobalContext();
+  const { setIsLoggingIn, setIsLoggedIn, setUser } = useGlobalContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -34,6 +34,7 @@ export default function Dropdown({ setIsDropdownShowing }: DropdownProps) {
     await signOut();
     setIsLoggingIn(false);
     setIsLoggedIn(false);
+    setUser({ firstName: "", lastName: "", membershipLevel: "free" });
     router.push("/");
   };
 

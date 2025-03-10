@@ -28,6 +28,7 @@ interface LessonContextType {
   handleMarkTooDifficult: (exerciseId: string) => Promise<void>;
   isMarkCompleteLoading: boolean;
   isTooDifficultLoading: boolean;
+  membershipLevel: string;
 
   // exercise state
   selectedExerciseTitle: string | null;
@@ -77,6 +78,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
   const [isTooDifficultLoading, setIsTooDifficultLoading] = useState(false);
   const [lessonExercises, setLessonExercises] = useState<Exercise[]>([]);
   const [isInPracticeList, setIsInPracticeList] = useState<boolean>(false);
+  const [membershipLevel, setMembershipLevel] = useState<string>("");
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -102,13 +104,16 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
               "url": asset->url,
               "originalFilename": asset->originalFilename
             },
-            exercises
+            exercises,
+            membershipLevel
           }`
         );
 
         setLesson(fetchedLesson);
+        setMembershipLevel(fetchedLesson?.membershipLevel || "");
 
         const firstExercise = fetchedLesson?.exercises?.[0];
+
         if (firstExercise) {
           loadExerciseContent(firstExercise, userId);
         } else {
@@ -252,6 +257,7 @@ export const LessonProvider = ({ children, lessonId }: LessonProviderProps) => {
         handleMarkComplete,
         handleMarkTooDifficult,
         isMarkCompleteLoading,
+        membershipLevel,
         isTooDifficultLoading,
         completedExerciseIds,
         difficultExerciseIds,
