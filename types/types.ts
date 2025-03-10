@@ -67,4 +67,5 @@ export type Exercise = {
 export type User = {
   firstName: string;
   lastName: string;
+  membershipLevel: "free" | "bronze" | "silver" | "gold" | "platinum";
 };

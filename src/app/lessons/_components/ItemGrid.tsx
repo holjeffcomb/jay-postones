@@ -6,6 +6,8 @@ import Link from "next/link";
 import { GridItem } from "../../../../types/types";
 import { BucketType } from "../page";
 import { motion, AnimatePresence } from "framer-motion";
+import { useGlobalContext } from "@/app/_context/GlobalContext";
+import { User } from "../../../../types/types";
 
 export default function ItemGrid({
   items,
@@ -22,6 +24,13 @@ export default function ItemGrid({
       setSelectedCourse(item);
     }
   };
+
+  const decideIfLocked = (userLevel: string, itemLevel: string): boolean => {
+    const levels = ["free", "silver", "gold", "platinum"];
+    return levels.indexOf(userLevel) < levels.indexOf(itemLevel);
+  };
+
+  const { user } = useGlobalContext();
 
   return (
     <>
@@ -60,9 +69,22 @@ export default function ItemGrid({
                         objectFit="cover"
                         className="absolute top-0 left-0 w-full h-full"
                       />
+                      {decideIfLocked(
+                        user?.membershipLevel,
+                        item.membershipLevel
+                      ) && (
+                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                          <Image
+                            src="/images/icons/lock_icon.svg"
+                            width={50}
+                            height={50}
+                            alt="LOCKED"
+                          />
+                        </div>
+                      )}
                       <div
                         className={`absolute top-0 right-0 px-2 rounded-sm m-2 text-[var(--text-color)] ${
-                          item.membershipLevel === "free"
+                          item.membershipLevel === "frees"
                             ? "bg-blue-500"
                             : item.membershipLevel === "silver"
                             ? "bg-gray-500"

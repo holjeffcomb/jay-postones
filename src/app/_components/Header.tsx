@@ -43,7 +43,7 @@ export default function Header() {
 
         const { data: profile, error } = await supabase
           .from("profiles")
-          .select("first_name, last_name")
+          .select("first_name, last_name, membership_level")
           .eq("id", user.id)
           .single();
 
@@ -53,6 +53,7 @@ export default function Header() {
           setUser({
             firstName: profile.first_name,
             lastName: profile.last_name,
+            membershipLevel: profile.membership_level,
           });
           setIsLoggedIn(true);
         }
@@ -87,7 +88,7 @@ export default function Header() {
       ) : isLoggedIn ? (
         <div className="flex px-6 text-xs gap-2 relative">
           <span>
-            Logged in as {user?.firstName} {user?.lastName}
+            Logged in as {user?.firstName} {user?.lastName}{" "}
           </span>
           <button onClick={toggleDropdown}>
             <FaCaretDown />
