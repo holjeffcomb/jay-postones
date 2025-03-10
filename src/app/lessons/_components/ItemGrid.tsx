@@ -75,14 +75,17 @@ export default function ItemGrid({
                         item.membershipLevel
                       ) && (
                         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                          <span className="text-[var(--text-color)] text-lg font-bold">
-                            LOCKED
-                          </span>
+                          <Image
+                            src="/images/icons/lock_icon.svg"
+                            width={50}
+                            height={50}
+                            alt="LOCKED"
+                          />
                         </div>
                       )}
                       <div
                         className={`absolute top-0 right-0 px-2 rounded-sm m-2 text-[var(--text-color)] ${
-                          item.membershipLevel === "free"
+                          item.membershipLevel === "frees"
                             ? "bg-blue-500"
                             : item.membershipLevel === "silver"
                             ? "bg-gray-500"
