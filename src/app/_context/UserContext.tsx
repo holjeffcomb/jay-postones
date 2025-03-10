@@ -1,12 +1,7 @@
 // CURRENTLY NOT DOING ANYTHING WITH THIS FILE
 
 import React, { createContext, useState, useContext, ReactNode } from "react";
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-};
+import { User } from "../../../types/types";
 
 type UserContextType = {
   user: User | null;

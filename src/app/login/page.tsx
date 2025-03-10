@@ -27,14 +27,18 @@ export default function LoginPage() {
 
       const { data: profile, error } = await supabase
         .from("profiles")
-        .select("first_name, last_name")
+        .select("first_name, last_name, membership_level")
         .eq("email", email)
         .single();
 
       if (error) {
         throw error;
       }
-      setUser({ firstName: profile?.first_name, lastName: profile?.last_name });
+      setUser({
+        firstName: profile?.first_name,
+        lastName: profile?.last_name,
+        membershipLevel: profile?.membership_level,
+      });
       setIsLoggedIn(true);
       router.push("/");
     } catch (error) {
