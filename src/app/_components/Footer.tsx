@@ -117,6 +117,20 @@ export default function Footer() {
                   alt="Substack"
                 />
               </a>
+              <a
+                href="https://form.jotform.com/230134019743347"
+                className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Rhythm Recap Mailing List"
+              >
+                <Image
+                  src="/images/logos/socials/mail-neg.png"
+                  width={30}
+                  height={34}
+                  alt="Rhythm Recap Mailing List"
+                />
+              </a>
             </div>
           </div>
         </div>
