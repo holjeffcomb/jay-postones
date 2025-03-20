@@ -127,7 +127,7 @@ export default function Footer() {
                 <Image
                   src="/images/logos/socials/mail-neg.png"
                   width={30}
-                  height={34}
+                  height={27}
                   alt="Rhythm Recap Mailing List"
                 />
               </a>
