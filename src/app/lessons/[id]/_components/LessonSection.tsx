@@ -144,7 +144,7 @@ export default function LessonSection() {
             )}
             {lesson.tempo && (
               <p>
-                <strong>Tempo:</strong> {lesson.tempo} BPM
+                <strong>Goal Tempo:</strong> {lesson.tempo} BPM
               </p>
             )}
           </div>
