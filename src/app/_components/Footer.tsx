@@ -51,6 +51,7 @@ export default function Footer() {
                 className="hover:text-gray-300"
                 target="_blank"
                 rel="noopener noreferrer"
+                title="Facebook"
               >
                 <Image
                   src="/images/logos/socials/facebook-neg.png"
@@ -64,6 +65,7 @@ export default function Footer() {
                 className="hover:text-gray-300"
                 target="_blank"
                 rel="noopener noreferrer"
+                title="Instagram"
               >
                 <Image
                   src="/images/logos/socials/insta-neg.png"
@@ -73,29 +75,46 @@ export default function Footer() {
                 />
               </a>
               <a
-                href="https://x.com/jaypostones"
+                href="https://discord.gg/ShRP94FHKQ"
                 className="hover:text-gray-300"
                 target="_blank"
                 rel="noopener noreferrer"
+                title="Discord"
               >
                 <Image
-                  src="/images/logos/socials/x-neg.png"
+                  src="/images/logos/socials/discord-neg.png"
                   width={30}
                   height={30}
-                  alt="X"
+                  alt="Discord"
                 />
               </a>
+
               <a
                 href="https://www.youtube.com/c/JayPostones"
                 className="hover:text-gray-300"
                 target="_blank"
                 rel="noopener noreferrer"
+                title="Youtube"
               >
                 <Image
                   src="/images/logos/socials/youtube-neg.png"
                   width={30}
                   height={30}
                   alt="Youtube"
+                />
+              </a>
+              <a
+                href="https://substack.com/@jaypostones"
+                className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Substack"
+              >
+                <Image
+                  src="/images/logos/socials/substack-neg.png"
+                  width={23}
+                  height={23}
+                  alt="Substack"
                 />
               </a>
             </div>
