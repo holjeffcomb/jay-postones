@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
           <div className="w-full md:w-1/4 mb-4 md:mb-0">
             <h3 className="text-lg font-bold mb-2">Follow Me</h3>
-            <div className="flex space-x-4">
+            <div className="flex items-center space-x-4">
               <a
                 href="https://form.jotform.com/230134019743347"
                 className="hover:text-gray-300"
