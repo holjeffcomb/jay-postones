@@ -47,31 +47,17 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-2">Follow Me</h3>
             <div className="flex space-x-4">
               <a
-                href="https://www.facebook.com/JayTesseracT/"
+                href="https://form.jotform.com/230134019743347"
                 className="hover:text-gray-300"
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Facebook"
+                title="Rhythm Recap Mailing List"
               >
                 <Image
-                  src="/images/logos/socials/facebook-neg.png"
+                  src="/images/logos/socials/mail-neg.png"
                   width={30}
-                  height={30}
-                  alt="Facebook"
-                />
-              </a>
-              <a
-                href="https://www.instagram.com/jaytesseract/"
-                className="hover:text-gray-300"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Instagram"
-              >
-                <Image
-                  src="/images/logos/socials/insta-neg.png"
-                  width={30}
-                  height={30}
-                  alt="Instagram"
+                  height={27}
+                  alt="Rhythm Recap Mailing List"
                 />
               </a>
               <a
@@ -86,21 +72,6 @@ export default function Footer() {
                   width={30}
                   height={30}
                   alt="Discord"
-                />
-              </a>
-
-              <a
-                href="https://www.youtube.com/c/JayPostones"
-                className="hover:text-gray-300"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Youtube"
-              >
-                <Image
-                  src="/images/logos/socials/youtube-neg.png"
-                  width={30}
-                  height={30}
-                  alt="Youtube"
                 />
               </a>
               <a
@@ -118,17 +89,45 @@ export default function Footer() {
                 />
               </a>
               <a
-                href="https://form.jotform.com/230134019743347"
+                href="https://www.youtube.com/c/JayPostones"
                 className="hover:text-gray-300"
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Rhythm Recap Mailing List"
+                title="Youtube"
               >
                 <Image
-                  src="/images/logos/socials/mail-neg.png"
+                  src="/images/logos/socials/youtube-neg.png"
                   width={30}
-                  height={27}
-                  alt="Rhythm Recap Mailing List"
+                  height={30}
+                  alt="Youtube"
+                />
+              </a>
+              <a
+                href="https://www.instagram.com/jaytesseract/"
+                className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Instagram"
+              >
+                <Image
+                  src="/images/logos/socials/insta-neg.png"
+                  width={30}
+                  height={30}
+                  alt="Instagram"
+                />
+              </a>
+              <a
+                href="https://www.facebook.com/JayTesseracT/"
+                className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Facebook"
+              >
+                <Image
+                  src="/images/logos/socials/facebook-neg.png"
+                  width={30}
+                  height={30}
+                  alt="Facebook"
                 />
               </a>
             </div>
