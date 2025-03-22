@@ -17,6 +17,7 @@ export default function ItemGrid({
   bucket: BucketType;
 }) {
   const [selectedCourse, setSelectedCourse] = useState<GridItem | null>(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleItemClick = (item: GridItem, event: React.MouseEvent) => {
     if (bucket === "courses") {
@@ -28,6 +29,10 @@ export default function ItemGrid({
   const decideIfLocked = (userLevel: string, itemLevel: string): boolean => {
     const levels = ["free", "silver", "gold", "platinum"];
     return levels.indexOf(userLevel) < levels.indexOf(itemLevel);
+  };
+
+  const openUpgradeModal = () => {
+    setShowUpgradeModal(true);
   };
 
   const { user } = useGlobalContext();
@@ -57,7 +62,19 @@ export default function ItemGrid({
             >
               <Link
                 href={`/lessons/${item._id}`}
-                onClick={(e) => handleItemClick(item, e)}
+                onClick={(e) => {
+                  const isLocked = decideIfLocked(
+                    user?.membershipLevel,
+                    item.membershipLevel
+                  );
+                  if (isLocked) {
+                    e.preventDefault(); // Prevent navigation if locked
+                    openUpgradeModal(); // Function to open upgrade modal
+                    return;
+                  }
+
+                  handleItemClick(item, e);
+                }}
               >
                 <div className="flex flex-col bg-[var(--secondary-color)] rounded-lg shadow-[4px_4px_4px_rgba(0,0,0,0.8)] transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg hover:bg-[#3D3F5D] group min-w-[300px] w-full min-h-[460px] max-h-[none] overflow-hidden">
                   {item.imageUrl && (
@@ -225,6 +242,42 @@ export default function ItemGrid({
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showUpgradeModal && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          onClick={() => setShowUpgradeModal(false)}
+        >
+          <div
+            className="bg-[var(--secondary-color)] text-[var(--text-color)] rounded-lg shadow-lg max-w-md w-full p-6 relative border border-[var(--accent-color)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-2 right-2 text-[var(--accent-color)] hover:text-white transition"
+              onClick={() => setShowUpgradeModal(false)}
+            >
+              ✖
+            </button>
+
+            <h2 className="text-2xl font-bold text-center mb-4 text-[var(--accent-color)]">
+              Upgrade Required
+            </h2>
+
+            <p className="text-sm text-[var(--text-color)] text-center font-light">
+              This lesson is locked. Upgrade your membership to gain full
+              access.
+            </p>
+
+            <div className="mt-6 flex justify-center">
+              <Link href="/upgrade">
+                <button className="bg-[var(--accent-color)] text-[var(--primary-color)] px-4 py-2 rounded hover:brightness-110 transition font-semibold">
+                  View Membership Options
+                </button>
+              </Link>
             </div>
           </div>
         </div>
