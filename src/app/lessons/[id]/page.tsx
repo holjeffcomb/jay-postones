@@ -28,7 +28,7 @@ const LessonContentWrapper = () => {
 
   // Redirect if user is not of the correct membership level
   if (decideIfLocked(user?.membershipLevel, membershipLevel)) {
-    redirect("/login");
+    redirect("/upgrade");
   }
 
   return (
